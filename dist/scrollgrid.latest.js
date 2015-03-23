@@ -84,35 +84,31 @@
 
             render.setDefaultStyles.call(this);
             render.formatRules = options.formatRules || [];
+            render.cellWaitText = options.cellWaitText || "loading...";
 
-            if (this.setData(options.data)) {
+            // Pass the data or adapter through to setData
+            this.setData(options.data);
 
-                // Set up the column sizes
-                physical.initialiseColumnSizes.call(this);
+            // Set up the column sizes
+            physical.initialiseColumnSizes.call(this);
 
-                // Calculate the bounds of the data displayable in the main grid
-                virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;
-                virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
+            // Calculate the bounds of the data displayable in the main grid
+            virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;
+            virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
 
-                // Create the DOM shapes required
-                dom.populateDOM.call(this);
+            // Create the DOM shapes required
+            dom.populateDOM.call(this);
 
-                // Set the actual dimensions of the elements according to the calculations above
-                dom.layoutDOM.call(this);
+            // Set the actual dimensions of the elements according to the calculations above
+            dom.layoutDOM.call(this);
 
-                // Render the control
-                this.draw();
+            // Render the control
+            this.draw();
 
-                // Set auto resize. The unusual condition here is to make auto resize the default behaviour.
-                // This will occur unless autoResize is specifically set to false
-                if (options.autoResize === undefined || options.autoResize) {
-                    dom.setAutoResize.call(this);
-                }
-
-            } else {
-                int.raise('Invalid data format provided, please provide data as an array of arrays, where every array is of the ' +
-                    'same length. If this is not the format of your data please check the Scrollgrid.transformers namespace for ' +
-                    'some helpful converters.');
+            // Set auto resize. The unusual condition here is to make auto resize the default behaviour.
+            // This will occur unless autoResize is specifically set to false
+            if (options.autoResize === undefined || options.autoResize) {
+                dom.setAutoResize.call(this);
             }
         }
     };
@@ -123,6 +119,8 @@
         return scrollgrid;
     };
 
+    // Build namespaces
+    Scrollgrid.adapters = {};
     Scrollgrid.prototype.internal = {
         sizes: {
             virtual: {},
@@ -506,7 +504,7 @@
 
                 // Apply the combined rules
                 if (ruleDefinition.formatter) {
-                    data[i].value = ruleDefinition.formatter(data[i].value);
+                    data[i].formatter = ruleDefinition.formatter;
                 }
                 if (ruleDefinition.alignment) {
                     data[i].alignment = ruleDefinition.alignment;
@@ -662,9 +660,14 @@
             runningY,
             rowHeight = 0,
             visibleData = [],
-            adjustments;
+            adjustments,
+            getValue;
 
         runningY = viewArea.startY;
+
+        // Load the data range and get the accessor
+        getValue = this.adapter.loadDataRange(viewArea);
+
         for (r = viewArea.top || 0, i = 0; r < viewArea.bottom || 0; r += 1) {
             rowHeight = physical.getRowHeight.call(this, r);
             runningX = viewArea.startX || 0;
@@ -682,14 +685,15 @@
                     y: Math.floor(runningY) + adjustments.y + 0.5,
                     width: Math.ceil(column.width) + adjustments.width,
                     height: Math.ceil(rowHeight) + adjustments.height,
-                    value: this.data[r][c],
                     backgroundStyle: this.style.cellBackgroundPrefix + 'r' + (r + 1) + '-c' + (c + 1),
                     foregroundStyle: this.style.cellForegroundPrefix + 'r' + (r + 1) + '-c' + (c + 1),
                     cellPadding: physical.cellPadding,
                     alignment: 'left',
                     rowIndex: r,
                     columnIndex: c,
-                    column: column
+                    column: column,
+                    formatter: null,
+                    getValue: getValue
                 };
                 runningX += column.width;
             }
@@ -859,7 +863,17 @@
 
         cells.attr("x", render.getTextPosition.bind(this))
             .attr("y", function (d) { return d.y + d.height / 2; })
-            .text(function (d) { return d.value; });
+            .each(function (d) {
+                var shape = d3.select(this);
+                shape.text(render.cellWaitText);
+                d.getValue(d.rowIndex, d.columnIndex, function (value) {
+                    if (d.formatter) {
+                        shape.text(d.formatter(value));
+                    } else {
+                        shape.text(value);
+                    }
+                });
+            });
 
         cells.exit()
             .remove();
@@ -1092,6 +1106,62 @@
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+    // Source: /src/external/adapters/simple.js
+    Scrollgrid.adapters.simple = function (data) {
+
+        var int = this.internal,
+            inconsistent = false,
+            valid = true,
+            columnCount = 0,
+            table = data,
+            i;
+
+        // Find the longest length of the data sub arrays
+        for (i = 0; i < table.length; i += 1) {
+            if (table[i] && Object.prototype.toString.call(table[i]) === '[object Array]') {
+                inconsistent = columnCount && (inconsistent || columnCount !== table[i].length);
+                if (!columnCount || table[i].length > columnCount) {
+                    columnCount = table[i].length;
+                }
+            } else {
+                valid = false;
+                int.raise("Invalid data row found");
+                break;
+            }
+        }
+
+        // Check that the table has some width
+        if (valid && columnCount > 0) {
+            // The table is valid but may have inconsistent widths which will be filled out here
+            if (inconsistent) {
+                for (i = 0; i < table.length; i += 1) {
+                    while (table[i].length < columnCount) {
+                        table[i].push("");
+                    }
+                }
+            }
+        }
+
+        // Return the total number of rows including headers and footers
+        this.getRowCount = function () {
+            return table.length;
+        };
+
+        // Return the total number of columns including headers and footers
+        this.getColumnCount = function () {
+            return columnCount;
+        };
+
+        this.loadDataRange = function () {
+            return function (row, column, callback) {
+                callback(table[row][column]);
+            };
+        };
+
+    };
+
+    // Copyright: 2015 AlignAlytics
+    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/external/draw.js
     Scrollgrid.prototype.draw = function () {
 
@@ -1144,54 +1214,18 @@
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/external/setData.js
     Scrollgrid.prototype.setData = function (data) {
-        var i,
-            int = this.internal,
+        var int = this.internal,
             sizes = int.sizes,
-            virtual = sizes.virtual,
-            inconsistent = false,
-            valid = false;
+            virtual = sizes.virtual;
 
-        // Invalidate if the data object is not an array
+        // If the dataAdapter is an array, treat it as the data itself and instantiate with the default adapter
         if (data && Object.prototype.toString.call(data) === '[object Array]' && data.length > virtual.top + virtual.bottom) {
-
-            virtual.outerHeight = data.length;
-            valid = true;
-
-            // Find the longest length of the data sub arrays
-            for (i = 0; i < data.length; i += 1) {
-                if (data[i] && Object.prototype.toString.call(data[i]) === '[object Array]') {
-                    inconsistent = virtual.outerWidth && (inconsistent || virtual.outerWidth !== data[i].length);
-                    if (!virtual.outerWidth || data[i].length > virtual.outerWidth) {
-                        virtual.outerWidth = data[i].length;
-                    }
-                } else {
-                    valid = false;
-                    break;
-                }
-            }
-
-            // Check that the data has some width
-            if (valid && virtual.outerWidth > 0) {
-
-                // The data is valid but may have inconsistent widths which will be filled out here
-                if (inconsistent) {
-                    for (i = 0; i < data.length; i += 1) {
-                        while (data[i].length < virtual.outerWidth) {
-                            data[i].push("");
-                        }
-                    }
-                }
-
-                // Set the instance data
-                this.data = data;
-                // This data is valid and can now be used
-                valid = true;
-
-            }
+            this.adapter = new Scrollgrid.adapters.simple(data);
+        } else {
+            this.adapter = data;
         }
-
-        return valid;
-
+        virtual.outerHeight = this.adapter.getRowCount();
+        virtual.outerWidth = this.adapter.getColumnCount();
     };
 
     return Scrollgrid;

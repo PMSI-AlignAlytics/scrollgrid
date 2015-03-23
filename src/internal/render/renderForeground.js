@@ -20,7 +20,17 @@
 
         cells.attr("x", render.getTextPosition.bind(this))
             .attr("y", function (d) { return d.y + d.height / 2; })
-            .text(function (d) { return d.value; });
+            .each(function (d) {
+                var shape = d3.select(this);
+                shape.text(render.cellWaitText);
+                d.getValue(d.rowIndex, d.columnIndex, function (value) {
+                    if (d.formatter) {
+                        shape.text(d.formatter(value));
+                    } else {
+                        shape.text(value);
+                    }
+                });
+            });
 
         cells.exit()
             .remove();

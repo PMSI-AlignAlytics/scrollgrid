@@ -39,11 +39,11 @@
         }
     </style>
     <script src="/lib/d3.v3.4.8.js"></script>
-    <script src="/dist/scrollgrid.v0.1.0.js"></script>
+    <script src="/dist/scrollgrid.latest.js"></script>
     <script type="text/javascript">
 
         // GENERATE TEST DATA
-        var rc = 100000, cc = 10000,  d = [rc];
+        var rc = 10000, cc = 1000,  d = [rc];
         for (var r = 0; r < rc; r += 1) {
             var tr = [cc];
             for (var c = 0; c < cc; c += 1) {
@@ -58,7 +58,7 @@
             footerRows: 2,
             footerColumns: 2,
             formatRules: [
-//                { row: "*", column: "*", formatter: d3.format(",.0f"), columnWidth: 200},
+                { row: "*", column: "*", formatter: d3.format(",.0f")},
 //                { row: "2", column: "*", formatter: d3.format("%")},
 //                { row: "5", column: "5, 10, 300", foregroundStyle: 'my-cool-class'},
 //                { row: "8, 9, 10", column: "7:9", formatter: d3.format("%"), alignment: 'center'},

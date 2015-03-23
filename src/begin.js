@@ -84,35 +84,31 @@
 
             render.setDefaultStyles.call(this);
             render.formatRules = options.formatRules || [];
+            render.cellWaitText = options.cellWaitText || "loading...";
 
-            if (this.setData(options.data)) {
+            // Pass the data or adapter through to setData
+            this.setData(options.data);
 
-                // Set up the column sizes
-                physical.initialiseColumnSizes.call(this);
+            // Set up the column sizes
+            physical.initialiseColumnSizes.call(this);
 
-                // Calculate the bounds of the data displayable in the main grid
-                virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;
-                virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
+            // Calculate the bounds of the data displayable in the main grid
+            virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;
+            virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
 
-                // Create the DOM shapes required
-                dom.populateDOM.call(this);
+            // Create the DOM shapes required
+            dom.populateDOM.call(this);
 
-                // Set the actual dimensions of the elements according to the calculations above
-                dom.layoutDOM.call(this);
+            // Set the actual dimensions of the elements according to the calculations above
+            dom.layoutDOM.call(this);
 
-                // Render the control
-                this.draw();
+            // Render the control
+            this.draw();
 
-                // Set auto resize. The unusual condition here is to make auto resize the default behaviour.
-                // This will occur unless autoResize is specifically set to false
-                if (options.autoResize === undefined || options.autoResize) {
-                    dom.setAutoResize.call(this);
-                }
-
-            } else {
-                int.raise('Invalid data format provided, please provide data as an array of arrays, where every array is of the ' +
-                    'same length. If this is not the format of your data please check the Scrollgrid.transformers namespace for ' +
-                    'some helpful converters.');
+            // Set auto resize. The unusual condition here is to make auto resize the default behaviour.
+            // This will occur unless autoResize is specifically set to false
+            if (options.autoResize === undefined || options.autoResize) {
+                dom.setAutoResize.call(this);
             }
         }
     };
@@ -123,6 +119,8 @@
         return scrollgrid;
     };
 
+    // Build namespaces
+    Scrollgrid.adapters = {};
     Scrollgrid.prototype.internal = {
         sizes: {
             virtual: {},

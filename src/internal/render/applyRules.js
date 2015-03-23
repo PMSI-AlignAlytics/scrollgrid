@@ -43,7 +43,7 @@
 
                 // Apply the combined rules
                 if (ruleDefinition.formatter) {
-                    data[i].value = ruleDefinition.formatter(data[i].value);
+                    data[i].formatter = ruleDefinition.formatter;
                 }
                 if (ruleDefinition.alignment) {
                     data[i].alignment = ruleDefinition.alignment;

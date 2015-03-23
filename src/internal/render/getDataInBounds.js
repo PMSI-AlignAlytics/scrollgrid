@@ -15,9 +15,14 @@
             runningY,
             rowHeight = 0,
             visibleData = [],
-            adjustments;
+            adjustments,
+            getValue;
 
         runningY = viewArea.startY;
+
+        // Load the data range and get the accessor
+        getValue = this.adapter.loadDataRange(viewArea);
+
         for (r = viewArea.top || 0, i = 0; r < viewArea.bottom || 0; r += 1) {
             rowHeight = physical.getRowHeight.call(this, r);
             runningX = viewArea.startX || 0;
@@ -35,14 +40,15 @@
                     y: Math.floor(runningY) + adjustments.y + 0.5,
                     width: Math.ceil(column.width) + adjustments.width,
                     height: Math.ceil(rowHeight) + adjustments.height,
-                    value: this.data[r][c],
                     backgroundStyle: this.style.cellBackgroundPrefix + 'r' + (r + 1) + '-c' + (c + 1),
                     foregroundStyle: this.style.cellForegroundPrefix + 'r' + (r + 1) + '-c' + (c + 1),
                     cellPadding: physical.cellPadding,
                     alignment: 'left',
                     rowIndex: r,
                     columnIndex: c,
-                    column: column
+                    column: column,
+                    formatter: null,
+                    getValue: getValue
                 };
                 runningX += column.width;
             }
