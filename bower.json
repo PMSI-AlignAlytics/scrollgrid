@@ -1,0 +1,42 @@
+{
+  "name": "scrollgrid",
+  "description": "A dynamic scrollable table built using d3",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PMSI-AlignAlytics/scrollgrid.git"
+  },
+  "dependencies": {
+    "d3": ">=3.5.2"
+  },
+  "version": "0.1.1",
+  "homepage": "https://github.com/PMSI-AlignAlytics/scrollgrid",
+  "authors": [
+    "johnkiernander <jkiernander@pmsi-consulting.com>"
+  ],
+  "main": "dist/dimple.v2.1.2.min.js",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "grid",
+    "pivot",
+    "table",
+    "d3"
+  ],
+  "ignore": [
+    "**/.*",
+    "app.js",
+    "Gruntfile.js",
+    "package.json",
+    "node_modules",
+    "bower_components",
+    "test",
+    "spec",
+    "data",
+    "examples",
+    "lib",
+    "src",
+    "tmp"
+  ]
+}
