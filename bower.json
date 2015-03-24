@@ -14,7 +14,7 @@
   "authors": [
     "johnkiernander <jkiernander@pmsi-consulting.com>"
   ],
-  "main": "dist/scrollgrid.v0.1.2.min.js",
+  "main": "dist/scrollgrid.latest.min.js",
   "moduleType": [
     "amd"
   ],
