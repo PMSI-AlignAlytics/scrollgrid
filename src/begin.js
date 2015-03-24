@@ -66,10 +66,6 @@
             physical.defaultColumnWidth = options.defaultColumnWidth || 100;
             physical.cellPadding = options.cellPadding || 6;
 
-            // Set the browser div size limit in pixels, all browsers currently crash
-            // eventually as a div gets too large.  The smallest limit is IE at around 1.5m
-            physical.divSizeLimit = 1000000;
-
             // Set the interaction options
             interaction.allowColumnResizing = options.allowColumnResizing || true;
 

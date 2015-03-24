@@ -8,14 +8,8 @@
             sizes = int.sizes,
             physical = sizes.physical;
 
-        // There is an inherent div size limit which varies by browser,
-        // this is set to 1,000,000px here which should fall within any limit
-        // this is reversed in the render.
-        physical.scrollerWidth = Math.min(physical.totalInnerWidth, physical.divSizeLimit);
-        physical.scrollerHeight = Math.min(physical.totalInnerHeight, physical.divSizeLimit);
-
         dom.main.scroller
-            .style('width', physical.scrollerWidth + 'px')
-            .style('height', physical.scrollerHeight + 'px');
+            .style('width', physical.totalInnerWidth + 'px')
+            .style('height', physical.totalInnerHeight + 'px');
 
     };

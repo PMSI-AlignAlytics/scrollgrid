@@ -41,26 +41,28 @@
     <script src="/lib/d3.v3.4.8.js"></script>
     <script src="/dist/scrollgrid.latest.js"></script>
     <script type="text/javascript">
-        var rows = 1000000,
-            columns = 1000000,
-            customAdapter = {
-                getRowCount: function () { return rows; },
-                getColumnCount: function () { return columns; },
-                loadDataRange: function () {
-                    return function (row, column, callback) {
-                        callback(row * columns + column + 1);
-                    };
-                }
-            };
+        var data = [
+            { "Owner":  "Alpha", "Pack Type": "Standard", "Sales Value": 100},
+            { "Owner":  "Alpha", "Pack Type": "Deluxe", "Sales Value": 200},
+            { "Owner":  "Alpha", "Pack Type": "Giftset", "Sales Value": 300},
+            { "Owner":  "Beta", "Pack Type": "Standard", "Sales Value": 400},
+            { "Owner":  "Beta", "Pack Type": "Deluxe", "Sales Value": 500},
+            { "Owner":  "Beta", "Pack Type": "Giftset", "Sales Value": 600},
+            { "Owner":  "Gamma", "Pack Type": "Deluxe", "Sales Value": 700},
+            { "Owner":  "Gamma", "Pack Type": "Standard", "Sales Value": 800},
+            { "Owner":  "Gamma", "Pack Type": "Giftset", "Sales Value": 900},
+            { "Owner":  "Delta", "Pack Type": "Standard", "Sales Value": 1000},
+            { "Owner":  "Delta", "Pack Type": "Deluxe", "Sales Value": 1100}
+        ];
         Scrollgrid.init('#myTable', {
-            data: customAdapter,
+            data: new Scrollgrid.adapters.pivot(data, "Owner", "Pack Type", "Sales Value", {
+                valueOrientation: 'columns'
+            }),
             headerRows: 1,
             headerColumns: 1,
             footerRows: 1,
             footerColumns: 1,
-            formatRules: [
-                { row: "*", column: "*", formatter: d3.format(",.0f"), columnWidth: 150}
-            ]
+            formatRules: []
         });
 
     </script>
