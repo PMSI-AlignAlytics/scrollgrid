@@ -1,7 +1,7 @@
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-    // Source: /src/internal/dom/updateSize.js
+    // Source: /src/external/updateSize.js
     Scrollgrid.prototype.updateSize = function () {
         var int = this.internal,
             dom = int.dom;
