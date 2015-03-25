@@ -14,7 +14,7 @@
                 existingHandler();
             }
             // Call the instantiated layout refresh
-            this.updateSize();
+            this.refresh();
         }.bind(this);
 
     };

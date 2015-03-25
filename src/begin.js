@@ -52,10 +52,6 @@
         } else if (d3.select(options.target).length !== 1) {
             int.raise('target should be a d3/jquery selector identifying a single div.  E.g. "#tableContainer" ' +
                 'where you have a div with id "tableContainer".  Please check that your selector is matching 1 and only 1 div.');
-        } else if (!options.data) {
-            int.raise('data is a required field, please provide data in an array of arrays, where every array is of the ' +
-                'same length. If this is not the format of your data please check the Scrollgrid.transformers namespace for ' +
-                'some helpful converters.');
         } else {
 
             // Set the display options
@@ -82,28 +78,13 @@
             render.formatRules = options.formatRules || [];
             render.cellWaitText = options.cellWaitText || "loading...";
 
-            // Pass the data or adapter through to setData
-            this.setData(options.data);
-
-            // Set up the column sizes
-            physical.initialiseColumnSizes.call(this);
-
-            // Calculate the bounds of the data displayable in the main grid
-            virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;
-            virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
-
             // Create the DOM shapes required
             dom.populateDOM.call(this);
 
-            // Set the actual dimensions of the elements according to the calculations above
-            dom.layoutDOM.call(this);
+            // Pass the data or adapter through to setData
+            this.data(options.data || options.adapter);
 
-            // Render the control
-            this.draw();
-
-            // Set auto resize. The unusual condition here is to make auto resize the default behaviour.
-            // This will occur unless autoResize is specifically set to false
-            if (options.autoResize === undefined || options.autoResize) {
+            if (options.autoResize) {
                 dom.setAutoResize.call(this);
             }
         }

@@ -41,15 +41,15 @@
     <script src="/lib/d3.v3.4.8.js"></script>
     <script src="/dist/scrollgrid.latest.js"></script>
     <script type="text/javascript">
-        d3.tsv("/examples/data/example_data.tsv", function (data) {
-            Scrollgrid.init('#myTable', {
-                data: new Scrollgrid.adapters.json(data),
-                headerRows: 1,
-                formatRules: [
-                    { rows: "*", columns: "*", columnWidth: 250 }
-                ]
-            });
+        var table = Scrollgrid.init('#myTable', {
+            headerRows: 1,
+            autoResize: true,
+            formatRules: [
+                { rows: "*", columns: "*", columnWidth: 250 }
+            ]
         });
-
+        d3.tsv("/examples/data/example_data.tsv", function (data) {
+            table.data(new Scrollgrid.adapters.json(data));
+        });
     </script>
 </div>
