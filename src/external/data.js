@@ -5,6 +5,7 @@
     Scrollgrid.prototype.data = function (data) {
         var int = this.internal,
             sizes = int.sizes,
+            physical = sizes.physical,
             virtual = sizes.virtual;
 
         if (data) {
