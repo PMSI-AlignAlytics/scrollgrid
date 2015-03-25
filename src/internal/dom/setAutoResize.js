@@ -5,9 +5,7 @@
     Scrollgrid.prototype.internal.dom.setAutoResize = function () {
 
         // Pick up any existing resize handlers
-        var existingHandler = window.onresize,
-            int = this.internal,
-            dom = int.dom;
+        var existingHandler = window.onresize;
 
         // Add a new handler
         window.onresize = function () {
@@ -16,9 +14,7 @@
                 existingHandler();
             }
             // Call the instantiated layout refresh
-            dom.layoutDOM.call(this);
-            this.draw();
-            dom.setScrollerSize.call(this);
+            this.updateSize();
         }.bind(this);
 
     };
