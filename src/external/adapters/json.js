@@ -2,17 +2,20 @@
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/external/adapters/json.js
-    Scrollgrid.adapters.json = function (data, columns) {
+    Scrollgrid.adapters.json = function (data, columns, options) {
+
+        options = options || {};
 
         var columnLookup = {},
             cols = columns || [],
             table = data,
             key,
+            sampleSize = options.rowSampleSize || 100,
             i;
 
-        // If columns aren't provided find them from the data (only sample first 100 rows)
+        // If columns aren't provided find them from the data
         if (cols.length === 0) {
-            for (i = 0; i < Math.min(table.length, 100); i += 1) {
+            for (i = 0; i < Math.min(table.length, sampleSize); i += 1) {
                 for (key in table[i]) {
                     if (table[i].hasOwnProperty(key)) {
                         if (columnLookup[key] === undefined) {
