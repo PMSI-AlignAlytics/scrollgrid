@@ -16,8 +16,8 @@
 
         cells.attr("x", function (d) { return d.x; })
             .attr("y", function (d) { return d.y; })
-            .attr("width", function (d) { return d.width; })
-            .attr("height", function (d) { return d.height; });
+            .attr("width", function (d) { return d.boxWidth; })
+            .attr("height", function (d) { return d.boxHeight; });
 
         cells.exit()
             .remove();

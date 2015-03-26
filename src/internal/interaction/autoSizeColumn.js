@@ -22,7 +22,7 @@
             widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.bottom.right.svg, d.columnIndex).width);
 
             // Set the column to the widest width
-            d.column.width = widestInView + 2 * sizes.physical.cellPadding;
+            d.column.width = widestInView;
 
             // Update the container size because the width will have changed
             this.internal.dom.layoutDOM.call(this);

@@ -26,7 +26,7 @@
             .call(interaction.getColumnResizer.call(this, left));
 
         handles
-            .attr("x", function (d) { return d.x + (left ? 0 : d.width); });
+            .attr("x", function (d) { return d.x + (left ? 0 : d.boxWidth); });
 
         handles.exit()
             .remove();

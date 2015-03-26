@@ -5,9 +5,9 @@
     Scrollgrid.prototype.internal.render.getTextPosition = function (d) {
         var x = d.x;
         if (d.alignment === 'center') {
-            x += d.width / 2;
+            x += d.textWidth / 2;
         } else if (d.alignment === 'right') {
-            x += d.width - d.cellPadding;
+            x += d.textWidth - d.cellPadding;
         } else {
             x += d.cellPadding;
         }

@@ -11,7 +11,7 @@
         if (data) {
 
             // If the dataAdapter is an array, treat it as the data itself and instantiate with the default adapter
-            if (Object.prototype.toString.call(data) === '[object Array]' && data.length > virtual.top + virtual.bottom) {
+            if (Object.prototype.toString.call(data) === '[object Array]') {
                 this.adapter = new Scrollgrid.adapters.simple(data);
             } else {
                 this.adapter = data;

@@ -42,10 +42,10 @@
     <script src="/dist/scrollgrid.latest.js"></script>
     <script type="text/javascript">
         var table = Scrollgrid.init('#myTable', {
-            headerRows: 1,
             autoResize: true,
+            headerRows: 1,
             formatRules: [
-                { rows: "*", columns: "*", columnWidth: 250 }
+                { rows: "*", columns: "*", columnWidth: 100 }
             ]
         });
         d3.tsv("/examples/data/example_data.tsv", function (data) {

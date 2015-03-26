@@ -11,10 +11,10 @@
             .filter(function (d) {
                 return (column === undefined || d.columnIndex === column) && (row === undefined || d.rowIndex === row);
             })
-            .each(function () {
+            .each(function (d) {
                 var b = d3.select(this).node().getBBox();
-                if (b.width > returnBounds.width) {
-                    returnBounds.width = b.width;
+                if (b.width + 2 * d.cellPadding > returnBounds.width) {
+                    returnBounds.width = b.width + 2 * d.cellPadding;
                 }
                 if (b.height > returnBounds.height) {
                     returnBounds.height = b.height;

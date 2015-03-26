@@ -19,7 +19,7 @@
             .attr("dy", "0.35em");
 
         cells.attr("x", render.getTextPosition.bind(this))
-            .attr("y", function (d) { return d.y + d.height / 2; })
+            .attr("y", function (d) { return d.y + d.textHeight / 2; })
             .each(function (d) {
                 var shape = d3.select(this);
                 shape.text(render.cellWaitText);

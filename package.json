@@ -1,6 +1,6 @@
 {
   "name": "scrollgrid",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "private": true,
   "devDependencies": {
     "karma-script-launcher": "~0.1.0",
