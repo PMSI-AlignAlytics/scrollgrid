@@ -77,6 +77,7 @@
             render.setDefaultStyles.call(this);
             render.formatRules = options.formatRules || [];
             render.cellWaitText = options.cellWaitText || "loading...";
+            render.sortIconSize = options.sortIconSize || 7;
 
             // Create the DOM shapes required
             dom.populateDOM.call(this);
@@ -117,6 +118,7 @@
         var int = this.internal,
             dom = int.dom,
             sizes = int.sizes,
+            render = int.render,
             physical = sizes.physical;
 
         // This is required so content can size relative to it
@@ -157,7 +159,7 @@
         dom.top.right.transform.attr('transform', 'translate(' + physical.dragHandleWidth / 2 + ', 0)');
 
         // Invoke draw on scroll
-        dom.main.viewport.on('scroll', this.draw.bind(this));
+        dom.main.viewport.on('scroll', render.draw.bind(this));
 
         // Set the scrollable area
         dom.setScrollerSize.call(this);
@@ -297,12 +299,12 @@
             physical = sizes.physical;
 
         handles = g
-            .selectAll(".gi-no-style--resize-handle-selector")
+            .selectAll(".sg-no-style--resize-handle-selector")
             .data(data, function (d) { return d.key; });
 
         handles.enter()
             .append("rect")
-            .attr("class", "gi-no-style--resize-handle-selector " + style.resizeHandle)
+            .attr("class", "sg-no-style--resize-handle-selector " + style.resizeHandle)
             .attr("transform", "translate(" + (-1 * physical.dragHandleWidth / 2) + ", 0)")
             .attr("y", 0)
             .attr("width", physical.dragHandleWidth)
@@ -344,10 +346,7 @@
             d.column.width = widestInView;
 
             // Update the container size because the width will have changed
-            this.internal.dom.layoutDOM.call(this);
-
-            // Redraw
-            this.draw();
+            this.refresh();
 
         }
     };
@@ -391,11 +390,8 @@
         // Move the drag handle itself
         shape.attr('x', d.x);
 
-        // Update the container size because the width will have changed
-        this.internal.dom.layoutDOM.call(this);
-
         // Redraw
-        this.draw();
+        this.refresh();
 
     };
 
@@ -561,7 +557,63 @@
         if (column === virtual.outerWidth - 1) {
             extension.boxWidth -= 1;
         }
+        // If the cell is in the last row of the column headers and the column is being sorted
+        if (row === virtual.top - 1) {
+            // Set the sort icon to that of the column
+            extension.sortIcon = this.columns[column].sorted;
+        }
+
         return extension;
+
+    };
+
+    // Copyright: 2015 AlignAlytics
+    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+    // Source: /src/internal/render/draw.js
+    Scrollgrid.prototype.internal.render.draw = function () {
+
+        var int = this.internal,
+            render = int.render,
+            sizes = int.sizes,
+            dom = int.dom,
+            virtual = sizes.virtual,
+            physical = sizes.physical,
+            physicalViewArea = render.getVisibleRegion.call(this),
+            viewArea = render.getDataBounds.call(this, physicalViewArea),
+            totalWidth,
+            totalHeight,
+            fixedSize = {},
+            p = viewArea.physical,
+            v = viewArea.virtual,
+            y = {
+                top: { top: 0, bottom: virtual.top },
+                middle: { top: virtual.top + v.top, bottom: virtual.top + v.bottom },
+                bottom: { top: virtual.outerHeight - virtual.bottom, bottom: virtual.outerHeight }
+            },
+            x = {
+                left: { left: 0, right: virtual.left },
+                middle: { left: virtual.left + v.left, right: virtual.left + v.right },
+                right: { left: virtual.outerWidth - virtual.right, right: virtual.outerWidth }
+            };
+
+        // Draw the separate regions
+        render.renderRegion.call(this, dom.top.left, {}, x.left, y.top);
+        render.renderRegion.call(this, dom.top, { x: p.x }, x.middle, y.top);
+        render.renderRegion.call(this, dom.top.right, {}, x.right, y.top);
+        render.renderRegion.call(this, dom.left, { y: p.y }, x.left, y.middle);
+        render.renderRegion.call(this, dom.main, { x: p.x, y: p.y }, x.middle, y.middle);
+        render.renderRegion.call(this, dom.right, { y: p.y }, x.right, y.middle);
+        render.renderRegion.call(this, dom.bottom.left, {}, x.left, y.bottom);
+        render.renderRegion.call(this, dom.bottom, { x: p.x }, x.middle, y.bottom);
+        render.renderRegion.call(this, dom.bottom.right, {}, x.right, y.bottom);
+
+        // Calculate if the rendering means that the width of the
+        // whole table should change and layout accordingly
+        totalWidth = (physical.left + physical.totalInnerWidth + physical.right + physical.verticalScrollbarWidth);
+        fixedSize.width = (totalWidth < dom.parent.node().offsetWidth ? totalWidth : null);
+        totalHeight = (physical.top + physical.totalInnerHeight + physical.bottom + physical.horizontalScrollbarHeight);
+        fixedSize.height = (totalHeight < dom.parent.node().offsetHeight ? totalHeight : null);
+        dom.layoutDOM.call(this, fixedSize);
 
     };
 
@@ -656,8 +708,9 @@
                     boxHeight: Math.ceil(rowHeight) + adjustments.boxHeight,
                     textWidth: Math.ceil(column.width) + adjustments.textWidth,
                     textHeight: Math.ceil(rowHeight) + adjustments.textHeight,
-                    backgroundStyle: this.style.cellBackgroundPrefix + 'r' + (r + 1) + '-c' + (c + 1),
-                    foregroundStyle: this.style.cellForegroundPrefix + 'r' + (r + 1) + '-c' + (c + 1),
+                    backgroundStyle: this.style.cellBackgroundPrefix + 'r' + (r + 1) + ' ' + this.style.cellBackgroundPrefix + 'c' + (c + 1),
+                    foregroundStyle: this.style.cellForegroundPrefix + 'r' + (r + 1) + ' ' + this.style.cellForegroundPrefix + 'c' + (c + 1),
+                    sortIcon: adjustments.sortIcon || 'none',
                     cellPadding: physical.cellPadding,
                     alignment: 'left',
                     rowIndex: r,
@@ -680,6 +733,21 @@
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+    // Source: /src/internal/render/getSortIconPosition.js
+    Scrollgrid.prototype.internal.render.getSortIconPosition = function (d) {
+        var int = this.internal,
+            render = int.render,
+            x = d.x;
+        if (d.alignment === 'right') {
+            x += d.textWidth - d.cellPadding - render.sortIconSize / 2;
+        } else {
+            x += d.cellPadding + render.sortIconSize / 2;
+        }
+        return x;
+    };
+
+    // Copyright: 2015 AlignAlytics
+    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/render/getTextAnchor.js
     Scrollgrid.prototype.internal.render.getTextAnchor = function (d) {
         var anchor = 'start';
@@ -695,13 +763,21 @@
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/render/getTextPosition.js
     Scrollgrid.prototype.internal.render.getTextPosition = function (d) {
-        var x = d.x;
+        var int = this.internal,
+            render = int.render,
+            x = d.x;
         if (d.alignment === 'center') {
             x += d.textWidth / 2;
         } else if (d.alignment === 'right') {
             x += d.textWidth - d.cellPadding;
+            if (d.sortIcon && d.sortIcon !== 'none') {
+                x -= render.sortIconSize + d.cellPadding;
+            }
         } else {
             x += d.cellPadding;
+            if (d.sortIcon && d.sortIcon !== 'none') {
+                x += render.sortIconSize + d.cellPadding;
+            }
         }
         return x;
     };
@@ -789,12 +865,43 @@
         var cells;
 
         cells = g
-            .selectAll(".gi-no-style--background-selector")
+            .selectAll(".sg-no-style--background-selector")
             .data(viewData, function (d) { return d.key; });
 
         cells.enter()
             .append("rect")
-            .attr("class", function (d) { return "gi-no-style--background-selector " + d.backgroundStyle; });
+            .attr("class", function (d) { return "sg-no-style--background-selector " + d.backgroundStyle; });
+
+        cells.attr("x", function (d) { return d.x; })
+            .attr("y", function (d) { return d.y; })
+            .attr("width", function (d) { return d.boxWidth; })
+            .attr("height", function (d) { return d.boxHeight; });
+
+        cells.exit()
+            .remove();
+
+        return cells;
+
+    };
+
+    // Copyright: 2015 AlignAlytics
+    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+    // Source: /src/internal/render/renderCell.js
+    Scrollgrid.prototype.internal.render.renderCell = function (target, viewData) {
+
+        var cells;
+
+        cells = target
+            .selectAll(".sg-no-style--background-selector")
+            .data(viewData, function (d) { return d.key; });
+
+        cells.enter()
+            .append("g")
+            .attr("class", function (d) { return "sg-no-style--background-selector " + d.backgroundStyle; })
+            .each(function () {
+                this.append("rect");
+                this.append("text");
+            });
 
         cells.attr("x", function (d) { return d.x; })
             .attr("y", function (d) { return d.y; })
@@ -813,21 +920,24 @@
     // Source: /src/internal/render/renderForeground.js
     Scrollgrid.prototype.internal.render.renderForeground = function (g, viewData) {
 
-        var int = this.internal,
+        var self = this,
+            int = self.internal,
             render = int.render,
             cells;
 
+        g.selectAll(".sg-no-style--sort-icon-selector").remove();
+
         cells = g
-            .selectAll(".gi-no-style--text-selector")
+            .selectAll(".sg-no-style--text-selector")
             .data(viewData, function (d) { return d.key; });
 
         cells.enter()
             .append("text")
-            .attr("class", function (d) { return "gi-no-style--text-selector " + d.foregroundStyle; })
-            .style("text-anchor", render.getTextAnchor.bind(this))
+            .attr("class", function (d) { return "sg-no-style--text-selector " + d.foregroundStyle; })
+            .style("text-anchor", render.getTextAnchor.bind(self))
             .attr("dy", "0.35em");
 
-        cells.attr("x", render.getTextPosition.bind(this))
+        cells.attr("x", render.getTextPosition.bind(self))
             .attr("y", function (d) { return d.y + d.textHeight / 2; })
             .each(function (d) {
                 var shape = d3.select(this);
@@ -839,6 +949,14 @@
                         shape.text(value);
                     }
                 });
+                // Add a sort icon for the last row of the headers
+                if (d.sortIcon && d.sortIcon !== 'none') {
+                    g.append("g")
+                        .datum(d.sortIcon)
+                        .attr("class", "sg-no-style--sort-icon-selector")
+                        .attr("transform", "translate(" + render.getSortIconPosition.call(self, d) + "," + (d.y + d.textHeight / 2) + ")")
+                        .call(render.sortIcon.bind(self));
+                }
             });
 
         cells.exit()
@@ -868,8 +986,9 @@
                 right: xVirtual.right || 0
             });
 
-        render.renderBackground.call(this, target.background, data);
-        render.renderForeground.call(this, target.content, data);
+        //render.renderBackground.call(this, target.content, data);
+        //render.renderForeground.call(this, target.content, data);
+        render.renderCell.call(this, target.content, data);
 
         // Add column resize handles to the headers
         if (interaction.allowColumnResizing && (target === dom.top || target === dom.top.left || target === dom.top.right)) {
@@ -888,39 +1007,61 @@
         // Define default classes, these are kept external as users might want to use their own
         this.style = {
             left: {
-                panel: 'gi-fixed gi-left'
+                panel: 'sg-fixed sg-left'
             },
             top: {
-                panel: 'gi-fixed gi-top',
+                panel: 'sg-fixed sg-top',
                 left: {
-                    panel: 'gi-fixed gi-top-left'
+                    panel: 'sg-fixed sg-top-left'
                 },
                 right: {
-                    panel: 'gi-fixed gi-top-right'
+                    panel: 'sg-fixed sg-top-right'
                 }
             },
             right: {
-                panel: 'gi-fixed gi-right',
+                panel: 'sg-fixed sg-right',
                 left: {
-                    panel: 'gi-fixed gi-top-left'
+                    panel: 'sg-fixed sg-top-left'
                 }
             },
             bottom: {
-                panel: 'gi-fixed gi-bottom',
+                panel: 'sg-fixed sg-bottom',
                 left: {
-                    panel: 'gi-fixed gi-bottom-left'
+                    panel: 'sg-fixed sg-bottom-left'
                 },
                 right: {
-                    panel: 'gi-fixed gi-bottom-right'
+                    panel: 'sg-fixed sg-bottom-right'
                 }
             },
             main: {
-                panel: 'gi-grid'
+                panel: 'sg-grid'
             },
-            resizeHandle: 'gi-resize-handle',
-            cellBackgroundPrefix: 'gi-cell-background-',
-            cellForegroundPrefix: 'gi-cell-foreground-'
+            resizeHandle: 'sg-resize-handle',
+            cellBackgroundPrefix: 'sg-cell-background-',
+            cellForegroundPrefix: 'sg-cell-foreground-',
+            sortIcon: 'sg-sort-icon'
         };
+
+    };
+
+    // Copyright: 2015 AlignAlytics
+    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+    // Source: /src/internal/render/sortIcon.js
+    Scrollgrid.prototype.internal.render.sortIcon = function (group) {
+
+        var int = this.internal,
+            render = int.render,
+            size = render.sortIconSize,
+            icon = group.append("path").attr("class", this.style.sortIcon);
+
+        if (group.datum() === 'asc') {
+            icon.attr("d", "M " + (size / 2) + " 0 L " + size + " " + size + " L 0 " + size + " z");
+        } else if (group.datum() === 'desc') {
+            icon.attr("d", "M 0 0 L " + size + " 0 L " + (size / 2) + " " + size + " z");
+        }
+
+        // Center it around zero
+        icon.attr("transform", "translate(" + icon.node().getBBox().width / -2 + "," + icon.node().getBBox().height / -2 + ")");
 
     };
 
@@ -1064,7 +1205,8 @@
                 }
             }
             this.columns[i] = {
-                width: width
+                width: width,
+                sorted: 'desc'
             };
         }
 
@@ -1098,121 +1240,23 @@
             }
         }
 
-        // Return the total number of rows including headers and footers
-        this.getRowCount = function () {
-            return table.length;
-        };
-
-        // Return the total number of columns including headers and footers
-        this.getColumnCount = function () {
-            return cols.length;
-        };
-
-        this.loadDataRange = function () {
-            return function (row, column, callback) {
-                if (row === 0) {
-                    callback(cols[column]);
-                } else {
-                    callback(table[row][cols[column]] || 0);
-                }
-            };
-        };
-
-    };
-
-    // Copyright: 2015 AlignAlytics
-    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-    // Source: /src/external/adapters/pivot.js
-    Scrollgrid.adapters.pivot = function (data, rowDimensions, columnDimensions, valueDimensions, options) {
-
-        options = options || {};
-
-        var d,
-            r,
-            c,
-            i,
-            //measTitle = options.measureTitle || 'Measure',
-            //valueTitle = options.valueTitle || 'Value',
-            valueOrientation = options.valueOrientation || 'columns',
-            rowKey = [],
-            rowLookup = {},
-            rowValueKey = [],
-            colKey = [],
-            colValueKey = [],
-            colLookup = {},
-            rows = [],
-            columnCount = 0;
-
-        // Avoid any case errors with string options
-        valueOrientation = valueOrientation.toLowerCase();
-
-        // Force into arrays
-        rowDimensions = [].concat(rowDimensions);
-        columnDimensions = [].concat(columnDimensions);
-        valueDimensions = [].concat(valueDimensions);
-
-        for (c = 0; c < columnDimensions.length; c += 1) {
-            rows.push([]);
-            for (r = 0; r < rowDimensions.length; r += 1) {
-                rows[rows.length - 1].push(rowDimensions[r]);
+        return {
+            rowCount: function () { return table.length; },
+            columnCount: function () { return cols.length; },
+            sort: function (column, descending, predicate) {
+                table.sort(function (a, b) {
+                    return predicate(a[cols[column]], b[cols[column]]) * (descending ? -1 : 1);
+                });
+            },
+            loadDataRange: function () {
+                return function (row, column, callback) {
+                    if (row === 0) {
+                        callback(cols[column]);
+                    } else {
+                        callback(table[row][cols[column]] || 0);
+                    }
+                };
             }
-        }
-        columnCount = rowDimensions[r];
-
-        if (data && data.length > 0) {
-            for (d = 0; d < data.length; d += 1) {
-                rowKey = [];
-                colKey = [];
-                for (i = 0; i < rowDimensions.length; i += 1) {
-                    rowKey.push(data[d][rowDimensions[i]]);
-                }
-                for (i = 0; i < columnDimensions.length; i += 1) {
-                    colKey.push(data[d][columnDimensions[i]]);
-                }
-                if (valueOrientation === 'columns') {
-                    if (rowLookup[rowKey] === undefined) {
-                        rowLookup[rowKey] = rows.length;
-                        rows.push([].concat(rowKey));
-                    }
-                    for (i = 0; i < valueDimensions.length; i += 1) {
-                        colValueKey = colKey.concat(valueDimensions[i]);
-                        if (colLookup[colValueKey] === undefined) {
-                            colLookup[colValueKey] = columnCount;
-                            columnCount += 1;
-                        }
-                        rows[rowLookup[rowKey]][colLookup[colValueKey]] = (rows[rowLookup[rowKey]][colLookup[colValueKey]] || 0) + data[d][valueDimensions[i]];
-                    }
-                } else {
-                    if (colLookup[colKey] === undefined) {
-                        colLookup[colKey] = columnCount;
-                        columnCount += 1;
-                    }
-                    for (i = 0; i < valueDimensions.length; i += 1) {
-                        rowValueKey = rowKey.concat(valueDimensions[i]);
-                        if (rowLookup[rowValueKey] === undefined) {
-                            rowLookup[rowValueKey] = rows.length;
-                            rows.push([].concat(rowValueKey));
-                        }
-                        rows[rowLookup[rowValueKey]][colLookup[colKey]] = (rows[rowLookup[rowValueKey]][colLookup[colKey]] || 0) + data[d][valueDimensions[i]];
-                    }
-                }
-            }
-        }
-
-        // Return the total number of rows including headers and footers
-        this.getRowCount = function () {
-            return rows.length;
-        };
-
-        // Return the total number of columns including headers and footers
-        this.getColumnCount = function () {
-            return columnCount;
-        };
-
-        this.loadDataRange = function () {
-            return function (row, column, callback) {
-                callback(rows[row][column]);
-            };
         };
 
     };
@@ -1238,20 +1282,19 @@
             }
         }
 
-        // Return the total number of rows including headers and footers
-        this.getRowCount = function () {
-            return table.length;
-        };
-
-        // Return the total number of columns including headers and footers
-        this.getColumnCount = function () {
-            return columnCount;
-        };
-
-        this.loadDataRange = function () {
-            return function (row, column, callback) {
-                callback(table[row][column]);
-            };
+        return {
+            rowCount: function () { return table.length; },
+            columnCount: function () { return columnCount; },
+            sort: function (column, descending, predicate) {
+                table.sort(function (a, b) {
+                    return predicate(a[column], b[column]) * (descending ? -1 : 1);
+                });
+            },
+            loadDataRange: function () {
+                return function (row, column, callback) {
+                    callback(table[row][column]);
+                };
+            }
         };
 
     };
@@ -1269,12 +1312,12 @@
 
             // If the dataAdapter is an array, treat it as the data itself and instantiate with the default adapter
             if (Object.prototype.toString.call(data) === '[object Array]') {
-                this.adapter = new Scrollgrid.adapters.simple(data);
+                this.adapter = Scrollgrid.adapters.simple(data);
             } else {
                 this.adapter = data;
             }
-            virtual.outerHeight = this.adapter.getRowCount();
-            virtual.outerWidth = this.adapter.getColumnCount();
+            virtual.outerHeight = this.adapter.rowCount();
+            virtual.outerWidth = this.adapter.columnCount();
 
             // Set up the column sizes
             physical.initialiseColumnSizes.call(this);
@@ -1294,63 +1337,14 @@
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-    // Source: /src/external/draw.js
-    Scrollgrid.prototype.draw = function () {
-
-        var int = this.internal,
-            render = int.render,
-            sizes = int.sizes,
-            dom = int.dom,
-            virtual = sizes.virtual,
-            physical = sizes.physical,
-            physicalViewArea = render.getVisibleRegion.call(this),
-            viewArea = render.getDataBounds.call(this, physicalViewArea),
-            totalWidth,
-            totalHeight,
-            fixedSize = {},
-            p = viewArea.physical,
-            v = viewArea.virtual,
-            y = {
-                top: { top: 0, bottom: virtual.top },
-                middle: { top: virtual.top + v.top, bottom: virtual.top + v.bottom },
-                bottom: { top: virtual.outerHeight - virtual.bottom, bottom: virtual.outerHeight }
-            },
-            x = {
-                left: { left: 0, right: virtual.left },
-                middle: { left: virtual.left + v.left, right: virtual.left + v.right },
-                right: { left: virtual.outerWidth - virtual.right, right: virtual.outerWidth }
-            };
-
-        // Draw the separate regions
-        render.renderRegion.call(this, dom.top.left, {}, x.left, y.top);
-        render.renderRegion.call(this, dom.top, { x: p.x }, x.middle, y.top);
-        render.renderRegion.call(this, dom.top.right, {}, x.right, y.top);
-        render.renderRegion.call(this, dom.left, { y: p.y }, x.left, y.middle);
-        render.renderRegion.call(this, dom.main, { x: p.x, y: p.y }, x.middle, y.middle);
-        render.renderRegion.call(this, dom.right, { y: p.y }, x.right, y.middle);
-        render.renderRegion.call(this, dom.bottom.left, {}, x.left, y.bottom);
-        render.renderRegion.call(this, dom.bottom, { x: p.x }, x.middle, y.bottom);
-        render.renderRegion.call(this, dom.bottom.right, {}, x.right, y.bottom);
-
-        // Calculate if the rendering means that the width of the
-        // whole table should change and layout accordingly
-        totalWidth = (physical.left + physical.totalInnerWidth + physical.right + physical.verticalScrollbarWidth);
-        fixedSize.width = (totalWidth < dom.parent.node().offsetWidth ? totalWidth : null);
-        totalHeight = (physical.top + physical.totalInnerHeight + physical.bottom + physical.horizontalScrollbarHeight);
-        fixedSize.height = (totalHeight < dom.parent.node().offsetHeight ? totalHeight : null);
-        dom.layoutDOM.call(this, fixedSize);
-
-    };
-
-    // Copyright: 2015 AlignAlytics
-    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/external/refresh.js
     Scrollgrid.prototype.refresh = function () {
         var int = this.internal,
+            render = int.render,
             dom = int.dom;
         // Call the instantiated layout refresh
         dom.layoutDOM.call(this);
-        this.draw();
+        render.draw.call(this);
         dom.setScrollerSize.call(this);
     };
 

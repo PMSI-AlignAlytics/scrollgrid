@@ -20,20 +20,19 @@
             }
         }
 
-        // Return the total number of rows including headers and footers
-        this.getRowCount = function () {
-            return table.length;
-        };
-
-        // Return the total number of columns including headers and footers
-        this.getColumnCount = function () {
-            return columnCount;
-        };
-
-        this.loadDataRange = function () {
-            return function (row, column, callback) {
-                callback(table[row][column]);
-            };
+        return {
+            rowCount: function () { return table.length; },
+            columnCount: function () { return columnCount; },
+            sort: function (column, descending, predicate) {
+                table.sort(function (a, b) {
+                    return predicate(a[column], b[column]) * (descending ? -1 : 1);
+                });
+            },
+            loadDataRange: function () {
+                return function (row, column, callback) {
+                    callback(table[row][column]);
+                };
+            }
         };
 
     };

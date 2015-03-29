@@ -32,7 +32,8 @@
                 }
             }
             this.columns[i] = {
-                width: width
+                width: width,
+                sorted: 'desc'
             };
         }
 

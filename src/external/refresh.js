@@ -4,9 +4,10 @@
     // Source: /src/external/refresh.js
     Scrollgrid.prototype.refresh = function () {
         var int = this.internal,
+            render = int.render,
             dom = int.dom;
         // Call the instantiated layout refresh
         dom.layoutDOM.call(this);
-        this.draw();
+        render.draw.call(this);
         dom.setScrollerSize.call(this);
     };

@@ -12,12 +12,12 @@
 
             // If the dataAdapter is an array, treat it as the data itself and instantiate with the default adapter
             if (Object.prototype.toString.call(data) === '[object Array]') {
-                this.adapter = new Scrollgrid.adapters.simple(data);
+                this.adapter = Scrollgrid.adapters.simple(data);
             } else {
                 this.adapter = data;
             }
-            virtual.outerHeight = this.adapter.getRowCount();
-            virtual.outerWidth = this.adapter.getColumnCount();
+            virtual.outerHeight = this.adapter.rowCount();
+            virtual.outerWidth = this.adapter.columnCount();
 
             // Set up the column sizes
             physical.initialiseColumnSizes.call(this);

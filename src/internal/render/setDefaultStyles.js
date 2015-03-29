@@ -7,38 +7,39 @@
         // Define default classes, these are kept external as users might want to use their own
         this.style = {
             left: {
-                panel: 'gi-fixed gi-left'
+                panel: 'sg-fixed sg-left'
             },
             top: {
-                panel: 'gi-fixed gi-top',
+                panel: 'sg-fixed sg-top',
                 left: {
-                    panel: 'gi-fixed gi-top-left'
+                    panel: 'sg-fixed sg-top-left'
                 },
                 right: {
-                    panel: 'gi-fixed gi-top-right'
+                    panel: 'sg-fixed sg-top-right'
                 }
             },
             right: {
-                panel: 'gi-fixed gi-right',
+                panel: 'sg-fixed sg-right',
                 left: {
-                    panel: 'gi-fixed gi-top-left'
+                    panel: 'sg-fixed sg-top-left'
                 }
             },
             bottom: {
-                panel: 'gi-fixed gi-bottom',
+                panel: 'sg-fixed sg-bottom',
                 left: {
-                    panel: 'gi-fixed gi-bottom-left'
+                    panel: 'sg-fixed sg-bottom-left'
                 },
                 right: {
-                    panel: 'gi-fixed gi-bottom-right'
+                    panel: 'sg-fixed sg-bottom-right'
                 }
             },
             main: {
-                panel: 'gi-grid'
+                panel: 'sg-grid'
             },
-            resizeHandle: 'gi-resize-handle',
-            cellBackgroundPrefix: 'gi-cell-background-',
-            cellForegroundPrefix: 'gi-cell-foreground-'
+            resizeHandle: 'sg-resize-handle',
+            cellBackgroundPrefix: 'sg-cell-background-',
+            cellForegroundPrefix: 'sg-cell-foreground-',
+            sortIcon: 'sg-sort-icon'
         };
 
     };

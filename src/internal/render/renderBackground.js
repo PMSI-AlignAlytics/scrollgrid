@@ -7,12 +7,12 @@
         var cells;
 
         cells = g
-            .selectAll(".gi-no-style--background-selector")
+            .selectAll(".sg-no-style--background-selector")
             .data(viewData, function (d) { return d.key; });
 
         cells.enter()
             .append("rect")
-            .attr("class", function (d) { return "gi-no-style--background-selector " + d.backgroundStyle; });
+            .attr("class", function (d) { return "sg-no-style--background-selector " + d.backgroundStyle; });
 
         cells.attr("x", function (d) { return d.x; })
             .attr("y", function (d) { return d.y; })

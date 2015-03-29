@@ -77,6 +77,7 @@
             render.setDefaultStyles.call(this);
             render.formatRules = options.formatRules || [];
             render.cellWaitText = options.cellWaitText || "loading...";
+            render.sortIconSize = options.sortIconSize || 7;
 
             // Create the DOM shapes required
             dom.populateDOM.call(this);

@@ -22,10 +22,7 @@
         // Move the drag handle itself
         shape.attr('x', d.x);
 
-        // Update the container size because the width will have changed
-        this.internal.dom.layoutDOM.call(this);
-
         // Redraw
-        this.draw();
+        this.refresh();
 
     };

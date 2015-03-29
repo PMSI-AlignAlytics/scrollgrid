@@ -12,12 +12,12 @@
             physical = sizes.physical;
 
         handles = g
-            .selectAll(".gi-no-style--resize-handle-selector")
+            .selectAll(".sg-no-style--resize-handle-selector")
             .data(data, function (d) { return d.key; });
 
         handles.enter()
             .append("rect")
-            .attr("class", "gi-no-style--resize-handle-selector " + style.resizeHandle)
+            .attr("class", "sg-no-style--resize-handle-selector " + style.resizeHandle)
             .attr("transform", "translate(" + (-1 * physical.dragHandleWidth / 2) + ", 0)")
             .attr("y", 0)
             .attr("width", physical.dragHandleWidth)

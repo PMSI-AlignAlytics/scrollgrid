@@ -1,8 +1,8 @@
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-    // Source: /src/external/draw.js
-    Scrollgrid.prototype.draw = function () {
+    // Source: /src/internal/render/draw.js
+    Scrollgrid.prototype.internal.render.draw = function () {
 
         var int = this.internal,
             render = int.render,

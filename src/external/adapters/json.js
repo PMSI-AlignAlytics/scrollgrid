@@ -27,24 +27,23 @@
             }
         }
 
-        // Return the total number of rows including headers and footers
-        this.getRowCount = function () {
-            return table.length;
-        };
-
-        // Return the total number of columns including headers and footers
-        this.getColumnCount = function () {
-            return cols.length;
-        };
-
-        this.loadDataRange = function () {
-            return function (row, column, callback) {
-                if (row === 0) {
-                    callback(cols[column]);
-                } else {
-                    callback(table[row][cols[column]] || 0);
-                }
-            };
+        return {
+            rowCount: function () { return table.length; },
+            columnCount: function () { return cols.length; },
+            sort: function (column, descending, predicate) {
+                table.sort(function (a, b) {
+                    return predicate(a[cols[column]], b[cols[column]]) * (descending ? -1 : 1);
+                });
+            },
+            loadDataRange: function () {
+                return function (row, column, callback) {
+                    if (row === 0) {
+                        callback(cols[column]);
+                    } else {
+                        callback(table[row][cols[column]] || 0);
+                    }
+                };
+            }
         };
 
     };

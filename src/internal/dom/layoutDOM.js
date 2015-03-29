@@ -7,6 +7,7 @@
         var int = this.internal,
             dom = int.dom,
             sizes = int.sizes,
+            render = int.render,
             physical = sizes.physical;
 
         // This is required so content can size relative to it
@@ -47,7 +48,7 @@
         dom.top.right.transform.attr('transform', 'translate(' + physical.dragHandleWidth / 2 + ', 0)');
 
         // Invoke draw on scroll
-        dom.main.viewport.on('scroll', this.draw.bind(this));
+        dom.main.viewport.on('scroll', render.draw.bind(this));
 
         // Set the scrollable area
         dom.setScrollerSize.call(this);
