@@ -64,6 +64,7 @@
 
             // Set the interaction options
             interaction.allowColumnResizing = options.allowColumnResizing || true;
+            interaction.allowSorting = options.allowSorting || true;
 
             // Set the number of header or footer rows or columns
             virtual.top = options.headerRows || 0;
@@ -204,9 +205,6 @@
         // the scroll bars behave as expected
         dom.main.scroller = dom.main.viewport.append('div');
 
-        // A group for drag handles in the top panel
-        dom.top.dragHandles = dom.top.transform.append('g');
-
     };
 
     // Copyright: 2015 AlignAlytics
@@ -220,7 +218,6 @@
         panel.svg = dom.container.append('svg');
         panel.svg.attr('class', css);
         panel.transform = panel.svg.append('g');
-        panel.background = panel.transform.append('g');
         panel.content = panel.transform.append('g');
 
         return panel;
@@ -291,31 +288,57 @@
     // Source: /src/internal/interaction/addResizeHandles.js
     Scrollgrid.prototype.internal.interaction.addResizeHandles = function (g, data, left) {
 
-        var handles,
-            int = this.internal,
+        var int = this.internal,
             style = this.style,
             sizes = int.sizes,
             interaction = int.interaction,
             physical = sizes.physical;
 
-        handles = g
-            .selectAll(".sg-no-style--resize-handle-selector")
-            .data(data, function (d) { return d.key; });
+        // Unlike cell content we need to remove and re-add handles so they stay on top
+        g.selectAll(".sg-no-style--resize-handle-selector")
+            .remove();
 
-        handles.enter()
+        g.selectAll(".sg-no-style--resize-handle-selector")
+            .data(data, function (d) { return d.key; })
+            .enter()
             .append("rect")
             .attr("class", "sg-no-style--resize-handle-selector " + style.resizeHandle)
             .attr("transform", "translate(" + (-1 * physical.dragHandleWidth / 2) + ", 0)")
+            .attr("x", function (d) { return d.x + (left ? 0 : d.boxWidth); })
             .attr("y", 0)
             .attr("width", physical.dragHandleWidth)
             .attr("height", physical.top)
             .on("dblclick", interaction.autoResizeColumn.bind(this))
             .call(interaction.getColumnResizer.call(this, left));
 
-        handles
-            .attr("x", function (d) { return d.x + (left ? 0 : d.boxWidth); });
+    };
 
-        handles.exit()
+    // Copyright: 2015 AlignAlytics
+    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+    // Source: /src/internal/interaction/addSortButtons.js
+    Scrollgrid.prototype.internal.interaction.addSortButtons = function (g, data) {
+
+        var buttons,
+            int = this.internal,
+            interaction = int.interaction;
+
+        buttons = g
+            .selectAll(".sg-no-style--sort-button-selector")
+            .data(data, function (d) { return d.key; });
+
+        buttons.enter()
+            .append("rect")
+            .attr("class", "sg-no-style--sort-button-selector")
+            .style("opacity", 0)
+            .style("cursor", "pointer")
+            .on("click", function (d) { return interaction.sortColumn.call(this, d.columnIndex, true); }.bind(this));
+
+        buttons.attr("x", function (d) { return d.x; })
+            .attr("y", function (d) { return d.y; })
+            .attr("width", function (d) { return d.boxWidth; })
+            .attr("height", function (d) { return d.boxHeight; });
+
+        buttons.exit()
             .remove();
 
     };
@@ -411,6 +434,39 @@
             .on('dragend', function (d) { interaction.columnResizeEnd.call(self, d3.select(this), d); });
 
     };
+
+    // Copyright: 2015 AlignAlytics
+    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+    // Source: /src/internal/interaction/sortColumn.js
+    Scrollgrid.prototype.internal.interaction.sortColumn = function (index, toggle) {
+        var int = this.internal,
+            sizes = int.sizes,
+            virtual = sizes.virtual,
+            c;
+        // Clear existing sorts and set the new one
+        for (c = 0; c < this.columns.length; c += 1) {
+            if (c !== index) {
+                delete this.columns[c].sort;
+            } else if (toggle) {
+                this.columns[c].sort = (this.columns[c].sort === 'desc' ? 'asc' : 'desc');
+            }
+        }
+        // Instruct the adapter to perform a sort
+        this.adapter.sort(index, virtual.top, virtual.bottom, this.columns[index].sort === 'desc', this.columns[index].compareFunction || function (a, b) {
+            var order;
+            if (isNaN(a) || isNaN(b)) {
+                order = (new Date(a)) - (new Date(b));
+            } else {
+                order = parseFloat(a) - parseFloat(b);
+            }
+            if (isNaN(order)) {
+                order = (a < b ? -1 : (a > b ? 1 : 0));
+            }
+            return order;
+        });
+        this.refresh();
+    };
+
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
@@ -560,7 +616,7 @@
         // If the cell is in the last row of the column headers and the column is being sorted
         if (row === virtual.top - 1) {
             // Set the sort icon to that of the column
-            extension.sortIcon = this.columns[column].sorted;
+            extension.sortIcon = this.columns[column].sort;
         }
 
         return extension;
@@ -733,21 +789,6 @@
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-    // Source: /src/internal/render/getSortIconPosition.js
-    Scrollgrid.prototype.internal.render.getSortIconPosition = function (d) {
-        var int = this.internal,
-            render = int.render,
-            x = d.x;
-        if (d.alignment === 'right') {
-            x += d.textWidth - d.cellPadding - render.sortIconSize / 2;
-        } else {
-            x += d.cellPadding + render.sortIconSize / 2;
-        }
-        return x;
-    };
-
-    // Copyright: 2015 AlignAlytics
-    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/render/getTextAnchor.js
     Scrollgrid.prototype.internal.render.getTextAnchor = function (d) {
         var anchor = 'start';
@@ -770,9 +811,6 @@
             x += d.textWidth / 2;
         } else if (d.alignment === 'right') {
             x += d.textWidth - d.cellPadding;
-            if (d.sortIcon && d.sortIcon !== 'none') {
-                x -= render.sortIconSize + d.cellPadding;
-            }
         } else {
             x += d.cellPadding;
             if (d.sortIcon && d.sortIcon !== 'none') {
@@ -886,37 +924,6 @@
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-    // Source: /src/internal/render/renderCell.js
-    Scrollgrid.prototype.internal.render.renderCell = function (target, viewData) {
-
-        var cells;
-
-        cells = target
-            .selectAll(".sg-no-style--background-selector")
-            .data(viewData, function (d) { return d.key; });
-
-        cells.enter()
-            .append("g")
-            .attr("class", function (d) { return "sg-no-style--background-selector " + d.backgroundStyle; })
-            .each(function () {
-                this.append("rect");
-                this.append("text");
-            });
-
-        cells.attr("x", function (d) { return d.x; })
-            .attr("y", function (d) { return d.y; })
-            .attr("width", function (d) { return d.boxWidth; })
-            .attr("height", function (d) { return d.boxHeight; });
-
-        cells.exit()
-            .remove();
-
-        return cells;
-
-    };
-
-    // Copyright: 2015 AlignAlytics
-    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/render/renderForeground.js
     Scrollgrid.prototype.internal.render.renderForeground = function (g, viewData) {
 
@@ -954,7 +961,7 @@
                     g.append("g")
                         .datum(d.sortIcon)
                         .attr("class", "sg-no-style--sort-icon-selector")
-                        .attr("transform", "translate(" + render.getSortIconPosition.call(self, d) + "," + (d.y + d.textHeight / 2) + ")")
+                        .attr("transform", "translate(" + (d.x + d.cellPadding + render.sortIconSize / 2) + "," + (d.y + d.textHeight / 2) + ")")
                         .call(render.sortIcon.bind(self));
                 }
             });
@@ -986,15 +993,19 @@
                 right: xVirtual.right || 0
             });
 
-        //render.renderBackground.call(this, target.content, data);
-        //render.renderForeground.call(this, target.content, data);
-        render.renderCell.call(this, target.content, data);
+        render.renderBackground.call(this, target.content, data);
+        render.renderForeground.call(this, target.content, data);
 
-        // Add column resize handles to the headers
-        if (interaction.allowColumnResizing && (target === dom.top || target === dom.top.left || target === dom.top.right)) {
-            // Reverse the behaviour on the fixed right panel if the grid does not fill the full width because the columns
-            // will expand right into the free space, rather than left into the table
-            interaction.addResizeHandles.call(this, target.content, data, target === dom.top.right && physical.totalInnerWidth > physical.visibleInnerWidth);
+        // Add some interaction to the headers
+        if (target === dom.top || target === dom.top.left || target === dom.top.right) {
+            // Add sorting
+            if (interaction.allowSorting) {
+                interaction.addSortButtons.call(this, target.content, data);
+            }
+            // Add column resizing
+            if (interaction.allowColumnResizing) {
+                interaction.addResizeHandles.call(this, target.content, data, target === dom.top.right && physical.totalInnerWidth > physical.visibleInnerWidth);
+            }
         }
 
     };
@@ -1128,7 +1139,9 @@
     // Source: /src/internal/sizes/getExistingTextBound.js
     Scrollgrid.prototype.internal.sizes.getExistingTextBound = function (surface, column, row) {
 
-        var returnBounds = { width: 0, height: 0 };
+        var int = this.internal,
+            render = int.render,
+            returnBounds = { width: 0, height: 0 };
 
         // Measuring header values is easier because they are all rendered
         surface.selectAll("text")
@@ -1138,7 +1151,7 @@
             .each(function (d) {
                 var b = d3.select(this).node().getBBox();
                 if (b.width + 2 * d.cellPadding > returnBounds.width) {
-                    returnBounds.width = b.width + 2 * d.cellPadding;
+                    returnBounds.width = b.width + 2 * d.cellPadding + (d.sortIcon && d.sortIcon !== 'none' ? render.sortIconSize + d.cellPadding : 0);
                 }
                 if (b.height > returnBounds.height) {
                     returnBounds.height = b.height;
@@ -1174,8 +1187,8 @@
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-    // Source: /src/internal/sizes/initialiseColumnSizes.js
-    Scrollgrid.prototype.internal.sizes.physical.initialiseColumnSizes = function () {
+    // Source: /src/internal/sizes/initialiseColumns.js
+    Scrollgrid.prototype.internal.sizes.physical.initialiseColumns = function () {
 
         var i,
             int = this.internal,
@@ -1183,31 +1196,27 @@
             sizes = int.sizes,
             physical = sizes.physical,
             virtual = sizes.virtual,
-            rule,
-            width;
+            rule;
 
         // Initialise the columns if required
         this.columns = this.columns || [];
 
         for (i = 0; i < virtual.outerWidth; i += 1) {
             // Initialise with a default to ensure we always have a width
-            width = physical.defaultColumnWidth;
+            this.columns[i] = this.columns[i] || {};
+            this.columns[i].width = this.columns[i].width || physical.defaultColumnWidth;
+
             if (render.formatRules && render.formatRules.length > 0) {
-                // Iterate backwards because we can exit as soon
-                // as a rule matches (as long as only one property is set here)
-                // if adding an additional rule here, reverse the array order because
-                // later rules should override earlier rules
-                for (rule = render.formatRules.length - 1; rule >= 0; rule -= 1) {
-                    if (render.formatRules[rule].columnWidth && render.matchRule.call(this, render.formatRules[rule].column, i + 1, virtual.outerWidth)) {
-                        width = render.formatRules[rule].columnWidth;
-                        break;
+                for (rule = 0; rule < render.formatRules.length; rule += 1) {
+                    if (render.matchRule.call(this, render.formatRules[rule].column, i + 1, virtual.outerWidth)) {
+                        this.columns[i] = {
+                            width: render.formatRules[rule].columnWidth || this.columns[i].width,
+                            sort: render.formatRules[rule].sort || this.columns[i].sort,
+                            compareFunction: render.formatRules[rule].compareFunction || this.columns[i].compareFunction
+                        };
                     }
                 }
             }
-            this.columns[i] = {
-                width: width,
-                sorted: 'desc'
-            };
         }
 
     };
@@ -1220,6 +1229,7 @@
         options = options || {};
 
         var columnLookup = {},
+            headRow = {},
             cols = columns || [],
             table = data,
             key,
@@ -1240,21 +1250,32 @@
             }
         }
 
+        for (i = 0; i < cols.length; i += 1) {
+            headRow[cols[i]] = cols[i];
+        }
+
+        table.splice(0, 0, headRow);
+
         return {
             rowCount: function () { return table.length; },
             columnCount: function () { return cols.length; },
-            sort: function (column, descending, predicate) {
+            sort: function (column, headers, footers, descending, compareFunction) {
+                var heads = table.splice(0, headers),
+                    foots = table.splice(table.length - footers),
+                    i;
                 table.sort(function (a, b) {
-                    return predicate(a[cols[column]], b[cols[column]]) * (descending ? -1 : 1);
+                    return compareFunction(a[cols[column]], b[cols[column]]) * (descending ? -1 : 1);
                 });
+                for (i = heads.length - 1; i >= 0; i -= 1) {
+                    table.splice(0, 0, heads[i]);
+                }
+                for (i = 0; i < foots.length; i += 1) {
+                    table.push(foots[i]);
+                }
             },
             loadDataRange: function () {
                 return function (row, column, callback) {
-                    if (row === 0) {
-                        callback(cols[column]);
-                    } else {
-                        callback(table[row][cols[column]] || 0);
-                    }
+                    callback(table[row][cols[column]] || 0);
                 };
             }
         };
@@ -1285,10 +1306,19 @@
         return {
             rowCount: function () { return table.length; },
             columnCount: function () { return columnCount; },
-            sort: function (column, descending, predicate) {
+            sort: function (column, headers, footers, descending, compareFunction) {
+                var heads = table.splice(0, headers),
+                    foots = table.splice(table.length - footers),
+                    i;
                 table.sort(function (a, b) {
-                    return predicate(a[column], b[column]) * (descending ? -1 : 1);
+                    return compareFunction(a[column], b[column]) * (descending ? -1 : 1);
                 });
+                for (i = heads.length - 1; i >= 0; i -= 1) {
+                    table.splice(0, 0, heads[i]);
+                }
+                for (i = 0; i < foots.length; i += 1) {
+                    table.push(foots[i]);
+                }
             },
             loadDataRange: function () {
                 return function (row, column, callback) {
@@ -1306,7 +1336,9 @@
         var int = this.internal,
             sizes = int.sizes,
             physical = sizes.physical,
-            virtual = sizes.virtual;
+            virtual = sizes.virtual,
+            interaction = int.interaction,
+            c;
 
         if (data) {
 
@@ -1319,8 +1351,15 @@
             virtual.outerHeight = this.adapter.rowCount();
             virtual.outerWidth = this.adapter.columnCount();
 
-            // Set up the column sizes
-            physical.initialiseColumnSizes.call(this);
+            // Set up the columns
+            physical.initialiseColumns.call(this);
+
+            // If any of the columns have a sort it should be applied
+            for (c = 0; c < this.columns.length; c += 1) {
+                if (this.columns[c].sort === 'asc' || this.columns[c].sort === 'desc') {
+                    interaction.sortColumn.call(this, c, false);
+                }
+            }
 
             // Calculate the bounds of the data displayable in the main grid
             virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;

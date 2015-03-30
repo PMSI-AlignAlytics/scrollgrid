@@ -6,7 +6,9 @@
         var int = this.internal,
             sizes = int.sizes,
             physical = sizes.physical,
-            virtual = sizes.virtual;
+            virtual = sizes.virtual,
+            interaction = int.interaction,
+            c;
 
         if (data) {
 
@@ -19,8 +21,15 @@
             virtual.outerHeight = this.adapter.rowCount();
             virtual.outerWidth = this.adapter.columnCount();
 
-            // Set up the column sizes
-            physical.initialiseColumnSizes.call(this);
+            // Set up the columns
+            physical.initialiseColumns.call(this);
+
+            // If any of the columns have a sort it should be applied
+            for (c = 0; c < this.columns.length; c += 1) {
+                if (this.columns[c].sort === 'asc' || this.columns[c].sort === 'desc') {
+                    interaction.sortColumn.call(this, c, false);
+                }
+            }
 
             // Calculate the bounds of the data displayable in the main grid
             virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;

@@ -19,14 +19,19 @@
                 right: xVirtual.right || 0
             });
 
-        render.renderBackground.call(this, target.background, data);
+        render.renderBackground.call(this, target.content, data);
         render.renderForeground.call(this, target.content, data);
 
-        // Add column resize handles to the headers
-        if (interaction.allowColumnResizing && (target === dom.top || target === dom.top.left || target === dom.top.right)) {
-            // Reverse the behaviour on the fixed right panel if the grid does not fill the full width because the columns
-            // will expand right into the free space, rather than left into the table
-            interaction.addResizeHandles.call(this, target.content, data, target === dom.top.right && physical.totalInnerWidth > physical.visibleInnerWidth);
+        // Add some interaction to the headers
+        if (target === dom.top || target === dom.top.left || target === dom.top.right) {
+            // Add sorting
+            if (interaction.allowSorting) {
+                interaction.addSortButtons.call(this, target.content, data);
+            }
+            // Add column resizing
+            if (interaction.allowColumnResizing) {
+                interaction.addResizeHandles.call(this, target.content, data, target === dom.top.right && physical.totalInnerWidth > physical.visibleInnerWidth);
+            }
         }
 
     };

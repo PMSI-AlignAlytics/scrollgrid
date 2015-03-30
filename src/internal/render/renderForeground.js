@@ -38,7 +38,7 @@
                     g.append("g")
                         .datum(d.sortIcon)
                         .attr("class", "sg-no-style--sort-icon-selector")
-                        .attr("transform", "translate(" + render.getSortIconPosition.call(self, d) + "," + (d.y + d.textHeight / 2) + ")")
+                        .attr("transform", "translate(" + (d.x + d.cellPadding + render.sortIconSize / 2) + "," + (d.y + d.textHeight / 2) + ")")
                         .call(render.sortIcon.bind(self));
                 }
             });

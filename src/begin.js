@@ -64,6 +64,7 @@
 
             // Set the interaction options
             interaction.allowColumnResizing = options.allowColumnResizing || true;
+            interaction.allowSorting = options.allowSorting || true;
 
             // Set the number of header or footer rows or columns
             virtual.top = options.headerRows || 0;

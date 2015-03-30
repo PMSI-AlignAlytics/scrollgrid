@@ -10,7 +10,6 @@
         panel.svg = dom.container.append('svg');
         panel.svg.attr('class', css);
         panel.transform = panel.svg.append('g');
-        panel.background = panel.transform.append('g');
         panel.content = panel.transform.append('g');
 
         return panel;

@@ -10,9 +10,6 @@
             x += d.textWidth / 2;
         } else if (d.alignment === 'right') {
             x += d.textWidth - d.cellPadding;
-            if (d.sortIcon && d.sortIcon !== 'none') {
-                x -= render.sortIconSize + d.cellPadding;
-            }
         } else {
             x += d.cellPadding;
             if (d.sortIcon && d.sortIcon !== 'none') {

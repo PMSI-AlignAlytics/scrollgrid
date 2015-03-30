@@ -4,7 +4,9 @@
     // Source: /src/internal/sizes/getExistingTextBound.js
     Scrollgrid.prototype.internal.sizes.getExistingTextBound = function (surface, column, row) {
 
-        var returnBounds = { width: 0, height: 0 };
+        var int = this.internal,
+            render = int.render,
+            returnBounds = { width: 0, height: 0 };
 
         // Measuring header values is easier because they are all rendered
         surface.selectAll("text")
@@ -14,7 +16,7 @@
             .each(function (d) {
                 var b = d3.select(this).node().getBBox();
                 if (b.width + 2 * d.cellPadding > returnBounds.width) {
-                    returnBounds.width = b.width + 2 * d.cellPadding;
+                    returnBounds.width = b.width + 2 * d.cellPadding + (d.sortIcon && d.sortIcon !== 'none' ? render.sortIconSize + d.cellPadding : 0);
                 }
                 if (b.height > returnBounds.height) {
                     returnBounds.height = b.height;

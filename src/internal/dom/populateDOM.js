@@ -33,7 +33,4 @@
         // the scroll bars behave as expected
         dom.main.scroller = dom.main.viewport.append('div');
 
-        // A group for drag handles in the top panel
-        dom.top.dragHandles = dom.top.transform.append('g');
-
     };

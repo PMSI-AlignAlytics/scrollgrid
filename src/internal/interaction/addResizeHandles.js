@@ -4,31 +4,27 @@
     // Source: /src/internal/interaction/addResizeHandles.js
     Scrollgrid.prototype.internal.interaction.addResizeHandles = function (g, data, left) {
 
-        var handles,
-            int = this.internal,
+        var int = this.internal,
             style = this.style,
             sizes = int.sizes,
             interaction = int.interaction,
             physical = sizes.physical;
 
-        handles = g
-            .selectAll(".sg-no-style--resize-handle-selector")
-            .data(data, function (d) { return d.key; });
+        // Unlike cell content we need to remove and re-add handles so they stay on top
+        g.selectAll(".sg-no-style--resize-handle-selector")
+            .remove();
 
-        handles.enter()
+        g.selectAll(".sg-no-style--resize-handle-selector")
+            .data(data, function (d) { return d.key; })
+            .enter()
             .append("rect")
             .attr("class", "sg-no-style--resize-handle-selector " + style.resizeHandle)
             .attr("transform", "translate(" + (-1 * physical.dragHandleWidth / 2) + ", 0)")
+            .attr("x", function (d) { return d.x + (left ? 0 : d.boxWidth); })
             .attr("y", 0)
             .attr("width", physical.dragHandleWidth)
             .attr("height", physical.top)
             .on("dblclick", interaction.autoResizeColumn.bind(this))
             .call(interaction.getColumnResizer.call(this, left));
-
-        handles
-            .attr("x", function (d) { return d.x + (left ? 0 : d.boxWidth); });
-
-        handles.exit()
-            .remove();
 
     };
