@@ -2,7 +2,7 @@
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/sizes/calculatePhysicalBounds.js
-    Scrollgrid.prototype.internal.sizes.calculatePhysicalBounds = function () {
+    Scrollgrid.prototype.internal.sizes.calculatePhysicalBounds = function (topMargin) {
 
         var int = this.internal,
             sizes = int.sizes,
@@ -28,7 +28,7 @@
         physical.top = virtual.top * physical.headerRowHeight;
         physical.bottom = virtual.bottom * physical.footerRowHeight;
         physical.visibleInnerWidth = int.dom.container.node().offsetWidth - physical.left - physical.right;
-        physical.visibleInnerHeight = int.dom.container.node().offsetHeight - physical.top - physical.bottom;
+        physical.visibleInnerHeight = int.dom.container.node().offsetHeight - physical.top - physical.bottom - topMargin;
         physical.totalInnerHeight = virtual.innerHeight * physical.rowHeight;
 
     };

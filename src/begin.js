@@ -61,6 +61,7 @@
             physical.footerRowHeight = options.footerRowHeight || physical.rowHeight;
             physical.defaultColumnWidth = options.defaultColumnWidth || 100;
             physical.cellPadding = options.cellPadding || 6;
+            physical.verticalAlignment = options.verticalAlignment || 'top';
 
             // Set the interaction options
             interaction.allowColumnResizing = options.allowColumnResizing || true;

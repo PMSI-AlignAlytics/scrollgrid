@@ -8,16 +8,20 @@
             dom = int.dom,
             sizes = int.sizes,
             render = int.render,
-            physical = sizes.physical;
+            physical = sizes.physical,
+            topMargin;
 
         // This is required so content can size relative to it
         dom.parent
             .style('position', 'relative');
 
+        topMargin = dom.getTopMargin.call(this, fixedSize, dom.parent);
+
         dom.container
             .style('position', 'relative')
             .style('width', (fixedSize && fixedSize.width ? fixedSize.width + 'px' : '100%'))
-            .style('height', (fixedSize && fixedSize.height ? fixedSize.height + 'px' : '100%'))
+            .style('height', (fixedSize && fixedSize.height ? (fixedSize.height) + 'px' : '100%'))
+            .style('padding-top', topMargin + 'px')
             .style('font-size', 0);
 
         // If the fixed size is too great, reset to 100%, this gives the effect of
@@ -26,23 +30,25 @@
             dom.container.style('width', '100%');
         }
         if (dom.container.node().offsetHeight > dom.parent.node().offsetHeight) {
-            dom.container.style('height', '100%');
+            dom.container
+                .style('margin-top', '0px')
+                .style('height', '100%');
         }
 
         // Set the physical dimensions of the various data elements in memory
-        sizes.calculatePhysicalBounds.call(this);
+        sizes.calculatePhysicalBounds.call(this, topMargin);
 
         // Set all panels
-        dom.setAbsolutePosition.call(this, dom.left.svg, 0, physical.top, physical.left, physical.visibleInnerHeight);
+        dom.setAbsolutePosition.call(this, dom.left.svg, 0, physical.top + topMargin, physical.left, physical.visibleInnerHeight);
         dom.setRelativePosition.call(this, dom.top.svg, physical.left, physical.visibleInnerWidth, physical.top, 'hidden');
         dom.setRelativePosition.call(this, dom.main.viewport, physical.left, physical.visibleInnerWidth, physical.visibleInnerHeight, 'auto');
-        dom.setAbsolutePosition.call(this, dom.right.svg, physical.left + physical.visibleInnerWidth, physical.top, physical.right, physical.visibleInnerHeight);
+        dom.setAbsolutePosition.call(this, dom.right.svg, physical.left + physical.visibleInnerWidth, physical.top + topMargin, physical.right, physical.visibleInnerHeight);
         dom.setRelativePosition.call(this, dom.bottom.svg, physical.left, physical.visibleInnerWidth, physical.bottom, 'hidden');
-        dom.setAbsolutePosition.call(this, dom.top.left.svg, 0, 0, physical.left + physical.dragHandleWidth / 2, physical.top);
-        dom.setAbsolutePosition.call(this, dom.top.right.svg, physical.left + physical.visibleInnerWidth - physical.dragHandleWidth / 2, 0, physical.right + physical.dragHandleWidth / 2, physical.top);
-        dom.setAbsolutePosition.call(this, dom.bottom.left.svg, 0, physical.top + physical.visibleInnerHeight, physical.left, physical.bottom);
-        dom.setAbsolutePosition.call(this, dom.bottom.right.svg, physical.left + physical.visibleInnerWidth, physical.top + physical.visibleInnerHeight,  physical.right, physical.bottom);
-        dom.setAbsolutePosition.call(this, dom.main.svg, physical.left, physical.top,  physical.visibleInnerWidth, physical.visibleInnerHeight);
+        dom.setAbsolutePosition.call(this, dom.top.left.svg, 0, topMargin, physical.left + physical.dragHandleWidth / 2, physical.top);
+        dom.setAbsolutePosition.call(this, dom.top.right.svg, physical.left + physical.visibleInnerWidth - physical.dragHandleWidth / 2, topMargin, physical.right + physical.dragHandleWidth / 2, physical.top);
+        dom.setAbsolutePosition.call(this, dom.bottom.left.svg, 0, physical.top + physical.visibleInnerHeight + topMargin, physical.left, physical.bottom);
+        dom.setAbsolutePosition.call(this, dom.bottom.right.svg, physical.left + physical.visibleInnerWidth, physical.top + physical.visibleInnerHeight + topMargin,  physical.right, physical.bottom);
+        dom.setAbsolutePosition.call(this, dom.main.svg, physical.left, physical.top + topMargin,  physical.visibleInnerWidth, physical.visibleInnerHeight);
 
         // Top right panel needs a small offset for the handle
         dom.top.right.transform.attr('transform', 'translate(' + physical.dragHandleWidth / 2 + ', 0)');
