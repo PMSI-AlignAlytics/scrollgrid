@@ -656,6 +656,37 @@
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+    // Source: /src/internal/render/cropText.js
+    Scrollgrid.prototype.internal.render.cropText = function (textShape, width) {
+
+        var textWidth = textShape.node().getBBox().width,
+            text = textShape.text(),
+            avgChar = textWidth / text.length,
+            // Deliberately overestimate to start with and reduce toward target
+            chars = Math.ceil(width / avgChar) + 1;
+
+        // Store the unabbreviated text
+        textShape.datum().originalText = text;
+
+        // Handle cases where chars is < 0 (negative width) so it never enters while loop
+        if (chars <= 0) {
+            textShape.text("");
+        }
+
+        while (textWidth > width && chars >= 0) {
+            if (chars === 0) {
+                textShape.text("");
+            } else {
+                textShape.text(text.substring(0, chars));
+            }
+            textWidth = textShape.node().getBBox().width;
+            chars -= 1;
+        }
+
+    };
+
+    // Copyright: 2015 AlignAlytics
+    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/render/draw.js
     Scrollgrid.prototype.internal.render.draw = function () {
 
@@ -978,7 +1009,8 @@
         cells.attr("x", render.getTextPosition.bind(self))
             .attr("y", function (d) { return d.y + d.textHeight / 2; })
             .each(function (d) {
-                var shape = d3.select(this);
+                var shape = d3.select(this),
+                    sorted = d.sortIcon && d.sortIcon !== 'none';
                 shape.text(render.cellWaitText);
                 d.getValue(d.rowIndex, d.columnIndex, function (value) {
                     if (d.formatter) {
@@ -986,15 +1018,17 @@
                     } else {
                         shape.text(value);
                     }
+                    render.cropText.call(self, shape, d.textWidth - d.cellPadding - (sorted ? render.sortIconSize + d.cellPadding : 0));
                 });
                 // Add a sort icon for the last row of the headers
-                if (d.sortIcon && d.sortIcon !== 'none') {
+                if (sorted && d.textWidth > d.cellPadding + render.sortIconSize) {
                     g.append("g")
                         .datum(d.sortIcon)
                         .attr("class", "sg-no-style--sort-icon-selector")
                         .attr("transform", "translate(" + (d.x + d.cellPadding + render.sortIconSize / 2) + "," + (d.y + d.textHeight / 2) + ")")
                         .call(render.sortIcon.bind(self));
                 }
+
             });
 
         cells.exit()
@@ -1180,13 +1214,21 @@
                 return (column === undefined || d.columnIndex === column) && (row === undefined || d.rowIndex === row);
             })
             .each(function (d) {
-                var b = d3.select(this).node().getBBox();
+                var shape = d3.select(this),
+                    originalText = shape.text(),
+                    b;
+                // Remove any abbreviation
+                shape.text(shape.datum().originalText || shape.text());
+                // Get the bounds
+                b = shape.node().getBBox();
                 if (b.width + 2 * d.cellPadding > returnBounds.width) {
                     returnBounds.width = b.width + 2 * d.cellPadding + (d.sortIcon && d.sortIcon !== 'none' ? render.sortIconSize + d.cellPadding : 0);
                 }
                 if (b.height > returnBounds.height) {
                     returnBounds.height = b.height;
                 }
+                // Reapply abbreviation
+                shape.text(originalText);
             });
 
         return returnBounds;
@@ -1310,7 +1352,6 @@
                 };
             }
         };
-
     };
 
     // Copyright: 2015 AlignAlytics
