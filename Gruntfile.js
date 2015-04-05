@@ -44,7 +44,7 @@ module.exports = function(grunt) {
         jslint: {
             files: [
                 'Gruntfile.js',
-                'test/**/*.spec.js',
+                'spec/**/*.spec.js',
                 'dist/<%= pkg.name %>.v<%= pkg.version %>.js'
             ],
             directives: {
@@ -59,6 +59,7 @@ module.exports = function(grunt) {
                     'require',
                     'exports',
                     'describe',
+                    'expect',
                     'it',
                     'xdescribe',
                     'xit',
@@ -68,24 +69,12 @@ module.exports = function(grunt) {
             }
         },
         karma: {
-            options: {
-                basepath: '',
-                frameworks: ['jasmine', 'requirejs'],
-                files: [
-                    'test/test-main.js',
-                    { pattern: 'lib/*.min.js', included: false },
-                    { pattern: 'tmp/*.js', included: false },
-                    { pattern: 'test/**/*.spec.js', included: false }
-                ],
-                reporters: ['progress'],
-                port: 9876,
-                colors: true,
-                browsers: ['PhantomJS']
-            },
             unit: {
+                configFile: 'karma.config.js',
                 singleRun: true
             },
             continuous: {
+                configFile: 'karma.config.js',
                 background: true
             }
         },
@@ -98,8 +87,8 @@ module.exports = function(grunt) {
             },
             test: {
                 files: [
-                    'test/**/*.spec.js',
-                    'test/*.spec.js'
+                    'spec/**/*.spec.js',
+                    'spec/*.spec.js'
                 ],
                 tasks: ['karma:continuous:run']
             }
@@ -116,7 +105,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-karma');
 
     // Default tasks
-    grunt.registerTask('default', ['concat', 'jslint', 'uglify', 'copy', 'connect']);
+    grunt.registerTask('default', ['concat', 'jslint', 'concat:test', 'karma:unit', 'uglify', 'copy', 'connect']);
     grunt.registerTask('test:unit', ['concat:test', 'karma:unit']);
     grunt.registerTask('test', ['karma:continuous:start', 'watch']);
 
