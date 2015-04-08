@@ -191,7 +191,7 @@
         dom.top.right.transform.attr('transform', 'translate(' + physical.dragHandleWidth / 2 + ', 0)');
 
         // Invoke draw on scroll
-        dom.main.viewport.on('scroll', render.draw.bind(this));
+        dom.main.viewport.on('scroll', function () { render.draw.call(this); });
 
         // Set the scrollable area
         dom.setScrollerSize.call(this);
