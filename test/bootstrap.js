@@ -11,13 +11,14 @@ for (file in window.__karma__.files) {
 }
 
 requirejs.config({
+
     // Karma serves files from '/base'
     baseUrl: '/base/src',
 
     paths: {
-        'scrollgrid': '../tmp/scrollgrid',
-        'd3': '../lib/d3.v3.4.8.min',
-        'mocks': '../spec/mocks'
+        'scrollgrid_actual': '../tmp/scrollgrid',
+        'scrollgrid_mock': '../test/mock/scrollgrid',
+        'd3': '../test/mock/d3'
     },
 
     // ask Require.js to load these files (all our tests)
@@ -25,4 +26,5 @@ requirejs.config({
 
     // start test run, once Require.js is done
     callback: window.__karma__.start
+
 });

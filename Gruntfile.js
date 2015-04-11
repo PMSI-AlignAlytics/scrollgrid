@@ -44,7 +44,7 @@ module.exports = function(grunt) {
         jslint: {
             files: [
                 'Gruntfile.js',
-                'spec/**/*.spec.js',
+                'test/spec/**/*.spec.js',
                 'dist/<%= pkg.name %>.v<%= pkg.version %>.js'
             ],
             directives: {
@@ -87,8 +87,8 @@ module.exports = function(grunt) {
             },
             test: {
                 files: [
-                    'spec/**/*.spec.js',
-                    'spec/*.spec.js'
+                    'test/spec/**/*.spec.js',
+                    'test/spec/*.spec.js'
                 ],
                 tasks: ['karma:continuous:run']
             }

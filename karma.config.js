@@ -6,11 +6,12 @@ module.exports = function(config) {
       basepath: '',
       frameworks: ['jasmine', 'requirejs'],
       files: [
-        'spec/bootstrap.js',
+        'test/bootstrap.js',
         { pattern: 'lib/*.min.js', included: false },
         { pattern: 'tmp/*.js', included: false },
-        { pattern: 'spec/mocks.js', included: false },
-        { pattern: 'spec/**/*.spec.js', included: false }
+        { pattern: 'test/mock/*.js', included: false },
+        { pattern: 'test/mock/**/*.js', included: false },
+        { pattern: 'test/spec/**/*.spec.js', included: false }
       ],
       reporters: ['progress'],
       port: 9876,
