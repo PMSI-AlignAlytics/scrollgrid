@@ -124,6 +124,7 @@
             sortIcon: 'sort-icon'
         };
         scrollgrid.target = scrollgrid.vals.target;
+        scrollgrid.refresh = jasmine.createSpy("refresh");
         return scrollgrid;
     };
 
