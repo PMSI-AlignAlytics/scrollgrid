@@ -6,6 +6,7 @@
     scrollgrid.vals = {
         gridAlignment: "top",
         target: "testTarget",
+        columnResizer: "column resizer",
         nodeOffsetHeight: 1,
         nodeOffsetWidth: 2,
         topMargin: 3,
@@ -35,27 +36,38 @@
             clientHeight: scrollgrid.vals.nodeClientHeight,
             clientWidth: scrollgrid.vals.nodeClientWidth
         };
-        self.attr = function (key, value) {
+        self.selections = {};
+        self.attr = jasmine.createSpy("attr").andCallFake(function (key, value) {
             self.attributes[key] = value;
             return self;
-        };
-        self.style = function (key, value) {
+        });
+        self.style = jasmine.createSpy("style").andCallFake(function (key, value) {
             self.styles[key] = value;
             return self;
-        };
-        self.node = function () {
+        });
+        self.node = jasmine.createSpy("node").andCallFake(function () {
             return self.nodeObject;
-        };
-        self.on = function (key, value) {
+        });
+        self.on = jasmine.createSpy("on").andCallFake(function (key, value) {
             self.eventHandlers[key] = value;
             return self;
-        };
-        self.append = function (child) {
+        });
+        self.append = jasmine.createSpy("append").andCallFake(function (child) {
             var returnVal = new scrollgrid.shape();
             self.children[child] = self.children[child] || [];
             self.children[child].push(returnVal);
             return returnVal;
-        }
+        });
+        self.selectAll = jasmine.createSpy("selectAll").andCallFake(function (selector) {
+            var returnVal = new scrollgrid.shape();
+            self.selections[selector] = self.selections[selector] || [];
+            self.selections[selector].push(returnVal);
+            return returnVal;
+        });
+        self.remove = jasmine.createSpy("remove").andReturn(self);
+        self.enter = jasmine.createSpy("enter").andReturn(self);
+        self.data = jasmine.createSpy("data").andReturn(self);
+        self.call = jasmine.createSpy("call").andReturn(self);
     };
 
     scrollgrid.panel = function () {
@@ -112,6 +124,10 @@
                     returnPanel.style = css;
                     return returnPanel;
                 })
+            },
+            interaction: {
+                autoResizeColumn: jasmine.createSpy("autoResizeColumn"),
+                getColumnResizer: jasmine.createSpy("getColumnResizer").andReturn("column resizer")
             },
             render: {
                 draw: jasmine.createSpy("draw")

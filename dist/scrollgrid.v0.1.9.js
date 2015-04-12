@@ -320,8 +320,9 @@
     // Source: /src/internal/interaction/addResizeHandles.js
     Scrollgrid.prototype.internal.interaction.addResizeHandles = function (g, data, left) {
 
-        var int = this.internal,
-            style = this.style,
+        var self = this,
+            int = self.internal,
+            style = self.style,
             sizes = int.sizes,
             interaction = int.interaction,
             physical = sizes.physical;
@@ -340,8 +341,8 @@
             .attr("y", 0)
             .attr("width", physical.dragHandleWidth)
             .attr("height", physical.top)
-            .on("dblclick", interaction.autoResizeColumn.bind(this))
-            .call(interaction.getColumnResizer.call(this, left));
+            .on("dblclick", function () { interaction.autoResizeColumn.call(self); })
+            .call(interaction.getColumnResizer.call(self, left));
 
     };
 
