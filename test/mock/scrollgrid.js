@@ -16,9 +16,11 @@
         physBottom: 17,
         visibleInnerHeight: 19,
         visibleInnerWidth: 23,
-        nodeClientHeight: 31,
-        nodeClientWidth: 37,
-        dragHandleWidth: 41
+        nodeClientHeight: 29,
+        nodeClientWidth: 31,
+        dragHandleWidth: 37,
+        totalInnerHeight: 41,
+        totalInnerWidth: 43
     };
 
     scrollgrid.shape = function () {
@@ -72,7 +74,8 @@
             transform: new scrollgrid.shape(),
             content: new scrollgrid.shape()
         };
-        self.viewport = new scrollgrid.shape()
+        self.viewport = new scrollgrid.shape();
+        self.scroller = new scrollgrid.shape();
     };
 
     scrollgrid.init = function () {
@@ -86,7 +89,9 @@
                     bottom: scrollgrid.vals.physBottom,
                     visibleInnerHeight: scrollgrid.vals.visibleInnerHeight,
                     visibleInnerWidth: scrollgrid.vals.visibleInnerWidth,
-                    dragHandleWidth: scrollgrid.vals.dragHandleWidth
+                    dragHandleWidth: scrollgrid.vals.dragHandleWidth,
+                    totalInnerHeight: scrollgrid.vals.totalInnerHeight,
+                    totalInnerWidth: scrollgrid.vals.totalInnerWidth
                 },
                 calculatePhysicalBounds: jasmine.createSpy("calculatePhysicalBounds")
             },
