@@ -4,6 +4,7 @@
     // Source: /src/internal/interaction/sortColumn.js
     Scrollgrid.prototype.internal.interaction.sortColumn = function (index, toggle) {
         var int = this.internal,
+            interaction = int.interaction,
             sizes = int.sizes,
             virtual = sizes.virtual,
             c;
@@ -16,17 +17,6 @@
             }
         }
         // Instruct the adapter to perform a sort
-        this.adapter.sort(index, virtual.top, virtual.bottom, this.columns[index].sort === 'desc', this.columns[index].compareFunction || function (a, b) {
-            var order;
-            if (isNaN(a) || isNaN(b)) {
-                order = (new Date(a)) - (new Date(b));
-            } else {
-                order = parseFloat(a) - parseFloat(b);
-            }
-            if (isNaN(order)) {
-                order = (a < b ? -1 : (a > b ? 1 : 0));
-            }
-            return order;
-        });
+        this.adapter.sort(index, virtual.top, virtual.bottom, this.columns[index].sort === 'desc', this.columns[index].compareFunction || interaction.defaultComparer);
         this.refresh();
     };

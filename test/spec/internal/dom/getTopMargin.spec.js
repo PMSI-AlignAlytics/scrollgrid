@@ -23,18 +23,19 @@ define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
         });
 
         it("should return 0 if parent is not passed", function () {
-            result = underTest.call(mock, {});
-            expect(result).toEqual(0);
-        });
-
-        it("should return 0 if alignment is top", function () {
-            result = underTest.call(mock, {}, new mock.shape());
+            result = underTest.call(mock, { height: mock.vals.containerHeight });
             expect(result).toEqual(0);
         });
 
         it("should default to 0 if alignment is not set", function () {
             mockPhys.verticalAlignment = undefined;
-            result = underTest.call(mock, {}, new mock.shape());
+            result = underTest.call(mock, { height: mock.vals.containerHeight }, new mock.shape());
+            expect(result).toEqual(0);
+        });
+
+        it("should return 0 if alignment is top", function () {
+            mockPhys.verticalAlignment = "top";
+            result = underTest.call(mock, { height: mock.vals.containerHeight }, new mock.shape());
             expect(result).toEqual(0);
         });
 
