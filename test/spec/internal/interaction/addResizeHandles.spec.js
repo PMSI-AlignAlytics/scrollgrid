@@ -92,8 +92,8 @@ define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
             it("should call auto resize column on double click", function () {
                 expect(selectionRect.on).toHaveBeenCalled();
                 expect(selectionRect.on.mostRecentCall.args[0]).toEqual("dblclick");
-                selectionRect.on.mostRecentCall.args[1]();
-                expect(mock.internal.interaction.autoResizeColumn).toHaveBeenCalled();
+                selectionRect.on.mostRecentCall.args[1]("Parameter");
+                expect(mock.internal.interaction.autoResizeColumn).toHaveBeenCalledWith("Parameter");
             });
 
             it("should call column resizer", function () {

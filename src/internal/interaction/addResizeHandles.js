@@ -25,7 +25,7 @@
             .attr("y", 0)
             .attr("width", physical.dragHandleWidth)
             .attr("height", physical.top)
-            .on("dblclick", function () { interaction.autoResizeColumn.call(self); })
+            .on("dblclick", function (d) { interaction.autoResizeColumn.call(self, d); })
             .call(interaction.getColumnResizer.call(self, left));
 
     };
