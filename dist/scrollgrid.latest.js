@@ -385,23 +385,19 @@
 
         var int = this.internal,
             dom = int.dom,
-            widestInView = 0,
-            sizes = int.sizes;
+            sizes = int.sizes,
+            panels = [dom.top.left, dom.top, dom.top.right, dom.left, dom.main, dom.right, dom.bottom.left, dom.bottom, dom.bottom.right],
+            i;
 
         if (d && d.column && d.columnIndex) {
 
-            widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.top.left.svg, d.columnIndex).width);
-            widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.top.svg, d.columnIndex).width);
-            widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.top.right.svg, d.columnIndex).width);
-            widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.left.svg, d.columnIndex).width);
-            widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.main.svg, d.columnIndex).width);
-            widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.right.svg, d.columnIndex).width);
-            widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.bottom.left.svg, d.columnIndex).width);
-            widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.bottom.svg, d.columnIndex).width);
-            widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.bottom.right.svg, d.columnIndex).width);
+            // Do not allow the width to be less than 0
+            d.column.width = 0;
 
-            // Set the column to the widest width
-            d.column.width = widestInView;
+            // Get the widest from the various panels (some panels may not apply to the given cell but those panels will return zero anyway)
+            for (i = 0; i < panels.length; i += 1) {
+                d.column.width = Math.max(d.column.width, sizes.getExistingTextBound.call(this, panels[i].svg, d.columnIndex).width);
+            }
 
             // Update the container size because the width will have changed
             this.refresh();
