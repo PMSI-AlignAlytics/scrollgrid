@@ -388,7 +388,7 @@
             widestInView = 0,
             sizes = int.sizes;
 
-        if (d.column) {
+        if (d && d.column && d.columnIndex) {
 
             widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.top.left.svg, d.columnIndex).width);
             widestInView = Math.max(widestInView, sizes.getExistingTextBound.call(this, dom.top.svg, d.columnIndex).width);

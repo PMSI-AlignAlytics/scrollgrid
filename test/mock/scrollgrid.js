@@ -21,7 +21,8 @@
         nodeClientWidth: 31,
         dragHandleWidth: 37,
         totalInnerHeight: 41,
-        totalInnerWidth: 43
+        totalInnerWidth: 43,
+        textBoundWidth: 47
     };
 
     scrollgrid.shape = function () {
@@ -106,7 +107,8 @@
                     totalInnerHeight: scrollgrid.vals.totalInnerHeight,
                     totalInnerWidth: scrollgrid.vals.totalInnerWidth
                 },
-                calculatePhysicalBounds: jasmine.createSpy("calculatePhysicalBounds")
+                calculatePhysicalBounds: jasmine.createSpy("calculatePhysicalBounds"),
+                getExistingTextBound: jasmine.createSpy("getExistingTextBound").andReturn({ width: scrollgrid.vals.textBoundWidth })
             },
             dom: {
                 parent: new scrollgrid.shape(),
