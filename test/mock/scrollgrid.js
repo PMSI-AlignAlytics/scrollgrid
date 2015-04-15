@@ -66,6 +66,7 @@
         });
         self.remove = jasmine.createSpy("remove").andReturn(self);
         self.enter = jasmine.createSpy("enter").andReturn(self);
+        self.exit = jasmine.createSpy("exit").andReturn(self);
         self.data = jasmine.createSpy("data").andReturn(self);
         self.call = jasmine.createSpy("call").andReturn(self);
     };
@@ -127,7 +128,8 @@
             },
             interaction: {
                 autoResizeColumn: jasmine.createSpy("autoResizeColumn"),
-                getColumnResizer: jasmine.createSpy("getColumnResizer").andReturn("column resizer")
+                getColumnResizer: jasmine.createSpy("getColumnResizer").andReturn("column resizer"),
+                sortColumn: jasmine.createSpy("sortColumn")
             },
             render: {
                 draw: jasmine.createSpy("draw")

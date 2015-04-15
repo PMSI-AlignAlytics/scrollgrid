@@ -5,7 +5,8 @@
     Scrollgrid.prototype.internal.interaction.addSortButtons = function (g, data) {
 
         var buttons,
-            int = this.internal,
+            self = this,
+            int = self.internal,
             interaction = int.interaction;
 
         buttons = g
@@ -17,7 +18,7 @@
             .attr("class", "sg-no-style--sort-button-selector")
             .style("opacity", 0)
             .style("cursor", "pointer")
-            .on("click", function (d) { return interaction.sortColumn.call(this, d.columnIndex, true); }.bind(this));
+            .on("click", function (d) { return interaction.sortColumn.call(self, d.columnIndex, true); });
 
         buttons.attr("x", function (d) { return d.x; })
             .attr("y", function (d) { return d.y; })
