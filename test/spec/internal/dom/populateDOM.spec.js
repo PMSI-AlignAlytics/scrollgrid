@@ -1,4 +1,4 @@
-define(['scrollgrid_actual', 'scrollgrid_mock', 'd3'], function (actual, mock, d3) {
+define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
     "use strict";
 
     describe("populateDOM", function () {

@@ -1,4 +1,4 @@
-define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
+define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
     "use strict";
 
     describe("setRelativePosition", function () {
@@ -15,7 +15,7 @@ define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
 
         beforeEach(function () {
             mock.init();
-            inShape = new mock.shape();
+            inShape = new d3.shape();
             outShape = underTest.call(mock, inShape, vals.x, vals.width, vals.height, vals.overflow);
         });
 

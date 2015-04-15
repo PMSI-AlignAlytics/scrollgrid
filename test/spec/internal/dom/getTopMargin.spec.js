@@ -1,4 +1,4 @@
-define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
+define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
     "use strict";
 
     describe("getTopMargin", function () {
@@ -29,25 +29,25 @@ define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
 
         it("should default to 0 if alignment is not set", function () {
             mockPhys.verticalAlignment = undefined;
-            result = underTest.call(mock, { height: mock.vals.containerHeight }, new mock.shape());
+            result = underTest.call(mock, { height: mock.vals.containerHeight }, new d3.shape());
             expect(result).toEqual(0);
         });
 
         it("should return 0 if alignment is top", function () {
             mockPhys.verticalAlignment = "top";
-            result = underTest.call(mock, { height: mock.vals.containerHeight }, new mock.shape());
+            result = underTest.call(mock, { height: mock.vals.containerHeight }, new d3.shape());
             expect(result).toEqual(0);
         });
 
         it("should return half parent height minus half container height if alignment is middle", function () {
             mockPhys.verticalAlignment = "middle";
-            result = underTest.call(mock, { height: mock.vals.containerHeight }, new mock.shape());
+            result = underTest.call(mock, { height: mock.vals.containerHeight }, new d3.shape());
             expect(result).toEqual(mock.vals.nodeOffsetHeight / 2 - mock.vals.containerHeight / 2);
         });
 
         it("should return parent height minus container height with 1 pixel margin if alignment is bottom", function () {
             mockPhys.verticalAlignment = "bottom";
-            result = underTest.call(mock, { height: mock.vals.containerHeight }, new mock.shape());
+            result = underTest.call(mock, { height: mock.vals.containerHeight }, new d3.shape());
             expect(result).toEqual(mock.vals.nodeOffsetHeight - mock.vals.containerHeight - 1);
         });
 

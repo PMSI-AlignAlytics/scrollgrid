@@ -1,4 +1,4 @@
-(function () {
+define(["d3"], function (d3) {
     "use strict";
 
     var scrollgrid = {};
@@ -25,71 +25,24 @@
         textBoundWidth: 47
     };
 
-    scrollgrid.shape = function () {
-        var self = this;
-        self.attributes = {};
-        self.styles = {};
-        self.eventHandlers = {};
-        self.children = {};
-        self.nodeObject = {
-            offsetHeight: scrollgrid.vals.nodeOffsetHeight,
-            offsetWidth: scrollgrid.vals.nodeOffsetWidth,
-            clientHeight: scrollgrid.vals.nodeClientHeight,
-            clientWidth: scrollgrid.vals.nodeClientWidth
-        };
-        self.selections = {};
-        self.attr = jasmine.createSpy("attr").andCallFake(function (key, value) {
-            self.attributes[key] = value;
-            return self;
-        });
-        self.style = jasmine.createSpy("style").andCallFake(function (key, value) {
-            self.styles[key] = value;
-            return self;
-        });
-        self.node = jasmine.createSpy("node").andCallFake(function () {
-            return self.nodeObject;
-        });
-        self.on = jasmine.createSpy("on").andCallFake(function (key, value) {
-            self.eventHandlers[key] = value;
-            return self;
-        });
-        self.append = jasmine.createSpy("append").andCallFake(function (child) {
-            var returnVal = new scrollgrid.shape();
-            self.children[child] = self.children[child] || [];
-            self.children[child].push(returnVal);
-            return returnVal;
-        });
-        self.selectAll = jasmine.createSpy("selectAll").andCallFake(function (selector) {
-            var returnVal = new scrollgrid.shape();
-            self.selections[selector] = self.selections[selector] || [];
-            self.selections[selector].push(returnVal);
-            return returnVal;
-        });
-        self.remove = jasmine.createSpy("remove").andReturn(self);
-        self.enter = jasmine.createSpy("enter").andReturn(self);
-        self.exit = jasmine.createSpy("exit").andReturn(self);
-        self.data = jasmine.createSpy("data").andReturn(self);
-        self.call = jasmine.createSpy("call").andReturn(self);
-    };
-
     scrollgrid.panel = function () {
         var self = this;
         self.style = null;
-        self.svg = new scrollgrid.shape();
-        self.transform = new scrollgrid.shape();
-        self.content = new scrollgrid.shape();
+        self.svg = new d3.shape(scrollgrid.vals);
+        self.transform = new d3.shape(scrollgrid.vals);
+        self.content = new d3.shape(scrollgrid.vals);
         self.left = {
-            svg: new scrollgrid.shape(),
-            transform: new scrollgrid.shape(),
-            content: new scrollgrid.shape()
+            svg: new d3.shape(scrollgrid.vals),
+            transform: new d3.shape(scrollgrid.vals),
+            content: new d3.shape(scrollgrid.vals)
         };
         self.right = {
-            svg: new scrollgrid.shape(),
-            transform: new scrollgrid.shape(),
-            content: new scrollgrid.shape()
+            svg: new d3.shape(scrollgrid.vals),
+            transform: new d3.shape(scrollgrid.vals),
+            content: new d3.shape(scrollgrid.vals)
         };
-        self.viewport = new scrollgrid.shape();
-        self.scroller = new scrollgrid.shape();
+        self.viewport = new d3.shape(scrollgrid.vals);
+        self.scroller = new d3.shape(scrollgrid.vals);
     };
 
     scrollgrid.init = function () {
@@ -111,8 +64,8 @@
                 getExistingTextBound: jasmine.createSpy("getExistingTextBound").andReturn({ width: scrollgrid.vals.textBoundWidth })
             },
             dom: {
-                parent: new scrollgrid.shape(),
-                container: new scrollgrid.shape(),
+                parent: new d3.shape(scrollgrid.vals),
+                container: new d3.shape(scrollgrid.vals),
                 top: new scrollgrid.panel(),
                 left: new scrollgrid.panel(),
                 main: new scrollgrid.panel(),
@@ -153,12 +106,6 @@
         return scrollgrid;
     };
 
-    if (typeof define === "function" && define.amd) {
-        define(scrollgrid);
-    } else if (typeof module === "object" && module.exports) {
-        module.exports = scrollgrid;
-    } else {
-        this.scrollgrid = scrollgrid;
-    }
+    return scrollgrid;
 
-}());
+});

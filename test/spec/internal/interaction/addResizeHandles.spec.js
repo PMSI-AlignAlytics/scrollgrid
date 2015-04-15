@@ -1,4 +1,4 @@
-define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
+define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
     "use strict";
 
     describe("addResizeHandles", function () {
@@ -10,7 +10,7 @@ define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
 
         beforeEach(function () {
             mock.init();
-            target = new mock.shape();
+            target = new d3.shape();
         });
 
         it("should remove any existing resize handles", function () {
