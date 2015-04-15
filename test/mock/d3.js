@@ -30,6 +30,7 @@ define(function () {
             self.eventHandlers[key] = value;
             return self;
         });
+        self.classed = jasmine.createSpy("classed");
         self.append = jasmine.createSpy("append").andCallFake(function (child) {
             var returnVal = new d3.shape();
             self.children[child] = self.children[child] || [];
