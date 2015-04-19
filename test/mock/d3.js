@@ -54,6 +54,11 @@ define(function () {
             select: new d3.shape()
         };
         d3.select = jasmine.createSpy("d3.select").andReturn(d3.returnValues.select);
+        d3.event = {
+            sourceEvent : {
+                stopPropagation : jasmine.createSpy("stopPropagation")
+            }
+        };
     };
     return d3;
 });
