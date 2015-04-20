@@ -22,7 +22,11 @@ define(["d3"], function (d3) {
         dragHandleWidth: 37,
         totalInnerHeight: 41,
         totalInnerWidth: 43,
-        textBoundWidth: 47
+        textBoundWidth: 47,
+        virtTop: 51,
+        virtLeft: 53,
+        virtRight: 57,
+        virtBottom: 61
     };
 
     scrollgrid.panel = function () {
@@ -59,6 +63,12 @@ define(["d3"], function (d3) {
                     dragHandleWidth: scrollgrid.vals.dragHandleWidth,
                     totalInnerHeight: scrollgrid.vals.totalInnerHeight,
                     totalInnerWidth: scrollgrid.vals.totalInnerWidth
+                },
+                virtual: {
+                    top: scrollgrid.vals.virtTop,
+                    left: scrollgrid.vals.virtLeft,
+                    right: scrollgrid.vals.virtRight,
+                    bottom: scrollgrid.vals.virtBottom
                 },
                 calculatePhysicalBounds: jasmine.createSpy("calculatePhysicalBounds"),
                 getExistingTextBound: jasmine.createSpy("getExistingTextBound").andReturn({ width: scrollgrid.vals.textBoundWidth })
@@ -106,6 +116,14 @@ define(["d3"], function (d3) {
         };
         scrollgrid.target = scrollgrid.vals.target;
         scrollgrid.refresh = jasmine.createSpy("refresh");
+        scrollgrid.columns = [
+            { width: 11 },
+            { width: 13 },
+            { width: 17 }
+        ];
+        scrollgrid.adapter = {
+            sort: jasmine.createSpy("sort")
+        };
         return scrollgrid;
     };
 
