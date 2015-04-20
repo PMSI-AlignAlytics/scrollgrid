@@ -49,6 +49,15 @@ define(function () {
         self.data = jasmine.createSpy("data").andReturn(self);
         self.call = jasmine.createSpy("call").andReturn(self);
     };
+    d3.drag = function () {
+        var self = this;
+        self.eventHandlers = {};
+        self.origin = jasmine.createSpy("origin").andReturn(self);
+        self.on = jasmine.createSpy("on").andCallFake(function (key, value) {
+            self.eventHandlers[key] = value;
+            return self;
+        });
+    };
     d3.init = function () {
         d3.returnValues = {
             select: new d3.shape()
@@ -59,6 +68,9 @@ define(function () {
                 stopPropagation : jasmine.createSpy("stopPropagation")
             }
         };
+        d3.behavior = {
+            drag: jasmine.createSpy("drag").andReturn(new d3.drag())
+        }
     };
     return d3;
 });

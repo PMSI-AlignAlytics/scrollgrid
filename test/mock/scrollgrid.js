@@ -84,6 +84,9 @@ define(["d3"], function (d3) {
             interaction: {
                 autoResizeColumn: jasmine.createSpy("autoResizeColumn"),
                 getColumnResizer: jasmine.createSpy("getColumnResizer").andReturn("column resizer"),
+                columnResizeStart: jasmine.createSpy("columnResizeStart"),
+                columnResizing: jasmine.createSpy("columnResizing"),
+                columnResizeEnd: jasmine.createSpy("columnResizeEnd"),
                 sortColumn: jasmine.createSpy("sortColumn")
             },
             render: {
