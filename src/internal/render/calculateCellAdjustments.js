@@ -56,7 +56,7 @@
         // If the cell is in the last row of the column headers and the column is being sorted
         if (row === virtual.top - 1) {
             // Set the sort icon to that of the column
-            extension.sortIcon = this.columns[column].sort;
+            extension.sortIcon = (this.columns[column] ? this.columns[column].sort : undefined);
         }
 
         return extension;

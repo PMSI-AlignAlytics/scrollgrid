@@ -26,7 +26,9 @@ define(["d3"], function (d3) {
         virtTop: 51,
         virtLeft: 53,
         virtRight: 57,
-        virtBottom: 61
+        virtBottom: 61,
+        verticalScrollbarWidth: 71,
+        horizontalScrollbarHeight: 73
     };
 
     scrollgrid.panel = function () {
@@ -54,6 +56,8 @@ define(["d3"], function (d3) {
             sizes: {
                 physical: {
                     verticalAlignment: scrollgrid.vals.gridAlignment,
+                    verticalScrollbarWidth: scrollgrid.vals.verticalScrollbarWidth,
+                    horizontalScrollbarHeight: scrollgrid.vals.horizontalScrollbarHeight,
                     top: scrollgrid.vals.physTop,
                     left: scrollgrid.vals.physLeft,
                     right: scrollgrid.vals.physRight,
