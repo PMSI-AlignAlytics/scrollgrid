@@ -100,6 +100,7 @@ define(["d3"], function (d3) {
                 sortColumn: jasmine.createSpy("sortColumn")
             },
             render: {
+                matchRule: jasmine.createSpy("matchRule").andReturn(true),
                 draw: jasmine.createSpy("draw")
             }
         };
@@ -123,6 +124,9 @@ define(["d3"], function (d3) {
         ];
         scrollgrid.adapter = {
             sort: jasmine.createSpy("sort")
+        };
+        scrollgrid.reporter = {
+            error: jasmine.createSpy("error")
         };
         return scrollgrid;
     };

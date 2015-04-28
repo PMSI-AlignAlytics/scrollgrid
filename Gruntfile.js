@@ -59,6 +59,7 @@ module.exports = function(grunt) {
                     'require',
                     'exports',
                     'describe',
+                    'spyOn',
                     'expect',
                     'it',
                     'xdescribe',
