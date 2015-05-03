@@ -23,12 +23,16 @@ define(["d3"], function (d3) {
         totalInnerHeight: 41,
         totalInnerWidth: 43,
         textBoundWidth: 47,
-        virtTop: 51,
-        virtLeft: 53,
-        virtRight: 57,
-        virtBottom: 61,
+        virtTop: 53,
+        virtLeft: 59,
+        virtRight: 61,
+        virtBottom: 67,
         verticalScrollbarWidth: 71,
-        horizontalScrollbarHeight: 73
+        horizontalScrollbarHeight: 73,
+        boundingBoxLeft: 79,
+        boundingBoxTop: 83,
+        boundingBoxWidth: 89,
+        boundingBoxHeight: 97
     };
 
     scrollgrid.panel = function () {

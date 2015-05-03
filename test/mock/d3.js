@@ -4,24 +4,44 @@ define(function () {
     d3.shape = function (defaults) {
         var self = this;
         defaults = defaults || {};
+        self.dataPoint = {};
+        self.textValue = "";
+        self.characterWidth = 10;
         self.attributes = {};
         self.styles = {};
         self.eventHandlers = {};
         self.children = {};
+        self.bounds = {
+            x: defaults.boundingBoxLeft,
+            y: defaults.boundingBoxTop,
+            width: defaults.boundingBoxWidth,
+            height: defaults.boundingBoxHeight
+        };
         self.nodeObject = {
             offsetHeight: defaults.nodeOffsetHeight || 1,
             offsetWidth: defaults.nodeOffsetWidth || 2,
             clientHeight: defaults.nodeClientHeight || 3,
-            clientWidth: defaults.nodeClientWidth || 5
+            clientWidth: defaults.nodeClientWidth || 5,
+            getBBox: jasmine.createSpy("getBBox").andReturn(self.bounds)
         };
         self.selections = {};
         self.attr = jasmine.createSpy("attr").andCallFake(function (key, value) {
-            self.attributes[key] = value;
-            return self;
+            var returnVal = self;
+            if (value === undefined) {
+                returnVal = self.attributes[key];
+            } else {
+                self.attributes[key] = value;
+            }
+            return returnVal;
         });
         self.style = jasmine.createSpy("style").andCallFake(function (key, value) {
-            self.styles[key] = value;
-            return self;
+            var returnVal = self;
+            if (value === undefined) {
+                returnVal = self.styles[key];
+            } else {
+                self.styles[key] = value;
+            }
+            return returnVal;
         });
         self.node = jasmine.createSpy("node").andCallFake(function () {
             return self.nodeObject;
@@ -29,6 +49,16 @@ define(function () {
         self.on = jasmine.createSpy("on").andCallFake(function (key, value) {
             self.eventHandlers[key] = value;
             return self;
+        });
+        self.text = jasmine.createSpy("text").andCallFake(function (t) {
+            var returnVal = self;
+            if (t === undefined) {
+                returnVal = self.textValue;
+            } else {
+                self.bounds.width = t.length * self.characterWidth;
+                self.textValue = t;
+            }
+            return returnVal;
         });
         self.classed = jasmine.createSpy("classed");
         self.append = jasmine.createSpy("append").andCallFake(function (child) {
@@ -47,6 +77,7 @@ define(function () {
         self.enter = jasmine.createSpy("enter").andReturn(self);
         self.exit = jasmine.createSpy("exit").andReturn(self);
         self.data = jasmine.createSpy("data").andReturn(self);
+        self.datum = jasmine.createSpy("datum").andReturn(self.dataPoint);
         self.call = jasmine.createSpy("call").andReturn(self);
     };
     d3.drag = function () {
