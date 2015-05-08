@@ -32,7 +32,15 @@ define(["d3"], function (d3) {
         boundingBoxLeft: 79,
         boundingBoxTop: 83,
         boundingBoxWidth: 89,
-        boundingBoxHeight: 97
+        boundingBoxHeight: 97,
+        viewAreaVirtLeft: 101,
+        viewAreaVirtTop: 103,
+        viewAreaVirtRight: 107,
+        viewAreaVirtBottom: 109,
+        viewAreaPhysX: 113,
+        viewAreaPhysY: 127,
+        virtOuterWidth: 131,
+        virtOuterHeight: 137
     };
 
     scrollgrid.panel = function () {
@@ -76,7 +84,9 @@ define(["d3"], function (d3) {
                     top: scrollgrid.vals.virtTop,
                     left: scrollgrid.vals.virtLeft,
                     right: scrollgrid.vals.virtRight,
-                    bottom: scrollgrid.vals.virtBottom
+                    bottom: scrollgrid.vals.virtBottom,
+                    outerWidth: scrollgrid.vals.virtOuterWidth,
+                    outerHeight: scrollgrid.vals.virtOuterHeight
                 },
                 calculatePhysicalBounds: jasmine.createSpy("calculatePhysicalBounds"),
                 getExistingTextBound: jasmine.createSpy("getExistingTextBound").andReturn({ width: scrollgrid.vals.textBoundWidth })
@@ -97,7 +107,8 @@ define(["d3"], function (d3) {
                     var returnPanel = new scrollgrid.panel();
                     returnPanel.style = css;
                     return returnPanel;
-                })
+                }),
+                layoutDOM: jasmine.createSpy("layoutDOM")
             },
             interaction: {
                 autoResizeColumn: jasmine.createSpy("autoResizeColumn"),
@@ -109,7 +120,21 @@ define(["d3"], function (d3) {
             },
             render: {
                 matchRule: jasmine.createSpy("matchRule").andReturn(true),
-                draw: jasmine.createSpy("draw")
+                draw: jasmine.createSpy("draw"),
+                getVisibleRegion: jasmine.createSpy("getVisibleRegion").andReturn("visible region"),
+                getDataBounds: jasmine.createSpy("getDataBounds").andReturn({
+                    virtual: {
+                        left: scrollgrid.vals.viewAreaVirtLeft,
+                        top: scrollgrid.vals.viewAreaVirtTop,
+                        right: scrollgrid.vals.viewAreaVirtRight,
+                        bottom: scrollgrid.vals.viewAreaVirtBottom
+                    },
+                    physical: {
+                        x: scrollgrid.vals.viewAreaPhysX,
+                        y: scrollgrid.vals.viewAreaPhysY
+                    }
+                }),
+                renderRegion: jasmine.createSpy("renderRegion")
             }
         };
         scrollgrid.style = {

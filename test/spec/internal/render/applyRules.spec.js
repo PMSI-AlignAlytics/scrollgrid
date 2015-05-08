@@ -29,8 +29,8 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
 
         it("should check row and column rules with the match rule method passing index + 1", function () {
             underTest.call(mock, data);
-            expect(mock.internal.render.matchRule).toHaveBeenCalledWith(rule.row, data[0].rowIndex + 1, mock.vals.outerHeight);
-            expect(mock.internal.render.matchRule).toHaveBeenCalledWith(rule.column, data[0].columnIndex + 1, mock.vals.outerWidth);
+            expect(mock.internal.render.matchRule).toHaveBeenCalledWith(rule.row, data[0].rowIndex + 1, mock.vals.virtOuterHeight);
+            expect(mock.internal.render.matchRule).toHaveBeenCalledWith(rule.column, data[0].columnIndex + 1, mock.vals.virtOuterWidth);
         });
 
         it("should not apply any rules if rules don't match", function () {
