@@ -40,7 +40,9 @@ define(["d3"], function (d3) {
         viewAreaPhysX: 113,
         viewAreaPhysY: 127,
         virtOuterWidth: 131,
-        virtOuterHeight: 137
+        virtOuterHeight: 137,
+        virtInnerWidth: 139,
+        virtInnerHeight: 149
     };
 
     scrollgrid.panel = function () {
@@ -86,7 +88,9 @@ define(["d3"], function (d3) {
                     right: scrollgrid.vals.virtRight,
                     bottom: scrollgrid.vals.virtBottom,
                     outerWidth: scrollgrid.vals.virtOuterWidth,
-                    outerHeight: scrollgrid.vals.virtOuterHeight
+                    outerHeight: scrollgrid.vals.virtOuterHeight,
+                    innerWidth: scrollgrid.vals.virtInnerWidth,
+                    innerHeight: scrollgrid.vals.virtInnerHeight
                 },
                 calculatePhysicalBounds: jasmine.createSpy("calculatePhysicalBounds"),
                 getExistingTextBound: jasmine.createSpy("getExistingTextBound").andReturn({ width: scrollgrid.vals.textBoundWidth })

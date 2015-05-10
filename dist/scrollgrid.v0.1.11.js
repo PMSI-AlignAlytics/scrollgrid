@@ -753,7 +753,6 @@
             };
 
         bounds.physical.y = bounds.virtual.top * physical.rowHeight - physicalViewArea.top;
-
         for (i = 0; i < virtual.innerWidth; i += 1) {
             columnWidth = cols[i + virtual.left].width;
             if (left === undefined && (i === virtual.innerWidth - 1 || runningX + columnWidth > physicalViewArea.left)) {
