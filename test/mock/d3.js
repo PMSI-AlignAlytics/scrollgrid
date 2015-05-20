@@ -22,6 +22,8 @@ define(function () {
             offsetWidth: defaults.nodeOffsetWidth || 2,
             clientHeight: defaults.nodeClientHeight || 3,
             clientWidth: defaults.nodeClientWidth || 5,
+            scrollLeft: defaults.nodeScrollLeft || 7,
+            scrollTop: defaults.nodeScrollTop || 11,
             getBBox: jasmine.createSpy("getBBox").andReturn(self.bounds)
         };
         self.selections = {};

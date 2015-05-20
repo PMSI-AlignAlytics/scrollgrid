@@ -51,8 +51,10 @@ define(["d3"], function (d3) {
         adjBoxWidth: 173,
         adjTextHeight: 179,
         adjTextWidth: 181,
-        cellPadding: 183,
-        sortIconSize: 187
+        cellPadding: 191,
+        sortIconSize: 193,
+        nodeScrollLeft: 197,
+        nodeScrollTop: 199
     };
 
     scrollgrid.panel = function () {
