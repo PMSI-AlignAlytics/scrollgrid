@@ -61,6 +61,16 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
             expect(result[3].x).toEqual(viewArea.startX + mock.columns[1].width + mock.vals.adjX + 0.5);
         });
 
+        it("should default to zero for the start x position", function () {
+            mock.init();
+            delete viewArea.startX;
+            result = underTest.call(mock, viewArea);
+            expect(result[0].x).toEqual(mock.vals.adjX + 0.5);
+            expect(result[1].x).toEqual(mock.columns[1].width + mock.vals.adjX + 0.5);
+            expect(result[2].x).toEqual(mock.vals.adjX + 0.5);
+            expect(result[3].x).toEqual(mock.columns[1].width + mock.vals.adjX + 0.5);
+        });
+
         it("should contain physical y position for each element", function () {
             expect(result[0].y).toEqual(viewArea.startY + mock.vals.adjY + 0.5);
             expect(result[1].y).toEqual(viewArea.startY + mock.vals.adjY + 0.5);

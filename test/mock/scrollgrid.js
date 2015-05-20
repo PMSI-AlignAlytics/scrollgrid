@@ -51,7 +51,8 @@ define(["d3"], function (d3) {
         adjBoxWidth: 173,
         adjTextHeight: 179,
         adjTextWidth: 181,
-        cellPadding: 183
+        cellPadding: 183,
+        sortIconSize: 187
     };
 
     scrollgrid.panel = function () {
@@ -159,7 +160,8 @@ define(["d3"], function (d3) {
                     textWidth: scrollgrid.vals.adjTextWidth,
                     sortIcon:  scrollgrid.vals.sortIcon
                 }),
-                applyRules: jasmine.createSpy("applyRules")
+                applyRules: jasmine.createSpy("applyRules"),
+                sortIconSize: scrollgrid.vals.sortIconSize
             }
         };
         scrollgrid.style = {
