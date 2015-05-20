@@ -7,6 +7,7 @@ define(["d3"], function (d3) {
         gridAlignment: "top",
         target: "testTarget",
         columnResizer: "column resizer",
+        sortIcon: "sort icon",
         nodeOffsetHeight: 1,
         nodeOffsetWidth: 2,
         topMargin: 3,
@@ -42,7 +43,15 @@ define(["d3"], function (d3) {
         virtOuterWidth: 131,
         virtOuterHeight: 137,
         virtInnerWidth: 139,
-        virtInnerHeight: 149
+        virtInnerHeight: 149,
+        physRowHeight: 151,
+        adjX: 157,
+        adjY: 163,
+        adjBoxHeight: 167,
+        adjBoxWidth: 173,
+        adjTextHeight: 179,
+        adjTextWidth: 181,
+        cellPadding: 183
     };
 
     scrollgrid.panel = function () {
@@ -80,7 +89,9 @@ define(["d3"], function (d3) {
                     visibleInnerWidth: scrollgrid.vals.visibleInnerWidth,
                     dragHandleWidth: scrollgrid.vals.dragHandleWidth,
                     totalInnerHeight: scrollgrid.vals.totalInnerHeight,
-                    totalInnerWidth: scrollgrid.vals.totalInnerWidth
+                    totalInnerWidth: scrollgrid.vals.totalInnerWidth,
+                    getRowHeight: jasmine.createSpy("getRowHeight").andReturn(scrollgrid.vals.physRowHeight),
+                    cellPadding: scrollgrid.vals.cellPadding
                 },
                 virtual: {
                     top: scrollgrid.vals.virtTop,
@@ -138,7 +149,17 @@ define(["d3"], function (d3) {
                         y: scrollgrid.vals.viewAreaPhysY
                     }
                 }),
-                renderRegion: jasmine.createSpy("renderRegion")
+                renderRegion: jasmine.createSpy("renderRegion"),
+                calculateCellAdjustments: jasmine.createSpy("calculateCellAdjustments").andReturn({
+                    x: scrollgrid.vals.adjX,
+                    y: scrollgrid.vals.adjY,
+                    boxHeight: scrollgrid.vals.adjBoxHeight,
+                    boxWidth: scrollgrid.vals.adjBoxWidth,
+                    textHeight: scrollgrid.vals.adjTextHeight,
+                    textWidth: scrollgrid.vals.adjTextWidth,
+                    sortIcon:  scrollgrid.vals.sortIcon
+                }),
+                applyRules: jasmine.createSpy("applyRules")
             }
         };
         scrollgrid.style = {
@@ -160,7 +181,8 @@ define(["d3"], function (d3) {
             { width: 17 }
         ];
         scrollgrid.adapter = {
-            sort: jasmine.createSpy("sort")
+            sort: jasmine.createSpy("sort"),
+            loadDataRange: jasmine.createSpy("loadDataRange").andReturn("getValue method")
         };
         scrollgrid.reporter = {
             error: jasmine.createSpy("error")
