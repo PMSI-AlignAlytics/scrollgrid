@@ -1,5 +1,5 @@
 ### Scrollgrid ###
-[![Build Status](https://travis-ci.org/PMSI-AlignAlytics/scrollgrid.svg?branch=master)](https://travis-ci.org/PMSI-AlignAlytics/scrollgrid)
+[![Build Status](https://travis-ci.org/PMSI-AlignAlytics/scrollgrid.svg?branch=master)](https://travis-ci.org/PMSI-AlignAlytics/scrollgrid) [![Coverage Status](https://coveralls.io/repos/PMSI-AlignAlytics/scrollgrid/badge.svg)](https://coveralls.io/r/PMSI-AlignAlytics/scrollgrid)
 
 Scrollgrid is the first fully featured grid control for web built in SVG using [d3](http://d3js.org).  As well as the core behaviours you would expect of any grid control, Scrollgrid also offers:
 
