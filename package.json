@@ -18,6 +18,7 @@
     "grunt-karma": "~0.6.2",
     "express": "3.x",
     "grunt": "~0.4.4",
+    "grunt-cli": "~0.1.13",
     "grunt-jslint": "~0.2.6",
     "grunt-contrib-concat": "~0.2.0",
     "grunt-contrib-uglify": "~0.2.0",
@@ -28,6 +29,6 @@
       "d3": "3.4.8"
   },
   "scripts": {
-      "test": "karma start karma.config.js --single-run"
+      "test": "grunt"
   }
 }
