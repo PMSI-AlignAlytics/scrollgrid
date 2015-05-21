@@ -107,6 +107,7 @@ module.exports = function(grunt) {
 
     // Default tasks
     grunt.registerTask('default', ['concat', 'jslint', 'concat:test', 'karma:unit', 'uglify', 'copy', 'connect']);
+    grunt.registerTask('travis', ['concat', 'jslint', 'concat:test', 'karma:unit']);
     grunt.registerTask('test:unit', ['concat:test', 'karma:unit']);
     grunt.registerTask('test', ['karma:continuous:start', 'watch']);
 

@@ -29,6 +29,6 @@
       "d3": "3.4.8"
   },
   "scripts": {
-      "test": "grunt"
+      "test": "grunt travis"
   }
 }
