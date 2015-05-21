@@ -1,4 +1,11 @@
 language: node_js
 node_js:
   - "0.10"
-after_success: grunt coveralls
+install:
+- npm -d install
+- npm install -g grunt-cli
+- npm install -g grunt
+script:
+- grunt travis
+after_script:
+- cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
