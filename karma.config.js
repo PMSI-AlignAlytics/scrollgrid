@@ -23,16 +23,7 @@ module.exports = function(config) {
     coverageReporter: {
       reporters: [
         {
-          type: 'cobertura',
-          dir: 'coverage/',
-          subdir: '.',
-          file: 'cobertura-coverage.xml',
-          instrumenter: {
-            '**/*.js': 'istanbul'
-          }
-        },
-        {
-          type: 'html',
+          type: 'lcov',
           dir: 'coverage/',
           subdir: '.',
           instrumenter: {

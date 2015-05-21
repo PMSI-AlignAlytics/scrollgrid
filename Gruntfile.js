@@ -93,21 +93,27 @@ module.exports = function(grunt) {
                 ],
                 tasks: ['karma:continuous:run']
             }
+        },
+        coveralls: {
+            options: {
+                src: 'coverage/lcov.info',
+                force: false
+            }
         }
     });
 
-    // Load the plugin that provides the "uglify" task.
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-coveralls');
     grunt.loadNpmTasks('grunt-jslint');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-karma');
 
     // Default tasks
     grunt.registerTask('default', ['concat', 'jslint', 'concat:test', 'karma:unit', 'uglify', 'copy', 'connect']);
-    grunt.registerTask('travis', ['concat', 'jslint', 'concat:test', 'karma:unit']);
+    grunt.registerTask('travis', ['concat', 'jslint', 'concat:test', 'karma:unit', 'coveralls']);
     grunt.registerTask('test:unit', ['concat:test', 'karma:unit']);
     grunt.registerTask('test', ['karma:continuous:start', 'watch']);
 
