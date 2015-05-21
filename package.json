@@ -31,7 +31,6 @@
     "d3": "3.4.8"
   },
   "scripts": {
-    "test": "grunt travis",
-    "ci": "istanbul cover -- grunt travis && grunt coveralls"
+    "test": "grunt travis"
   }
 }
