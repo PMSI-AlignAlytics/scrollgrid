@@ -13,7 +13,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
             mock.init();
             d3.init();
             group = new d3.shape();
-            result = underTest.call(this, group, "view data");
+            result = underTest.call(mock, group, "view data");
             selection = group.selections[".sg-no-style--background-selector"][0];
         });
 

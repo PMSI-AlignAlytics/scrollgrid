@@ -993,32 +993,17 @@
         cells.enter()
             .append("text")
             .attr("class", function (d) { return "sg-no-style--text-selector " + d.foregroundStyle; })
-            .style("text-anchor", render.getTextAnchor.bind(self))
-            .attr("dy", "0.35em");
+            .style("text-anchor", function (d) { return render.getTextAnchor.call(self, d); })
+            .attr("dy", "0.35em")
+            .text(render.cellWaitText);
 
-        cells.attr("x", render.getTextPosition.bind(self))
+        cells.attr("x", function (d) { return render.getTextPosition.call(self, d); })
             .attr("y", function (d) { return d.y + d.textHeight / 2; })
             .each(function (d) {
-                var shape = d3.select(this),
-                    sorted = d.sortIcon && d.sortIcon !== 'none';
-                shape.text(render.cellWaitText);
-                d.getValue(d.rowIndex, d.columnIndex, function (value) {
-                    if (d.formatter) {
-                        shape.text(d.formatter(value));
-                    } else {
-                        shape.text(value);
-                    }
-                    render.cropText.call(self, shape, d.textWidth - d.cellPadding - (sorted ? render.sortIconSize + d.cellPadding : 0));
-                });
-                // Add a sort icon for the last row of the headers
-                if (sorted && d.textWidth > d.cellPadding + render.sortIconSize) {
-                    g.append("g")
-                        .datum(d.sortIcon)
-                        .attr("class", "sg-no-style--sort-icon-selector")
-                        .attr("transform", "translate(" + (d.x + d.cellPadding + render.sortIconSize / 2) + "," + (d.y + d.textHeight / 2) + ")")
-                        .call(render.sortIcon.bind(self));
-                }
-
+                var text = d3.select(this),
+                    sorted = !(!d.sortIcon || d.sortIcon === 'none');
+                render.renderText.call(self, d, text, sorted);
+                render.renderSortIcon.call(self, d, g, sorted);
             });
 
         cells.exit()
@@ -1063,6 +1048,39 @@
             }
         }
 
+    };
+
+    // Copyright: 2015 AlignAlytics
+    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+    // Source: /src/internal/render/renderSortIcon.js
+    Scrollgrid.prototype.internal.render.renderSortIcon = function (d, target, sorted) {
+        var self = this,
+            int = self.internal,
+            render = int.render;
+        if (sorted && d.textWidth > d.cellPadding + render.sortIconSize) {
+            target.append("g")
+                .datum(d.sortIcon)
+                .attr("class", "sg-no-style--sort-icon-selector")
+                .attr("transform", "translate(" + (d.x + d.cellPadding + render.sortIconSize / 2) + "," + (d.y + d.textHeight / 2) + ")")
+                .call(function (d) { return render.sortIcon.call(self, d); });
+        }
+
+    };
+
+    // Copyright: 2015 AlignAlytics
+    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+    // Source: /src/internal/render/renderText.js
+    Scrollgrid.prototype.internal.render.renderText = function (d, target, sorted) {
+        var int = this.internal,
+            render = int.render;
+        d.getValue(d.rowIndex, d.columnIndex, function (value) {
+            if (d.formatter) {
+                target.text(d.formatter(value));
+            } else {
+                target.text(value);
+            }
+            render.cropText.call(this, target, d.textWidth - d.cellPadding - (sorted ? render.sortIconSize + d.cellPadding : 0));
+        });
     };
 
     // Copyright: 2015 AlignAlytics

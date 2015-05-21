@@ -163,7 +163,11 @@ define(["d3"], function (d3) {
                     sortIcon:  scrollgrid.vals.sortIcon
                 }),
                 applyRules: jasmine.createSpy("applyRules"),
-                sortIconSize: scrollgrid.vals.sortIconSize
+                sortIconSize: scrollgrid.vals.sortIconSize,
+                getTextAnchor: jasmine.createSpy("getTextAnchor"),
+                getTextPosition: jasmine.createSpy("getTextPosition"),
+                renderText: jasmine.createSpy("renderText"),
+                renderSortIcon: jasmine.createSpy("renderSortIcon")
             }
         };
         scrollgrid.style = {

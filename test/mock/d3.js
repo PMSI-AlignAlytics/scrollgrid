@@ -81,6 +81,7 @@ define(function () {
         self.data = jasmine.createSpy("data").andReturn(self);
         self.datum = jasmine.createSpy("datum").andReturn(self.dataPoint);
         self.call = jasmine.createSpy("call").andReturn(self);
+        self.each = jasmine.createSpy("each").andReturn(self);
     };
     d3.drag = function () {
         var self = this;
