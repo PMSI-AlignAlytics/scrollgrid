@@ -50,7 +50,10 @@
                     columnIndex: c,
                     column: column,
                     formatter: null,
-                    getValue: getValue
+                    getValue: getValue,
+                    renderForeground: render.renderForeground,
+                    renderBetween: null,
+                    renderBackground: render.renderBackground
                 };
                 // We abuse the key here, cells will be rendered on enter only, we therefore
                 // want to key by any value which should result in a redraw of a particular cell,

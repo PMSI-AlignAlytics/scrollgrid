@@ -48,7 +48,8 @@
                 { row: "*", column: "*", columnWidth: 100 },
                 { row: "*", column: "2", alignment: 'left' },
                 { row: "*", column: "3", alignment: 'right' },
-                { row: "*", column: "4", alignment: 'center' }
+                { row: "*", column: "4", alignment: 'center' },
+                { row: "2:-1", column: "11", formatter: d3.format(",.0f")}
             ]
         });
         d3.tsv("/examples/data/example_data.tsv", function (data) {

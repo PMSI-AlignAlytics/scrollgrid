@@ -47,8 +47,15 @@
                 .attr("class", "sg-no-style--cell-selector")
                 .each(function (d) {
                     var group = d3.select(this);
-                    render.renderBackground.call(self, group, d);
-                    render.renderForeground.call(self, group, d);
+                    if (d.renderBackground) {
+                        d.renderBackground.call(self, group, d);
+                    }
+                    if (d.renderBetween) {
+                        d.renderBetween.call(self, group, d);
+                    }
+                    if (d.renderForeground) {
+                        d.renderForeground.call(self, group, d);
+                    }
                     render.renderSortIcon.call(self, d, group, !(!d.sortIcon || d.sortIcon === 'none'));
                     // Add some interaction to the headers
                     if (target === dom.top || target === dom.top.left || target === dom.top.right) {

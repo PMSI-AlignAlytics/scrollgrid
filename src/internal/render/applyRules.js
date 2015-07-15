@@ -57,7 +57,15 @@
                 if (ruleDefinition.foregroundStyle) {
                     data[i].foregroundStyle += " " + ruleDefinition.foregroundStyle;
                 }
-
+                if (ruleDefinition.renderBackground) {
+                    data[i].renderBackground = ruleDefinition.renderBackground;
+                }
+                if (ruleDefinition.renderBetween) {
+                    data[i].renderBetween = ruleDefinition.renderBetween;
+                }
+                if (ruleDefinition.renderForeground) {
+                    data[i].renderForeground = ruleDefinition.renderForeground;
+                }
             }
         }
     };

@@ -561,7 +561,15 @@
                 if (ruleDefinition.foregroundStyle) {
                     data[i].foregroundStyle += " " + ruleDefinition.foregroundStyle;
                 }
-
+                if (ruleDefinition.renderBackground) {
+                    data[i].renderBackground = ruleDefinition.renderBackground;
+                }
+                if (ruleDefinition.renderBetween) {
+                    data[i].renderBetween = ruleDefinition.renderBetween;
+                }
+                if (ruleDefinition.renderForeground) {
+                    data[i].renderForeground = ruleDefinition.renderForeground;
+                }
             }
         }
     };
@@ -816,7 +824,10 @@
                     columnIndex: c,
                     column: column,
                     formatter: null,
-                    getValue: getValue
+                    getValue: getValue,
+                    renderForeground: render.renderForeground,
+                    renderBetween: null,
+                    renderBackground: render.renderBackground
                 };
                 // We abuse the key here, cells will be rendered on enter only, we therefore
                 // want to key by any value which should result in a redraw of a particular cell,
@@ -1029,8 +1040,15 @@
                 .attr("class", "sg-no-style--cell-selector")
                 .each(function (d) {
                     var group = d3.select(this);
-                    render.renderBackground.call(self, group, d);
-                    render.renderForeground.call(self, group, d);
+                    if (d.renderBackground) {
+                        d.renderBackground.call(self, group, d);
+                    }
+                    if (d.renderBetween) {
+                        d.renderBetween.call(self, group, d);
+                    }
+                    if (d.renderForeground) {
+                        d.renderForeground.call(self, group, d);
+                    }
                     render.renderSortIcon.call(self, d, group, !(!d.sortIcon || d.sortIcon === 'none'));
                     // Add some interaction to the headers
                     if (target === dom.top || target === dom.top.left || target === dom.top.right) {
@@ -1448,13 +1466,13 @@
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/external/refresh.js
-    Scrollgrid.prototype.refresh = function (resizeOnly) {
+    Scrollgrid.prototype.refresh = function (maintainCache) {
         var int = this.internal,
             render = int.render,
             dom = int.dom;
         // Call the instantiated layout refresh
         dom.layoutDOM.call(this);
-        render.draw.call(this, !resizeOnly);
+        render.draw.call(this, !maintainCache);
         dom.setScrollerSize.call(this);
     };
 
