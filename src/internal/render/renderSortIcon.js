@@ -10,7 +10,7 @@
             target.append("g")
                 .datum(d.sortIcon)
                 .attr("class", "sg-no-style--sort-icon-selector")
-                .attr("transform", "translate(" + (d.x + d.cellPadding + render.sortIconSize / 2) + "," + (d.y + d.textHeight / 2) + ")")
+                .attr("transform", "translate(" + (d.cellPadding + render.sortIconSize / 2) + "," + (d.textHeight / 2) + ")")
                 .call(function (d) { return render.sortIcon.call(self, d); });
         }
 

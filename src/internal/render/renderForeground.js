@@ -7,33 +7,23 @@
         var self = this,
             int = self.internal,
             render = int.render,
-            cells;
+            text;
 
-        g.selectAll(".sg-no-style--sort-icon-selector").remove();
-
-        cells = g
-            .selectAll(".sg-no-style--text-selector")
-            .data(viewData, function (d) { return d.key; });
-
-        cells.enter()
-            .append("text")
-            .attr("class", function (d) { return "sg-no-style--text-selector " + d.foregroundStyle; })
-            .style("text-anchor", function (d) { return render.getTextAnchor.call(self, d); })
+        text = g.append("text")
+            .attr("class", viewData.foregroundStyle)
+            .style("text-anchor", render.getTextAnchor.call(self, viewData))
             .attr("dy", "0.35em")
-            .text(render.cellWaitText);
+            .text(render.cellWaitText)
+            .attr("x", render.getTextPosition.call(self, viewData))
+            .attr("y", viewData.textHeight / 2);
 
-        cells.attr("x", function (d) { return render.getTextPosition.call(self, d); })
-            .attr("y", function (d) { return d.y + d.textHeight / 2; })
-            .each(function (d) {
-                var text = d3.select(this),
-                    sorted = !(!d.sortIcon || d.sortIcon === 'none');
-                render.renderText.call(self, d, text, sorted);
-                render.renderSortIcon.call(self, d, g, sorted);
-            });
-
-        cells.exit()
-            .remove();
-
-        return cells;
+        viewData.getValue(viewData.rowIndex, viewData.columnIndex, function (value) {
+            if (viewData.formatter) {
+                text.text(viewData.formatter(value));
+            } else {
+                text.text(value);
+            }
+            render.cropText.call(this, text, viewData.textWidth - viewData.cellPadding - (!(!viewData.sortIcon || viewData.sortIcon === 'none') ? render.sortIconSize + viewData.cellPadding : 0));
+        });
 
     };

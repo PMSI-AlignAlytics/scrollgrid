@@ -47,11 +47,11 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
             expect(render.calculateCellAdjustments).toHaveBeenCalledWith(3, 2);
         });
 
-        it("should contain a key based on row and column for each element of visible data", function () {
-            expect(result[0].key).toEqual("1_2");
-            expect(result[1].key).toEqual("2_2");
-            expect(result[2].key).toEqual("1_3");
-            expect(result[3].key).toEqual("2_3");
+        it("should contain a key based on all values which invalidate cache", function () {
+            expect(result[0].key).toEqual("1_2_186_sort icon");
+            expect(result[1].key).toEqual("2_2_190_sort icon");
+            expect(result[2].key).toEqual("1_3_186_sort icon");
+            expect(result[3].key).toEqual("2_3_190_sort icon");
         });
 
         it("should contain physical x position for each element", function () {

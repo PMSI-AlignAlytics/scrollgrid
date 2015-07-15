@@ -192,7 +192,7 @@
         dom.top.right.transform.attr('transform', 'translate(' + physical.dragHandleWidth / 2 + ', 0)');
 
         // Invoke draw on scroll
-        dom.main.viewport.on('scroll', function () { render.draw.call(self); });
+        dom.main.viewport.on('scroll', function () { render.draw.call(self, false); });
 
         // Set the scrollable area
         dom.setScrollerSize.call(self);
@@ -284,7 +284,7 @@
                 existingHandler();
             }
             // Call the instantiated layout refresh
-            self.refresh();
+            self.refresh(true);
         };
 
     };
@@ -319,69 +319,62 @@
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/interaction/addResizeHandles.js
-    Scrollgrid.prototype.internal.interaction.addResizeHandles = function (g, data, left) {
+    Scrollgrid.prototype.internal.interaction.addResizeHandles = function (target, bounds, startX) {
 
         var self = this,
             int = self.internal,
             style = self.style,
             sizes = int.sizes,
             interaction = int.interaction,
-            physical = sizes.physical;
+            physical = sizes.physical,
+            runningTotal = startX || 0;
 
-        // Unlike cell content we need to remove and re-add handles so they stay on top
-        g.selectAll(".sg-no-style--resize-handle-selector")
+        target.content
+            .selectAll(".sg-no-style--handle-selector")
             .remove();
 
-        g.selectAll(".sg-no-style--resize-handle-selector")
-            .data(data, function (d) { return d.key; })
+        target.content
+            .selectAll(".sg-no-style--handle-selector")
+            .data(this.columns.slice(bounds.left, bounds.right))
             .enter()
             .append("rect")
-            .attr("class", "sg-no-style--resize-handle-selector " + style.resizeHandle)
+            .attr("class", "sg-no-style--handle-selector " + style.resizeHandle)
             .attr("transform", "translate(" + (-1 * physical.dragHandleWidth / 2) + ", 0)")
-            .attr("x", function (d) { return d.x + (left ? 0 : d.boxWidth); })
+            .attr("x", function (c) {
+                runningTotal += c.width;
+                c.x = runningTotal;
+                return c.x;
+            })
             .attr("y", 0)
             .attr("width", physical.dragHandleWidth)
             .attr("height", physical.top)
-            .on("dblclick", function (d) { interaction.autoResizeColumn.call(self, d); })
-            .call(interaction.getColumnResizer.call(self, left));
+            .on("dblclick", function (c) { interaction.autoResizeColumn.call(self, c); })
+            .call(interaction.getColumnResizer.call(self));
 
     };
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/interaction/addSortButtons.js
-    Scrollgrid.prototype.internal.interaction.addSortButtons = function (g, data) {
+    Scrollgrid.prototype.internal.interaction.addSortButtons = function (g, viewData) {
 
-        var buttons,
-            self = this,
+        var self = this,
             int = self.internal,
             interaction = int.interaction;
 
-        buttons = g
-            .selectAll(".sg-no-style--sort-button-selector")
-            .data(data, function (d) { return d.key; });
-
-        buttons.enter()
-            .append("rect")
-            .attr("class", "sg-no-style--sort-button-selector")
+        g.append("rect")
+            .attr("width", viewData.boxWidth)
+            .attr("height", viewData.boxHeight)
             .style("opacity", 0)
             .style("cursor", "pointer")
-            .on("click", function (d) { return interaction.sortColumn.call(self, d.columnIndex, true); });
-
-        buttons.attr("x", function (d) { return d.x; })
-            .attr("y", function (d) { return d.y; })
-            .attr("width", function (d) { return d.boxWidth; })
-            .attr("height", function (d) { return d.boxHeight; });
-
-        buttons.exit()
-            .remove();
+            .on("click", function () { return interaction.sortColumn.call(self, viewData.columnIndex, true); });
 
     };
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/interaction/autoResizeColumn.js
-    Scrollgrid.prototype.internal.interaction.autoResizeColumn = function (d) {
+    Scrollgrid.prototype.internal.interaction.autoResizeColumn = function (column) {
 
         var int = this.internal,
             dom = int.dom,
@@ -389,20 +382,17 @@
             panels = [dom.top.left, dom.top, dom.top.right, dom.left, dom.main, dom.right, dom.bottom.left, dom.bottom, dom.bottom.right],
             i;
 
-        if (d && d.column && d.columnIndex) {
+        // Do not allow the width to be less than 0
+        column.width = 0;
 
-            // Do not allow the width to be less than 0
-            d.column.width = 0;
-
-            // Get the widest from the various panels (some panels may not apply to the given cell but those panels will return zero anyway)
-            for (i = 0; i < panels.length; i += 1) {
-                d.column.width = Math.max(d.column.width, sizes.getExistingTextBound.call(this, panels[i].svg, d.columnIndex).width);
-            }
-
-            // Update the container size because the width will have changed
-            this.refresh();
-
+        // Get the widest from the various panels (some panels may not apply to the given cell but those panels will return zero anyway)
+        for (i = 0; i < panels.length; i += 1) {
+            column.width = Math.max(column.width, sizes.getExistingTextBound.call(this, panels[i].svg, column.index).width);
         }
+
+        // Update the container size because the width will have changed
+        this.refresh(true);
+
     };
 
 
@@ -424,28 +414,24 @@
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/interaction/columnResizing.js
-    Scrollgrid.prototype.internal.interaction.columnResizing = function (shape, d, invert) {
+    Scrollgrid.prototype.internal.interaction.columnResizing = function (shape, column) {
 
         // Some resize handle should be inverted
-        if (invert) {
-            d.column.width += d.x - d3.event.x;
-        } else {
-            d.column.width -= d.x - d3.event.x;
-        }
+        column.width -= column.x - d3.event.x;
 
         // Update the x coordinate for the drag
-        d.x = d3.event.x;
+        column.x = d3.event.x;
 
         // If the column width is below 0 reset it, negative widths cause problems
-        if (d.column.width < 0) {
-            d.column.width = 0;
+        if (column.width < 0) {
+            column.width = 0;
         }
 
         // Move the drag handle itself
-        shape.attr('x', d.x);
+        shape.attr('x', column.x);
 
         // Redraw
-        this.refresh();
+        this.refresh(true);
 
     };
 
@@ -468,17 +454,17 @@
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/interaction/getColumnResizer.js
-    Scrollgrid.prototype.internal.interaction.getColumnResizer = function (invert) {
+    Scrollgrid.prototype.internal.interaction.getColumnResizer = function () {
 
         var int = this.internal,
             interaction = int.interaction,
             self = this;
 
         return d3.behavior.drag()
-            .origin(function (d) { return d; })
-            .on('dragstart', function (d) { interaction.columnResizeStart.call(self, d3.select(this), d); })
-            .on('drag', function (d) { interaction.columnResizing.call(self, d3.select(this), d, invert); })
-            .on('dragend', function (d) { interaction.columnResizeEnd.call(self, d3.select(this), d); });
+            .origin(function (c) { return c; })
+            .on('dragstart', function () { interaction.columnResizeStart.call(self, d3.select(this)); })
+            .on('drag', function (c) { interaction.columnResizing.call(self, d3.select(this), c); })
+            .on('dragend', function () { interaction.columnResizeEnd.call(self, d3.select(this)); });
 
     };
 
@@ -501,7 +487,7 @@
         }
         // Instruct the adapter to perform a sort
         this.adapter.sort(index, virtual.top, virtual.bottom, this.columns[index].sort === 'desc', this.columns[index].compareFunction || interaction.defaultComparer);
-        this.refresh();
+        this.refresh(false);
     };
 
 
@@ -679,10 +665,11 @@
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/render/draw.js
-    Scrollgrid.prototype.internal.render.draw = function () {
+    Scrollgrid.prototype.internal.render.draw = function (clearCache) {
 
         var int = this.internal,
             render = int.render,
+            interaction = int.interaction,
             sizes = int.sizes,
             dom = int.dom,
             virtual = sizes.virtual,
@@ -706,15 +693,20 @@
             };
 
         // Draw the separate regions
-        render.renderRegion.call(this, dom.top.left, {}, x.left, y.top);
-        render.renderRegion.call(this, dom.top, { x: p.x }, x.middle, y.top);
-        render.renderRegion.call(this, dom.top.right, {}, x.right, y.top);
-        render.renderRegion.call(this, dom.left, { y: p.y }, x.left, y.middle);
-        render.renderRegion.call(this, dom.main, { x: p.x, y: p.y }, x.middle, y.middle);
-        render.renderRegion.call(this, dom.right, { y: p.y }, x.right, y.middle);
-        render.renderRegion.call(this, dom.bottom.left, {}, x.left, y.bottom);
-        render.renderRegion.call(this, dom.bottom, { x: p.x }, x.middle, y.bottom);
-        render.renderRegion.call(this, dom.bottom.right, {}, x.right, y.bottom);
+        render.renderRegion.call(this, dom.top.left, {}, x.left, y.top, clearCache);
+        render.renderRegion.call(this, dom.top, { x: p.x }, x.middle, y.top, clearCache);
+        render.renderRegion.call(this, dom.top.right, {}, x.right, y.top, clearCache);
+        render.renderRegion.call(this, dom.left, { y: p.y }, x.left, y.middle, clearCache);
+        render.renderRegion.call(this, dom.main, { x: p.x, y: p.y }, x.middle, y.middle, clearCache);
+        render.renderRegion.call(this, dom.right, { y: p.y }, x.right, y.middle, clearCache);
+        render.renderRegion.call(this, dom.bottom.left, {}, x.left, y.bottom, clearCache);
+        render.renderRegion.call(this, dom.bottom, { x: p.x }, x.middle, y.bottom, clearCache);
+        render.renderRegion.call(this, dom.bottom.right, {}, x.right, y.bottom, clearCache);
+
+        // Add resize handles
+        interaction.addResizeHandles.call(this, dom.top.left, x.left);
+        interaction.addResizeHandles.call(this, dom.top, x.middle, p.x);
+        interaction.addResizeHandles.call(this, dom.top.right, x.right);
 
         // Calculate if the rendering means that the width of the
         // whole table should change and layout accordingly
@@ -809,7 +801,6 @@
                 x = Math.floor(runningX) + adjustments.x + 0.5;
                 // Using direct assignment for speed
                 visibleData[i] = {
-                    key: c + '_' + r,
                     x: x,
                     y: Math.floor(runningY) + adjustments.y + 0.5,
                     boxWidth: Math.ceil(column.width) + adjustments.boxWidth,
@@ -827,6 +818,10 @@
                     formatter: null,
                     getValue: getValue
                 };
+                // We abuse the key here, cells will be rendered on enter only, we therefore
+                // want to key by any value which should result in a redraw of a particular cell,
+                // this has huge performance benefits.  The
+                visibleData[i].key = visibleData[i].columnIndex + '_' + visibleData[i].rowIndex + "_" + visibleData[i].boxWidth + "_" + visibleData[i].sortIcon;
                 runningX += column.width;
             }
             runningY += rowHeight;
@@ -858,7 +853,7 @@
     Scrollgrid.prototype.internal.render.getTextPosition = function (d) {
         var int = this.internal,
             render = int.render,
-            x = d.x;
+            x = 0;
         if (d.alignment === 'center') {
             x += d.textWidth / 2;
         } else if (d.alignment === 'right') {
@@ -951,27 +946,10 @@
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/render/renderBackground.js
     Scrollgrid.prototype.internal.render.renderBackground = function (g, viewData) {
-
-        var cells;
-
-        cells = g
-            .selectAll(".sg-no-style--background-selector")
-            .data(viewData, function (d) { return d.key; });
-
-        cells.enter()
-            .append("rect")
-            .attr("class", function (d) { return "sg-no-style--background-selector " + d.backgroundStyle; });
-
-        cells.attr("x", function (d) { return d.x; })
-            .attr("y", function (d) { return d.y; })
-            .attr("width", function (d) { return d.boxWidth; })
-            .attr("height", function (d) { return d.boxHeight; });
-
-        cells.exit()
-            .remove();
-
-        return cells;
-
+        g.append("rect")
+            .attr("class", viewData.backgroundStyle)
+            .attr("width", viewData.boxWidth)
+            .attr("height", viewData.boxHeight);
     };
 
     // Copyright: 2015 AlignAlytics
@@ -982,49 +960,45 @@
         var self = this,
             int = self.internal,
             render = int.render,
-            cells;
+            text;
 
-        g.selectAll(".sg-no-style--sort-icon-selector").remove();
-
-        cells = g
-            .selectAll(".sg-no-style--text-selector")
-            .data(viewData, function (d) { return d.key; });
-
-        cells.enter()
-            .append("text")
-            .attr("class", function (d) { return "sg-no-style--text-selector " + d.foregroundStyle; })
-            .style("text-anchor", function (d) { return render.getTextAnchor.call(self, d); })
+        text = g.append("text")
+            .attr("class", viewData.foregroundStyle)
+            .style("text-anchor", render.getTextAnchor.call(self, viewData))
             .attr("dy", "0.35em")
-            .text(render.cellWaitText);
+            .text(render.cellWaitText)
+            .attr("x", render.getTextPosition.call(self, viewData))
+            .attr("y", viewData.textHeight / 2);
 
-        cells.attr("x", function (d) { return render.getTextPosition.call(self, d); })
-            .attr("y", function (d) { return d.y + d.textHeight / 2; })
-            .each(function (d) {
-                var text = d3.select(this),
-                    sorted = !(!d.sortIcon || d.sortIcon === 'none');
-                render.renderText.call(self, d, text, sorted);
-                render.renderSortIcon.call(self, d, g, sorted);
-            });
-
-        cells.exit()
-            .remove();
-
-        return cells;
+        viewData.getValue(viewData.rowIndex, viewData.columnIndex, function (value) {
+            if (viewData.formatter) {
+                text.text(viewData.formatter(value));
+            } else {
+                text.text(value);
+            }
+            render.cropText.call(this, text, viewData.textWidth - viewData.cellPadding - (!(!viewData.sortIcon || viewData.sortIcon === 'none') ? render.sortIconSize + viewData.cellPadding : 0));
+        });
 
     };
 
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/render/renderRegion.js
-    Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOffset, xVirtual, yVirtual) {
+    Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOffset, xVirtual, yVirtual, clearCache) {
 
-        var int = this.internal,
+        var self = this,
+            int = self.internal,
             render = int.render,
             interaction = int.interaction,
             sizes = int.sizes,
-            physical = sizes.physical,
+            virtual = sizes.virtual,
             dom = int.dom,
-            data = render.getDataInBounds.call(this, {
+            cells,
+            data;
+
+        if ((xVirtual.left || 0) !== (xVirtual.right || 0) && (yVirtual.top || 0) !== (yVirtual.bottom || 0)) {
+
+            data = render.getDataInBounds.call(self, {
                 startX: physicalOffset.x || 0,
                 startY: physicalOffset.y || 0,
                 top: yVirtual.top || 0,
@@ -1033,21 +1007,53 @@
                 right: xVirtual.right || 0
             });
 
-        render.renderBackground.call(this, target.content, data);
-        render.renderForeground.call(this, target.content, data);
+            // On refresh we will clear and redraw everything.  This can
+            // be invoked externally or internally on full grid changes.  On scroll or resize
+            // we don't want to clear the cache because affected cells will be redrawn anyway
+            if (clearCache) {
+                target.content
+                    .selectAll(".sg-no-style--cell-selector")
+                    .remove();
+            }
 
-        // Add some interaction to the headers
-        if (target === dom.top || target === dom.top.left || target === dom.top.right) {
-            // Add sorting
-            if (interaction.allowSorting) {
-                interaction.addSortButtons.call(this, target.content, data);
-            }
-            // Add column resizing
-            if (interaction.allowColumnResizing) {
-                interaction.addResizeHandles.call(this, target.content, data, target === dom.top.right && physical.totalInnerWidth > physical.visibleInnerWidth);
-            }
+            cells = target.content
+                .selectAll(".sg-no-style--cell-selector")
+                .data(data, function (d) {
+                    return d.key;
+                });
+
+            // We use the cell key to invoke an enter if the cell needs a render
+            // for any reason, this means everything here happens on enter.
+            cells.enter()
+                .append("g")
+                .attr("class", "sg-no-style--cell-selector")
+                .each(function (d) {
+                    var group = d3.select(this);
+                    render.renderBackground.call(self, group, d);
+                    render.renderForeground.call(self, group, d);
+                    render.renderSortIcon.call(self, d, group, !(!d.sortIcon || d.sortIcon === 'none'));
+                    // Add some interaction to the headers
+                    if (target === dom.top || target === dom.top.left || target === dom.top.right) {
+                        // Add sorting
+                        if (interaction.allowSorting && d.rowIndex === virtual.top - 1) {
+                            group.append("rect")
+                                .attr("width", d.boxWidth)
+                                .attr("height", d.boxHeight)
+                                .style("opacity", 0)
+                                .style("cursor", "pointer")
+                                .on("click", function () { return interaction.sortColumn.call(self, d.columnIndex, true); });
+                        }
+                    }
+                });
+
+            cells.attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+            cells.exit()
+                .remove();
+
         }
-
     };
 
     // Copyright: 2015 AlignAlytics
@@ -1061,26 +1067,10 @@
             target.append("g")
                 .datum(d.sortIcon)
                 .attr("class", "sg-no-style--sort-icon-selector")
-                .attr("transform", "translate(" + (d.x + d.cellPadding + render.sortIconSize / 2) + "," + (d.y + d.textHeight / 2) + ")")
+                .attr("transform", "translate(" + (d.cellPadding + render.sortIconSize / 2) + "," + (d.textHeight / 2) + ")")
                 .call(function (d) { return render.sortIcon.call(self, d); });
         }
 
-    };
-
-    // Copyright: 2015 AlignAlytics
-    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-    // Source: /src/internal/render/renderText.js
-    Scrollgrid.prototype.internal.render.renderText = function (d, target, sorted) {
-        var int = this.internal,
-            render = int.render;
-        d.getValue(d.rowIndex, d.columnIndex, function (value) {
-            if (d.formatter) {
-                target.text(d.formatter(value));
-            } else {
-                target.text(value);
-            }
-            render.cropText.call(this, target, d.textWidth - d.cellPadding - (sorted ? render.sortIconSize + d.cellPadding : 0));
-        });
     };
 
     // Copyright: 2015 AlignAlytics
@@ -1292,6 +1282,7 @@
                     if (render.matchRule.call(this, render.formatRules[rule].column, i + 1, virtual.outerWidth)) {
                         this.columns[i] = {
                             width: render.formatRules[rule].columnWidth || this.columns[i].width,
+                            index: i,
                             sort: render.formatRules[rule].sort || this.columns[i].sort,
                             compareFunction: render.formatRules[rule].compareFunction || this.columns[i].compareFunction
                         };
@@ -1446,7 +1437,7 @@
             virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
 
             // Render the control
-            this.refresh();
+            this.refresh(false);
 
         }
 
@@ -1457,13 +1448,13 @@
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/external/refresh.js
-    Scrollgrid.prototype.refresh = function () {
+    Scrollgrid.prototype.refresh = function (resizeOnly) {
         var int = this.internal,
             render = int.render,
             dom = int.dom;
         // Call the instantiated layout refresh
         dom.layoutDOM.call(this);
-        render.draw.call(this);
+        render.draw.call(this, !resizeOnly);
         dom.setScrollerSize.call(this);
     };
 

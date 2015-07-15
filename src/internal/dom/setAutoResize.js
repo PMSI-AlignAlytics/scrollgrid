@@ -15,7 +15,7 @@
                 existingHandler();
             }
             // Call the instantiated layout refresh
-            self.refresh();
+            self.refresh(true);
         };
 
     };

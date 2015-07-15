@@ -36,7 +36,7 @@
             virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
 
             // Render the control
-            this.refresh();
+            this.refresh(false);
 
         }
 

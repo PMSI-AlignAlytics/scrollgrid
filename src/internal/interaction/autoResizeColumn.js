@@ -2,7 +2,7 @@
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/interaction/autoResizeColumn.js
-    Scrollgrid.prototype.internal.interaction.autoResizeColumn = function (d) {
+    Scrollgrid.prototype.internal.interaction.autoResizeColumn = function (column) {
 
         var int = this.internal,
             dom = int.dom,
@@ -10,18 +10,15 @@
             panels = [dom.top.left, dom.top, dom.top.right, dom.left, dom.main, dom.right, dom.bottom.left, dom.bottom, dom.bottom.right],
             i;
 
-        if (d && d.column && d.columnIndex) {
+        // Do not allow the width to be less than 0
+        column.width = 0;
 
-            // Do not allow the width to be less than 0
-            d.column.width = 0;
-
-            // Get the widest from the various panels (some panels may not apply to the given cell but those panels will return zero anyway)
-            for (i = 0; i < panels.length; i += 1) {
-                d.column.width = Math.max(d.column.width, sizes.getExistingTextBound.call(this, panels[i].svg, d.columnIndex).width);
-            }
-
-            // Update the container size because the width will have changed
-            this.refresh();
-
+        // Get the widest from the various panels (some panels may not apply to the given cell but those panels will return zero anyway)
+        for (i = 0; i < panels.length; i += 1) {
+            column.width = Math.max(column.width, sizes.getExistingTextBound.call(this, panels[i].svg, column.index).width);
         }
+
+        // Update the container size because the width will have changed
+        this.refresh(true);
+
     };

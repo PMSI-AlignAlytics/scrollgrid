@@ -129,6 +129,7 @@ define(["d3"], function (d3) {
                 layoutDOM: jasmine.createSpy("layoutDOM")
             },
             interaction: {
+                addResizeHandles: jasmine.createSpy("addResizeHandles"),
                 autoResizeColumn: jasmine.createSpy("autoResizeColumn"),
                 getColumnResizer: jasmine.createSpy("getColumnResizer").andReturn("column resizer"),
                 columnResizeStart: jasmine.createSpy("columnResizeStart"),

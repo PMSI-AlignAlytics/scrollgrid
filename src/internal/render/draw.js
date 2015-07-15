@@ -2,10 +2,11 @@
     // Copyright: 2015 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     // Source: /src/internal/render/draw.js
-    Scrollgrid.prototype.internal.render.draw = function () {
+    Scrollgrid.prototype.internal.render.draw = function (clearCache) {
 
         var int = this.internal,
             render = int.render,
+            interaction = int.interaction,
             sizes = int.sizes,
             dom = int.dom,
             virtual = sizes.virtual,
@@ -29,15 +30,20 @@
             };
 
         // Draw the separate regions
-        render.renderRegion.call(this, dom.top.left, {}, x.left, y.top);
-        render.renderRegion.call(this, dom.top, { x: p.x }, x.middle, y.top);
-        render.renderRegion.call(this, dom.top.right, {}, x.right, y.top);
-        render.renderRegion.call(this, dom.left, { y: p.y }, x.left, y.middle);
-        render.renderRegion.call(this, dom.main, { x: p.x, y: p.y }, x.middle, y.middle);
-        render.renderRegion.call(this, dom.right, { y: p.y }, x.right, y.middle);
-        render.renderRegion.call(this, dom.bottom.left, {}, x.left, y.bottom);
-        render.renderRegion.call(this, dom.bottom, { x: p.x }, x.middle, y.bottom);
-        render.renderRegion.call(this, dom.bottom.right, {}, x.right, y.bottom);
+        render.renderRegion.call(this, dom.top.left, {}, x.left, y.top, clearCache);
+        render.renderRegion.call(this, dom.top, { x: p.x }, x.middle, y.top, clearCache);
+        render.renderRegion.call(this, dom.top.right, {}, x.right, y.top, clearCache);
+        render.renderRegion.call(this, dom.left, { y: p.y }, x.left, y.middle, clearCache);
+        render.renderRegion.call(this, dom.main, { x: p.x, y: p.y }, x.middle, y.middle, clearCache);
+        render.renderRegion.call(this, dom.right, { y: p.y }, x.right, y.middle, clearCache);
+        render.renderRegion.call(this, dom.bottom.left, {}, x.left, y.bottom, clearCache);
+        render.renderRegion.call(this, dom.bottom, { x: p.x }, x.middle, y.bottom, clearCache);
+        render.renderRegion.call(this, dom.bottom.right, {}, x.right, y.bottom, clearCache);
+
+        // Add resize handles
+        interaction.addResizeHandles.call(this, dom.top.left, x.left);
+        interaction.addResizeHandles.call(this, dom.top, x.middle, p.x);
+        interaction.addResizeHandles.call(this, dom.top.right, x.right);
 
         // Calculate if the rendering means that the width of the
         // whole table should change and layout accordingly

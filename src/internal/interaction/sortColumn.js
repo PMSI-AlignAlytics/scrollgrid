@@ -18,5 +18,5 @@
         }
         // Instruct the adapter to perform a sort
         this.adapter.sort(index, virtual.top, virtual.bottom, this.columns[index].sort === 'desc', this.columns[index].compareFunction || interaction.defaultComparer);
-        this.refresh();
+        this.refresh(false);
     };

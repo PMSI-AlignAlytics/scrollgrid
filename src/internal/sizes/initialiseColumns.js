@@ -25,6 +25,7 @@
                     if (render.matchRule.call(this, render.formatRules[rule].column, i + 1, virtual.outerWidth)) {
                         this.columns[i] = {
                             width: render.formatRules[rule].columnWidth || this.columns[i].width,
+                            index: i,
                             sort: render.formatRules[rule].sort || this.columns[i].sort,
                             compareFunction: render.formatRules[rule].compareFunction || this.columns[i].compareFunction
                         };
