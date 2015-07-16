@@ -975,11 +975,11 @@
 
         text = g.append("text")
             .attr("class", viewData.foregroundStyle)
-            .style("text-anchor", render.getTextAnchor.call(self, viewData))
             .attr("dy", "0.35em")
-            .text(render.cellWaitText)
             .attr("x", render.getTextPosition.call(self, viewData))
-            .attr("y", viewData.textHeight / 2);
+            .attr("y", viewData.textHeight / 2)
+            .style("text-anchor", render.getTextAnchor.call(self, viewData))
+            .text(render.cellWaitText);
 
         viewData.getValue(viewData.rowIndex, viewData.columnIndex, function (value) {
             if (viewData.formatter) {

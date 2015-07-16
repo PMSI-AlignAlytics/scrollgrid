@@ -80,6 +80,27 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
             expect(data[0].backgroundStyle).toEqual("Existing Background Style Custom Background Style");
         });
 
+        it("should apply the background render method if rules match", function () {
+            rule.renderBackground = "Custom Background Render";
+            underTest.call(mock, data);
+            expect(data[0].renderBackground).toBeDefined();
+            expect(data[0].renderBackground).toEqual("Custom Background Render");
+        });
+
+        it("should apply the between render method if rules match", function () {
+            rule.renderBetween = "Custom Between Render";
+            underTest.call(mock, data);
+            expect(data[0].renderBetween).toBeDefined();
+            expect(data[0].renderBetween).toEqual("Custom Between Render");
+        });
+
+        it("should apply the foreground render method if rules match", function () {
+            rule.renderForeground = "Custom Foreground Render";
+            underTest.call(mock, data);
+            expect(data[0].renderForeground).toBeDefined();
+            expect(data[0].renderForeground).toEqual("Custom Foreground Render");
+        });
+
     });
 
 });

@@ -54,7 +54,8 @@ define(["d3"], function (d3) {
         cellPadding: 191,
         sortIconSize: 193,
         nodeScrollLeft: 197,
-        nodeScrollTop: 199
+        nodeScrollTop: 199,
+        cellWaitText: 211
     };
 
     scrollgrid.panel = function () {
@@ -138,6 +139,7 @@ define(["d3"], function (d3) {
                 sortColumn: jasmine.createSpy("sortColumn")
             },
             render: {
+                cellWaitText: scrollgrid.vals.cellWaitText,
                 matchRule: jasmine.createSpy("matchRule").andReturn(true),
                 draw: jasmine.createSpy("draw"),
                 getVisibleRegion: jasmine.createSpy("getVisibleRegion").andReturn("visible region"),
@@ -165,10 +167,11 @@ define(["d3"], function (d3) {
                 }),
                 applyRules: jasmine.createSpy("applyRules"),
                 sortIconSize: scrollgrid.vals.sortIconSize,
-                getTextAnchor: jasmine.createSpy("getTextAnchor"),
-                getTextPosition: jasmine.createSpy("getTextPosition"),
+                getTextAnchor: jasmine.createSpy("getTextAnchor").andReturn("Text Anchor"),
+                getTextPosition: jasmine.createSpy("getTextPosition").andReturn("Text Position"),
                 renderText: jasmine.createSpy("renderText"),
-                renderSortIcon: jasmine.createSpy("renderSortIcon")
+                renderSortIcon: jasmine.createSpy("renderSortIcon"),
+                cropText: jasmine.createSpy("cropText")
             }
         };
         scrollgrid.style = {
