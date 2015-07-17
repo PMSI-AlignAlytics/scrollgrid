@@ -16,7 +16,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
                 textHeight: 5,
                 cellPadding: 7
             };
-            target = new d3.shape();
+            target = new d3.shape(mock.vals);
         });
 
         it("should not append a group if sorted is false", function () {

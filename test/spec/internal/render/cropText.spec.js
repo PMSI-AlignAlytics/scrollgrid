@@ -10,7 +10,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
         beforeEach(function () {
             mock.init();
             d3.init();
-            textShape = new d3.shape();
+            textShape = new d3.shape(mock.vals);
             exampleText = "Example Text Value";
             textShape.text(exampleText);
         });

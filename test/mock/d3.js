@@ -64,13 +64,13 @@ define(function () {
         });
         self.classed = jasmine.createSpy("classed");
         self.append = jasmine.createSpy("append").andCallFake(function (child) {
-            var returnVal = new d3.shape();
+            var returnVal = new d3.shape(defaults);
             self.children[child] = self.children[child] || [];
             self.children[child].push(returnVal);
             return returnVal;
         });
         self.selectAll = jasmine.createSpy("selectAll").andCallFake(function (selector) {
-            var returnVal = new d3.shape();
+            var returnVal = new d3.shape(defaults);
             self.selections[selector] = self.selections[selector] || [];
             self.selections[selector].push(returnVal);
             return returnVal;

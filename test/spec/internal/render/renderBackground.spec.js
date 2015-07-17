@@ -10,7 +10,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
         beforeEach(function () {
             mock.init();
             d3.init();
-            target = new d3.shape();
+            target = new d3.shape(mock.vals);
             data = {
                 backgroundStyle: "Background Style",
                 boxWidth: "Box Width",

@@ -10,7 +10,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
         beforeEach(function () {
             d3.init();
             mock.init();
-            target = new d3.shape();
+            target = new d3.shape(mock.vals);
             viewData = {
                 boxWidth: 7,
                 boxHeight: 9,

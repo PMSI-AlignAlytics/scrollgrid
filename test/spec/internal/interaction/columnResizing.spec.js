@@ -11,7 +11,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
         beforeEach(function () {
             mock.init();
             d3.init();
-            handle = new d3.shape();
+            handle = new d3.shape(mock.vals);
             vals = {
                 eventX: 7,
                 colWidth: 13,

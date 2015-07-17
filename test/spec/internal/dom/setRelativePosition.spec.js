@@ -15,7 +15,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
 
         beforeEach(function () {
             mock.init();
-            inShape = new d3.shape();
+            inShape = new d3.shape(mock.vals);
             outShape = underTest.call(mock, inShape, vals.x, vals.width, vals.height, vals.overflow);
         });
 

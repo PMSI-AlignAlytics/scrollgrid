@@ -8,7 +8,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
 
         beforeEach(function () {
             mock.init();
-            handle = new d3.shape();
+            handle = new d3.shape(mock.vals);
         });
 
         it("should add the 'dragging' class", function () {
