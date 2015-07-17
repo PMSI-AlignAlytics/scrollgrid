@@ -1100,10 +1100,7 @@
                 }
             },
             right: {
-                panel: 'sg-fixed sg-right',
-                left: {
-                    panel: 'sg-fixed sg-top-left'
-                }
+                panel: 'sg-fixed sg-right'
             },
             bottom: {
                 panel: 'sg-fixed sg-bottom',
