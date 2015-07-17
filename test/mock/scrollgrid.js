@@ -155,6 +155,7 @@ define(["d3"], function (d3) {
                         y: scrollgrid.vals.viewAreaPhysY
                     }
                 }),
+                getDataInBounds: jasmine.createSpy("getDataInBounds").andReturn("data in bounds"),
                 renderRegion: jasmine.createSpy("renderRegion"),
                 calculateCellAdjustments: jasmine.createSpy("calculateCellAdjustments").andReturn({
                     x: scrollgrid.vals.adjX,
@@ -166,12 +167,14 @@ define(["d3"], function (d3) {
                     sortIcon:  scrollgrid.vals.sortIcon
                 }),
                 applyRules: jasmine.createSpy("applyRules"),
+                addSortButtons: jasmine.createSpy("addSortButtons"),
                 sortIconSize: scrollgrid.vals.sortIconSize,
                 getTextAnchor: jasmine.createSpy("getTextAnchor").andReturn("Text Anchor"),
                 getTextPosition: jasmine.createSpy("getTextPosition").andReturn("Text Position"),
                 renderText: jasmine.createSpy("renderText"),
                 renderSortIcon: jasmine.createSpy("renderSortIcon"),
-                cropText: jasmine.createSpy("cropText")
+                cropText: jasmine.createSpy("cropText"),
+                sortIcon: jasmine.createSpy("sortIcon")
             }
         };
         scrollgrid.style = {

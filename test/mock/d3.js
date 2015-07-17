@@ -79,7 +79,15 @@ define(function () {
         self.enter = jasmine.createSpy("enter").andReturn(self);
         self.exit = jasmine.createSpy("exit").andReturn(self);
         self.data = jasmine.createSpy("data").andReturn(self);
-        self.datum = jasmine.createSpy("datum").andReturn(self.dataPoint);
+        self.datum = jasmine.createSpy("datum").andCallFake(function (arg) {
+            var returnValue = self;
+            if (arg) {
+                self.dataPoint = arg;
+            } else {
+                returnValue = self.dataPoint;
+            }
+            return returnValue;
+        });
         self.call = jasmine.createSpy("call").andReturn(self);
         self.each = jasmine.createSpy("each").andReturn(self);
     };

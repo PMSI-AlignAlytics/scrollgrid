@@ -7,9 +7,6 @@
         var self = this,
             int = self.internal,
             render = int.render,
-            interaction = int.interaction,
-            sizes = int.sizes,
-            virtual = sizes.virtual,
             dom = int.dom,
             cells,
             data;
@@ -59,15 +56,7 @@
                     render.renderSortIcon.call(self, d, group, !(!d.sortIcon || d.sortIcon === 'none'));
                     // Add some interaction to the headers
                     if (target === dom.top || target === dom.top.left || target === dom.top.right) {
-                        // Add sorting
-                        if (interaction.allowSorting && d.rowIndex === virtual.top - 1) {
-                            group.append("rect")
-                                .attr("width", d.boxWidth)
-                                .attr("height", d.boxHeight)
-                                .style("opacity", 0)
-                                .style("cursor", "pointer")
-                                .on("click", function () { return interaction.sortColumn.call(self, d.columnIndex, true); });
-                        }
+                        render.addSortButtons.call(self, group, d);
                     }
                 });
 
