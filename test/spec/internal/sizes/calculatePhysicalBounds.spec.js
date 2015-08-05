@@ -12,6 +12,7 @@ define(['d3', 'mock', 'sizes/calculatePhysicalBounds'], function (d3, mock) {
             topMargin;
 
         beforeEach(function () {
+
             mock.init();
             d3.init();
 
@@ -25,6 +26,7 @@ define(['d3', 'mock', 'sizes/calculatePhysicalBounds'], function (d3, mock) {
                 { width: 1 }, { width: 2 }, { width: 3 }, { width: 5 }, { width: 7 },
                 { width: 11 }, { width: 13 }, { width: 17 }, { width: 23 }, { width: 37 }
             ];
+
             virtual.left = 4;
             virtual.right = 2;
             virtual.outerWidth = 10;
@@ -37,7 +39,9 @@ define(['d3', 'mock', 'sizes/calculatePhysicalBounds'], function (d3, mock) {
             dom.container.nodeObject.offsetHeight = 49;
             dom.container.nodeObject.offsetWidth = 51;
             topMargin = 53;
+
             underTest.call(mock, topMargin);
+
         });
 
         it("should calculate physical left as the sum of column widths before the left most cell", function () {
