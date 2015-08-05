@@ -1,5 +1,6 @@
 
-var tests = [],
+// Call init to build the name spaces.  Code under test is loaded for each test in turn
+var tests = ["/base/src/init.js"],
     file;
 
 for (file in window.__karma__.files) {
@@ -16,9 +17,16 @@ requirejs.config({
     baseUrl: '/base/src',
 
     paths: {
-        'scrollgrid_actual': '../tmp/scrollgrid',
-        'scrollgrid_mock': '../test/mock/scrollgrid',
-        'd3': '../test/mock/d3'
+        'scrollgrid': '../test/mock/scrollgrid',
+        'd3': '../test/mock/d3',
+        'init': '../src/init',
+        'internal': '../src/internal',
+        'dom': '../src/internal/dom',
+        'interaction': '../src/internal/interaction',
+        'render': '../src/internal/render',
+        'sizes': '../src/internal/sizes',
+        'external': '../src/external',
+        'adapters': '../src/external/adapters'
     },
 
     // ask Require.js to load these files (all our tests)

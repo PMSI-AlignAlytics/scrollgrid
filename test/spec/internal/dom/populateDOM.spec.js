@@ -1,15 +1,17 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'dom/populateDOM'], function (d3, mock) {
     "use strict";
 
     describe("populateDOM", function () {
 
-        var underTest = actual.prototype.internal.dom.populateDOM,
+        var underTest,
             mockDom,
             mockStyle;
 
         beforeEach(function () {
             mock.init();
             d3.init();
+
+            underTest = Scrollgrid.prototype.internal.dom.populateDOM;
             mockDom = mock.internal.dom;
             mockStyle = mock.style;
         });
@@ -100,6 +102,6 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
             expect(mockDom.bottom.right).toBeDefined();
             expect(mockDom.bottom.right.style).toEqual(mockStyle.bottom.right.panel);
         });
-
     });
+
 });

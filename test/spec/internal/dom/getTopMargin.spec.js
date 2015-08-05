@@ -1,10 +1,10 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'dom/getTopMargin'], function (d3, mock) {
     "use strict";
 
     describe("getTopMargin", function () {
 
-        var result,
-            underTest = actual.prototype.internal.dom.getTopMargin,
+        var underTest = Scrollgrid.prototype.internal.dom.getTopMargin,
+            result,
             mockPhys;
 
         beforeEach(function () {

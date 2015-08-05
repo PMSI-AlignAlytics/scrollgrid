@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/renderForeground'], function (d3, mock) {
     "use strict";
 
     describe("renderForeground", function () {
 
-        var underTest = actual.prototype.internal.render.renderForeground,
+        var underTest = Scrollgrid.prototype.internal.render.renderForeground,
             target,
             data,
             ri,

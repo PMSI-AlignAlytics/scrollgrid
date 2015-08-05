@@ -6,10 +6,9 @@ module.exports = function(grunt) {
         concat: {
             dist: {
                 src: [
-                    "src/begin.js",
+                    "src/init.js",
                     "src/internal/**/*.js",
-                    "src/external/**/*.js",
-                    "src/end.js"
+                    "src/external/**/*.js"
                 ],
                 dest: 'dist/<%= pkg.name %>.v<%= pkg.version %>.js'
             },
@@ -52,6 +51,7 @@ module.exports = function(grunt) {
                 predef: [
                     'd3',
                     'scrollgrid',
+                    'Scrollgrid',
                     'module',
                     'console',
                     'jasmine',

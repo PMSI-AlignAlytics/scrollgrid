@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/renderSortIcon'], function (d3, mock) {
     "use strict";
 
     describe("renderSortIcon", function () {
 
-        var underTest = actual.prototype.internal.render.renderSortIcon,
+        var underTest = Scrollgrid.prototype.internal.render.renderSortIcon,
             target,
             datum;
 

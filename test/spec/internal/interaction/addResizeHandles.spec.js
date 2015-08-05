@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'interaction/addResizeHandles'], function (d3, mock) {
     "use strict";
 
     describe("addResizeHandles", function () {
 
-        var underTest = actual.prototype.internal.interaction.addResizeHandles,
+        var underTest = Scrollgrid.prototype.internal.interaction.addResizeHandles,
             target,
             bounds,
             startX;

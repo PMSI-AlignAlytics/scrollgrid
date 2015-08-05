@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'interaction/getColumnResizer'], function (d3, mock) {
     "use strict";
 
     describe("getColumnResizer", function () {
 
-        var underTest = actual.prototype.internal.interaction.getColumnResizer,
+        var underTest = Scrollgrid.prototype.internal.interaction.getColumnResizer,
             interaction;
 
         beforeEach(function () {

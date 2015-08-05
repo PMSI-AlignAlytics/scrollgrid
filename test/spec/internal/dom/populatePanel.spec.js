@@ -1,9 +1,9 @@
-define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
+define(['scrollgrid', 'dom/populatePanel'], function (mock) {
     "use strict";
 
     describe("populatePanel", function () {
 
-        var underTest = actual.prototype.internal.dom.populatePanel,
+        var underTest = Scrollgrid.prototype.internal.dom.populatePanel,
             mockDom;
 
         beforeEach(function () {

@@ -1,9 +1,9 @@
-define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
+define(['scrollgrid', 'internal/raise'], function (mock) {
     "use strict";
 
     describe("raise", function () {
 
-        var underTest = actual.prototype.internal.raise;
+        var underTest = Scrollgrid.prototype.internal.raise;
 
         beforeEach(function () {
             mock.init();

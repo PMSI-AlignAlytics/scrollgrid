@@ -110,3 +110,7 @@
         dom: {},
         render: {}
     };
+
+    return Scrollgrid;
+
+}));

@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/matchRule'], function (d3, mock) {
     "use strict";
 
     describe("matchRule", function () {
 
-        var underTest = actual.prototype.internal.render.matchRule;
+        var underTest = Scrollgrid.prototype.internal.render.matchRule;
 
         beforeEach(function () {
             mock.init();

@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/getDataInBounds'], function (d3, mock) {
     "use strict";
 
     describe("getDataInBounds", function () {
 
-        var underTest = actual.prototype.internal.render.getDataInBounds,
+        var underTest = Scrollgrid.prototype.internal.render.getDataInBounds,
             viewArea,
             result,
             render,

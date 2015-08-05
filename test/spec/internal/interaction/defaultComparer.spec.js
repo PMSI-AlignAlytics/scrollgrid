@@ -1,9 +1,9 @@
-define(['scrollgrid_actual'], function (actual) {
+define(['interaction/defaultComparer'], function () {
     "use strict";
 
     describe("defaultComparer", function () {
 
-        var underTest = actual.prototype.internal.interaction.defaultComparer;
+        var underTest = Scrollgrid.prototype.internal.interaction.defaultComparer;
 
         it("should return zero if two matching dates are passed", function () {
             var result = underTest(new Date("2012-06-01"), new Date("2012-06-01"));

@@ -1,15 +1,17 @@
 
-    // Copyright: 2015 AlignAlytics
-    // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-    // Source: /src/internal/dom/setScrollerSize.js
-    Scrollgrid.prototype.internal.dom.setScrollerSize = function () {
-        var int = this.internal,
-            dom = int.dom,
-            sizes = int.sizes,
-            physical = sizes.physical;
+// Copyright: 2015 AlignAlytics
+// License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+// Source: /src/internal/dom/setScrollerSize.js
+Scrollgrid.prototype.internal.dom.setScrollerSize = function () {
+    "use strict";
 
-        dom.main.scroller
-            .style('width', physical.totalInnerWidth + 'px')
-            .style('height', physical.totalInnerHeight + 'px');
+    var int = this.internal,
+        dom = int.dom,
+        sizes = int.sizes,
+        physical = sizes.physical;
 
-    };
+    dom.main.scroller
+        .style('width', physical.totalInnerWidth + 'px')
+        .style('height', physical.totalInnerHeight + 'px');
+
+};

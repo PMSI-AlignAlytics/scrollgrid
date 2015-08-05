@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/setDefaultStyles'], function (d3, mock) {
     "use strict";
 
     describe("setDefaultStyles", function () {
 
-        var underTest = actual.prototype.internal.render.setDefaultStyles;
+        var underTest = Scrollgrid.prototype.internal.render.setDefaultStyles;
 
         beforeEach(function () {
             mock.init();

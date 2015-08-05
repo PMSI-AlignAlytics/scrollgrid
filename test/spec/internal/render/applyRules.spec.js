@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/applyRules'], function (d3, mock) {
     "use strict";
 
     describe("applyRules", function () {
 
-        var underTest = actual.prototype.internal.render.applyRules,
+        var underTest = Scrollgrid.prototype.internal.render.applyRules,
             data,
             rule;
 

@@ -1,9 +1,9 @@
-define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
+define(['scrollgrid', 'dom/setAutoResize'], function (mock) {
     "use strict";
 
     describe("setAutoResize", function () {
 
-        var underTest = actual.prototype.internal.dom.setAutoResize;
+        var underTest = Scrollgrid.prototype.internal.dom.setAutoResize;
 
         beforeEach(function () {
             mock.init();

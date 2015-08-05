@@ -1,10 +1,9 @@
-define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
+define(['scrollgrid', 'dom/layoutDOM'], function (mock) {
     "use strict";
-
 
     describe("layoutDOM", function () {
 
-        var underTest = actual.prototype.internal.dom.layoutDOM,
+        var underTest = Scrollgrid.prototype.internal.dom.layoutDOM,
             mockDom,
             mockSizes,
             mockRender;

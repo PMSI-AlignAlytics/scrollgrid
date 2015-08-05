@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'dom/setRelativePosition'], function (d3, mock) {
     "use strict";
 
     describe("setRelativePosition", function () {
 
-        var underTest = actual.prototype.internal.dom.setRelativePosition,
+        var underTest = Scrollgrid.prototype.internal.dom.setRelativePosition,
             inShape,
             outShape,
             vals = {

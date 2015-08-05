@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'interaction/sortColumn'], function (d3, mock) {
     "use strict";
 
     describe("sortColumn", function () {
 
-        var underTest = actual.prototype.internal.interaction.sortColumn;
+        var underTest = Scrollgrid.prototype.internal.interaction.sortColumn;
 
         beforeEach(function () {
             mock.init();

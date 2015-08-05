@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'dom/setAbsolutePosition'], function (d3, mock) {
     "use strict";
 
     describe("setAbsolutePosition", function () {
 
-        var underTest = actual.prototype.internal.dom.setAbsolutePosition,
+        var underTest = Scrollgrid.prototype.internal.dom.setAbsolutePosition,
             inShape,
             outShape,
             vals = {

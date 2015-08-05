@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/renderRegion'], function (d3, mock) {
     "use strict";
 
     describe("renderRegion", function () {
 
-        var underTest = actual.prototype.internal.render.renderRegion,
+        var underTest = Scrollgrid.prototype.internal.render.renderRegion,
             target,
             physicalOffset,
             xVirtual,
@@ -251,7 +251,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
 
                 it("should not add sort buttons for unspecified panels", function () {
                     each(datum);
-                    expect(mock.internal.render.addSortButtons).not.toHaveBeenCalled();
+                    expect(mock.internal.interaction.addSortButtons).not.toHaveBeenCalled();
                 });
 
             });
@@ -279,7 +279,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
                 rowIndex: 7,
                 columnIndex: 11
             });
-            expect(mock.internal.render.addSortButtons).toHaveBeenCalled();
+            expect(mock.internal.interaction.addSortButtons).toHaveBeenCalled();
         });
 
         it("should add sort buttons to the top panel", function () {
@@ -291,7 +291,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
                 rowIndex: 7,
                 columnIndex: 11
             });
-            expect(mock.internal.render.addSortButtons).toHaveBeenCalled();
+            expect(mock.internal.interaction.addSortButtons).toHaveBeenCalled();
         });
 
         it("should add sort buttons to the top right panel", function () {
@@ -303,7 +303,7 @@ define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, moc
                 rowIndex: 7,
                 columnIndex: 11
             });
-            expect(mock.internal.render.addSortButtons).toHaveBeenCalled();
+            expect(mock.internal.interaction.addSortButtons).toHaveBeenCalled();
         });
 
     });

@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/calculateCellAdjustments'], function (d3, mock) {
     "use strict";
 
     describe("calculateCellAdjustments", function () {
 
-        var underTest = actual.prototype.internal.render.calculateCellAdjustments,
+        var underTest = Scrollgrid.prototype.internal.render.calculateCellAdjustments,
             virtual;
 
         beforeEach(function () {

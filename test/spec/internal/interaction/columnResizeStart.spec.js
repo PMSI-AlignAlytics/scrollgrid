@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'interaction/columnResizeStart'], function (d3, mock) {
     "use strict";
 
     describe("columnResizeStart", function () {
 
-        var underTest = actual.prototype.internal.interaction.columnResizeStart,
+        var underTest = Scrollgrid.prototype.internal.interaction.columnResizeStart,
             handle;
 
         beforeEach(function () {

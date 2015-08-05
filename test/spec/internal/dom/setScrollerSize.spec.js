@@ -1,9 +1,9 @@
-define(['scrollgrid_actual', 'scrollgrid_mock'], function (actual, mock) {
+define(['scrollgrid', 'dom/setScrollerSize'], function (mock) {
     "use strict";
 
     describe("setScrollerSize", function () {
 
-        var underTest = actual.prototype.internal.dom.setScrollerSize,
+        var underTest = Scrollgrid.prototype.internal.dom.setScrollerSize,
             mockDom;
 
         beforeEach(function () {

@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/getTextAnchor'], function (d3, mock) {
     "use strict";
 
     describe("getTextAnchor", function () {
 
-        var underTest = actual.prototype.internal.render.getTextAnchor,
+        var underTest = Scrollgrid.prototype.internal.render.getTextAnchor,
             result;
 
         beforeEach(function () {

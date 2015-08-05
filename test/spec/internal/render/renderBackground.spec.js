@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/renderBackground'], function (d3, mock) {
     "use strict";
 
     describe("cropText", function () {
 
-        var underTest = actual.prototype.internal.render.renderBackground,
+        var underTest = Scrollgrid.prototype.internal.render.renderBackground,
             target,
             data;
 

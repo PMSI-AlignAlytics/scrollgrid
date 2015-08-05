@@ -136,7 +136,8 @@ define(["d3"], function (d3) {
                 columnResizeStart: jasmine.createSpy("columnResizeStart"),
                 columnResizing: jasmine.createSpy("columnResizing"),
                 columnResizeEnd: jasmine.createSpy("columnResizeEnd"),
-                sortColumn: jasmine.createSpy("sortColumn")
+                sortColumn: jasmine.createSpy("sortColumn"),
+                addSortButtons: jasmine.createSpy("addSortButtons")
             },
             render: {
                 cellWaitText: scrollgrid.vals.cellWaitText,
@@ -167,7 +168,6 @@ define(["d3"], function (d3) {
                     sortIcon:  scrollgrid.vals.sortIcon
                 }),
                 applyRules: jasmine.createSpy("applyRules"),
-                addSortButtons: jasmine.createSpy("addSortButtons"),
                 sortIconSize: scrollgrid.vals.sortIconSize,
                 getTextAnchor: jasmine.createSpy("getTextAnchor").andReturn("Text Anchor"),
                 getTextPosition: jasmine.createSpy("getTextPosition").andReturn("Text Position"),

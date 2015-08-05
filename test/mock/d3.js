@@ -113,6 +113,7 @@ define(function () {
         d3.behavior = {
             drag: jasmine.createSpy("drag").andReturn(new d3.drag())
         }
+        window.d3 = d3;
     };
     return d3;
 });

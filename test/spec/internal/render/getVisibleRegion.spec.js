@@ -1,9 +1,9 @@
-define(['d3', 'scrollgrid_actual', 'scrollgrid_mock'], function (d3, actual, mock) {
+define(['d3', 'scrollgrid', 'render/getVisibleRegion'], function (d3, mock) {
     "use strict";
 
     describe("getTextPosition", function () {
 
-        var underTest = actual.prototype.internal.render.getVisibleRegion,
+        var underTest = Scrollgrid.prototype.internal.render.getVisibleRegion,
             result;
 
         beforeEach(function () {
