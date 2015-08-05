@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/setDefaultStyles'], function (d3, mock) {
+define(['d3', 'mock', 'render/setDefaultStyles'], function (d3, mock) {
     "use strict";
 
     describe("setDefaultStyles", function () {

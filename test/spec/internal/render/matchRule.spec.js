@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/matchRule'], function (d3, mock) {
+define(['d3', 'mock', 'render/matchRule'], function (d3, mock) {
     "use strict";
 
     describe("matchRule", function () {

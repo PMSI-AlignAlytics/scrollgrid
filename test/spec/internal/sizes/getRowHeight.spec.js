@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'sizes/getRowHeight'], function (d3, mock) {
+define(['d3', 'mock', 'sizes/getRowHeight'], function (d3, mock) {
     "use strict";
 
     describe("getRowHeight", function () {

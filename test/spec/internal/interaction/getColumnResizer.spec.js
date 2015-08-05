@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'interaction/getColumnResizer'], function (d3, mock) {
+define(['d3', 'mock', 'interaction/getColumnResizer'], function (d3, mock) {
     "use strict";
 
     describe("getColumnResizer", function () {

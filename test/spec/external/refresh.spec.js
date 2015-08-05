@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'external/refresh'], function (d3, mock) {
+define(['d3', 'mock', 'external/refresh'], function (d3, mock) {
     "use strict";
 
     describe("data", function () {

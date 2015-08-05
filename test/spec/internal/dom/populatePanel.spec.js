@@ -1,4 +1,4 @@
-define(['scrollgrid', 'dom/populatePanel'], function (mock) {
+define(['mock', 'dom/populatePanel'], function (mock) {
     "use strict";
 
     describe("populatePanel", function () {

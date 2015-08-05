@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/cropText'], function (d3, mock) {
+define(['d3', 'mock', 'render/cropText'], function (d3, mock) {
     "use strict";
 
     describe("cropText", function () {

@@ -17,7 +17,7 @@ requirejs.config({
     baseUrl: '/base/src',
 
     paths: {
-        'scrollgrid': '../test/mock/scrollgrid',
+        'mock': '../test/mock/scrollgrid',
         'd3': '../test/mock/d3',
         'init': '../src/init',
         'internal': '../src/internal',

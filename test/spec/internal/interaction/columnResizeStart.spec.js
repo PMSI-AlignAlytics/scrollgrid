@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'interaction/columnResizeStart'], function (d3, mock) {
+define(['d3', 'mock', 'interaction/columnResizeStart'], function (d3, mock) {
     "use strict";
 
     describe("columnResizeStart", function () {

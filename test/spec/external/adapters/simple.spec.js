@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'adapters/simple'], function (d3, mock) {
+define(['d3', 'mock', 'adapters/simple'], function (d3, mock) {
     "use strict";
 
     describe("simple", function () {

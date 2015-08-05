@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'interaction/sortColumn'], function (d3, mock) {
+define(['d3', 'mock', 'interaction/sortColumn'], function (d3, mock) {
     "use strict";
 
     describe("sortColumn", function () {

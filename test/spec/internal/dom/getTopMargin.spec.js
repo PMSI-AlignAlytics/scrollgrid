@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'dom/getTopMargin'], function (d3, mock) {
+define(['d3', 'mock', 'dom/getTopMargin'], function (d3, mock) {
     "use strict";
 
     describe("getTopMargin", function () {

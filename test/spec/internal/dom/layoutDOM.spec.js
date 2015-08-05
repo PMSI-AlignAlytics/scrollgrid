@@ -1,4 +1,4 @@
-define(['scrollgrid', 'dom/layoutDOM'], function (mock) {
+define(['mock', 'dom/layoutDOM'], function (mock) {
     "use strict";
 
     describe("layoutDOM", function () {

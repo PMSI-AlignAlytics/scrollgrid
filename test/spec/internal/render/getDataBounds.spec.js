@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/getDataBounds'], function (d3, mock) {
+define(['d3', 'mock', 'render/getDataBounds'], function (d3, mock) {
     "use strict";
 
     describe("getDataBounds", function () {

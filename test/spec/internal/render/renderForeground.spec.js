@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/renderForeground'], function (d3, mock) {
+define(['d3', 'mock', 'render/renderForeground'], function (d3, mock) {
     "use strict";
 
     describe("renderForeground", function () {

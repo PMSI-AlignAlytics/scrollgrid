@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/getTextAnchor'], function (d3, mock) {
+define(['d3', 'mock', 'render/getTextAnchor'], function (d3, mock) {
     "use strict";
 
     describe("getTextAnchor", function () {

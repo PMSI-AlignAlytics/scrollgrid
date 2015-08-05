@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/renderSortIcon'], function (d3, mock) {
+define(['d3', 'mock', 'render/renderSortIcon'], function (d3, mock) {
     "use strict";
 
     describe("renderSortIcon", function () {

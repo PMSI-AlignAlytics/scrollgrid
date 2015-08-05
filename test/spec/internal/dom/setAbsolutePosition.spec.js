@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'dom/setAbsolutePosition'], function (d3, mock) {
+define(['d3', 'mock', 'dom/setAbsolutePosition'], function (d3, mock) {
     "use strict";
 
     describe("setAbsolutePosition", function () {

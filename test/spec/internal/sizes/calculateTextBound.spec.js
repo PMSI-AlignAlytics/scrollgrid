@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'sizes/calculateTextBound'], function (d3, mock) {
+define(['d3', 'mock', 'sizes/calculateTextBound'], function (d3, mock) {
     "use strict";
 
     describe("calculateTextBound", function () {

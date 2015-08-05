@@ -1,4 +1,4 @@
-define(['scrollgrid', 'dom/setAutoResize'], function (mock) {
+define(['mock', 'dom/setAutoResize'], function (mock) {
     "use strict";
 
     describe("setAutoResize", function () {

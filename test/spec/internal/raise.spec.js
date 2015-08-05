@@ -1,4 +1,4 @@
-define(['scrollgrid', 'internal/raise'], function (mock) {
+define(['mock', 'internal/raise'], function (mock) {
     "use strict";
 
     describe("raise", function () {

@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'dom/setRelativePosition'], function (d3, mock) {
+define(['d3', 'mock', 'dom/setRelativePosition'], function (d3, mock) {
     "use strict";
 
     describe("setRelativePosition", function () {

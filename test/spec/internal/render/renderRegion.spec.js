@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/renderRegion'], function (d3, mock) {
+define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
     "use strict";
 
     describe("renderRegion", function () {

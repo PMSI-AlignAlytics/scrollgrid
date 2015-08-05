@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'sizes/calculatePhysicalBounds'], function (d3, mock) {
+define(['d3', 'mock', 'sizes/calculatePhysicalBounds'], function (d3, mock) {
     "use strict";
 
     describe("calculatePhysicalBounds", function () {

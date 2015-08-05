@@ -1,4 +1,4 @@
-define(['scrollgrid', 'dom/setScrollerSize'], function (mock) {
+define(['mock', 'dom/setScrollerSize'], function (mock) {
     "use strict";
 
     describe("setScrollerSize", function () {

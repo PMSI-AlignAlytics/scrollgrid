@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'sizes/getExistingTextBound'], function (d3, mock) {
+define(['d3', 'mock', 'sizes/getExistingTextBound'], function (d3, mock) {
     "use strict";
 
     describe("getExistingTextBound", function () {

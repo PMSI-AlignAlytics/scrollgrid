@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/calculateCellAdjustments'], function (d3, mock) {
+define(['d3', 'mock', 'render/calculateCellAdjustments'], function (d3, mock) {
     "use strict";
 
     describe("calculateCellAdjustments", function () {

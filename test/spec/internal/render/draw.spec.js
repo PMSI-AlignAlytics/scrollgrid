@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/draw'], function (d3, mock) {
+define(['d3', 'mock', 'render/draw'], function (d3, mock) {
     "use strict";
 
     describe("draw", function () {

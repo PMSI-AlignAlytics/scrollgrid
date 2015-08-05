@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'adapters/json'], function (d3, mock) {
+define(['d3', 'mock', 'adapters/json'], function (d3, mock) {
     "use strict";
 
     describe("json", function () {

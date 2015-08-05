@@ -1,4 +1,4 @@
-define(['d3', 'scrollgrid', 'render/getVisibleRegion'], function (d3, mock) {
+define(['d3', 'mock', 'render/getVisibleRegion'], function (d3, mock) {
     "use strict";
 
     describe("getTextPosition", function () {
