@@ -34,7 +34,7 @@ define(['d3', 'mock', 'render/applyRules'], function (d3, mock) {
         });
 
         it("should not apply any rules if rules don't match", function () {
-            mock.internal.render.matchRule.andReturn(false);
+            mock.internal.render.matchRule.and.returnValue(false);
             underTest.call(mock, data);
             expect(data[0].formatter).not.toBeDefined();
             expect(data[0].alignment).not.toBeDefined();

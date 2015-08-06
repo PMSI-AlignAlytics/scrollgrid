@@ -55,7 +55,9 @@ define(["d3"], function (d3) {
         sortIconSize: 193,
         nodeScrollLeft: 197,
         nodeScrollTop: 199,
-        cellWaitText: 211
+        cellWaitText: 211,
+        pushedTextBoundWidth: 213,
+        pushedTextBoundHeight: 217
     };
 
     scrollgrid.panel = function () {
@@ -94,7 +96,7 @@ define(["d3"], function (d3) {
                     dragHandleWidth: scrollgrid.vals.dragHandleWidth,
                     totalInnerHeight: scrollgrid.vals.totalInnerHeight,
                     totalInnerWidth: scrollgrid.vals.totalInnerWidth,
-                    getRowHeight: jasmine.createSpy("getRowHeight").andReturn(scrollgrid.vals.physRowHeight),
+                    getRowHeight: jasmine.createSpy("getRowHeight").and.returnValue(scrollgrid.vals.physRowHeight),
                     cellPadding: scrollgrid.vals.cellPadding
                 },
                 virtual: {
@@ -108,7 +110,8 @@ define(["d3"], function (d3) {
                     innerHeight: scrollgrid.vals.virtInnerHeight
                 },
                 calculatePhysicalBounds: jasmine.createSpy("calculatePhysicalBounds"),
-                getExistingTextBound: jasmine.createSpy("getExistingTextBound").andReturn({ width: scrollgrid.vals.textBoundWidth })
+                getExistingTextBound: jasmine.createSpy("getExistingTextBound").and.returnValue({ width: scrollgrid.vals.textBoundWidth }),
+                pushTextBound: jasmine.createSpy("pushTextBound").and.returnValue({ width: scrollgrid.vals.pushedTextBoundWidth, height: scrollgrid.vals.pushedTextBoundHeight })
             },
             dom: {
                 parent: new d3.shape(scrollgrid.vals),
@@ -118,11 +121,11 @@ define(["d3"], function (d3) {
                 main: new scrollgrid.panel(),
                 right: new scrollgrid.panel(),
                 bottom: new scrollgrid.panel(),
-                getTopMargin: jasmine.createSpy("getTopMargin").andReturn(scrollgrid.vals.topMargin),
+                getTopMargin: jasmine.createSpy("getTopMargin").and.returnValue(scrollgrid.vals.topMargin),
                 setAbsolutePosition: jasmine.createSpy("setAbsolutePosition"),
                 setRelativePosition: jasmine.createSpy("setRelativePosition"),
                 setScrollerSize: jasmine.createSpy("setScrollerSize"),
-                populatePanel: jasmine.createSpy("populatePanel").andCallFake(function (css) {
+                populatePanel: jasmine.createSpy("populatePanel").and.callFake(function (css) {
                     var returnPanel = new scrollgrid.panel();
                     returnPanel.style = css;
                     return returnPanel;
@@ -132,7 +135,7 @@ define(["d3"], function (d3) {
             interaction: {
                 addResizeHandles: jasmine.createSpy("addResizeHandles"),
                 autoResizeColumn: jasmine.createSpy("autoResizeColumn"),
-                getColumnResizer: jasmine.createSpy("getColumnResizer").andReturn("column resizer"),
+                getColumnResizer: jasmine.createSpy("getColumnResizer").and.returnValue("column resizer"),
                 columnResizeStart: jasmine.createSpy("columnResizeStart"),
                 columnResizing: jasmine.createSpy("columnResizing"),
                 columnResizeEnd: jasmine.createSpy("columnResizeEnd"),
@@ -141,10 +144,10 @@ define(["d3"], function (d3) {
             },
             render: {
                 cellWaitText: scrollgrid.vals.cellWaitText,
-                matchRule: jasmine.createSpy("matchRule").andReturn(true),
+                matchRule: jasmine.createSpy("matchRule").and.returnValue(true),
                 draw: jasmine.createSpy("draw"),
-                getVisibleRegion: jasmine.createSpy("getVisibleRegion").andReturn("visible region"),
-                getDataBounds: jasmine.createSpy("getDataBounds").andReturn({
+                getVisibleRegion: jasmine.createSpy("getVisibleRegion").and.returnValue("visible region"),
+                getDataBounds: jasmine.createSpy("getDataBounds").and.returnValue({
                     virtual: {
                         left: scrollgrid.vals.viewAreaVirtLeft,
                         top: scrollgrid.vals.viewAreaVirtTop,
@@ -156,9 +159,9 @@ define(["d3"], function (d3) {
                         y: scrollgrid.vals.viewAreaPhysY
                     }
                 }),
-                getDataInBounds: jasmine.createSpy("getDataInBounds").andReturn("data in bounds"),
+                getDataInBounds: jasmine.createSpy("getDataInBounds").and.returnValue("data in bounds"),
                 renderRegion: jasmine.createSpy("renderRegion"),
-                calculateCellAdjustments: jasmine.createSpy("calculateCellAdjustments").andReturn({
+                calculateCellAdjustments: jasmine.createSpy("calculateCellAdjustments").and.returnValue({
                     x: scrollgrid.vals.adjX,
                     y: scrollgrid.vals.adjY,
                     boxHeight: scrollgrid.vals.adjBoxHeight,
@@ -169,8 +172,8 @@ define(["d3"], function (d3) {
                 }),
                 applyRules: jasmine.createSpy("applyRules"),
                 sortIconSize: scrollgrid.vals.sortIconSize,
-                getTextAnchor: jasmine.createSpy("getTextAnchor").andReturn("Text Anchor"),
-                getTextPosition: jasmine.createSpy("getTextPosition").andReturn("Text Position"),
+                getTextAnchor: jasmine.createSpy("getTextAnchor").and.returnValue("Text Anchor"),
+                getTextPosition: jasmine.createSpy("getTextPosition").and.returnValue("Text Position"),
                 renderText: jasmine.createSpy("renderText"),
                 renderSortIcon: jasmine.createSpy("renderSortIcon"),
                 cropText: jasmine.createSpy("cropText"),
@@ -197,7 +200,7 @@ define(["d3"], function (d3) {
         ];
         scrollgrid.adapter = {
             sort: jasmine.createSpy("sort"),
-            loadDataRange: jasmine.createSpy("loadDataRange").andReturn("getValue method")
+            loadDataRange: jasmine.createSpy("loadDataRange").and.returnValue("getValue method")
         };
         scrollgrid.reporter = {
             error: jasmine.createSpy("error")

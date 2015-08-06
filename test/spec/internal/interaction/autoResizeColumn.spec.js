@@ -29,7 +29,7 @@ define(['d3', 'mock', 'interaction/autoResizeColumn'], function (d3, mock) {
             colSizes[dom.bottom.svg] = {width: 2};
             colSizes[dom.bottom.right.svg] = {width: 2};
 
-            sizes.getExistingTextBound = jasmine.createSpy("local mock getExistingTextBound").andCallFake(function (svg) {
+            sizes.getExistingTextBound = jasmine.createSpy("local mock getExistingTextBound").and.callFake(function (svg) {
                 return colSizes[svg];
             });
 

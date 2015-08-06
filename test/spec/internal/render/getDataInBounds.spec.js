@@ -34,13 +34,13 @@ define(['d3', 'mock', 'render/getDataInBounds'], function (d3, mock) {
         });
 
         it("should get row height for each row", function () {
-            expect(physical.getRowHeight.callCount).toEqual(2);
+            expect(physical.getRowHeight.calls.count()).toEqual(2);
             expect(physical.getRowHeight).toHaveBeenCalledWith(2);
             expect(physical.getRowHeight).toHaveBeenCalledWith(3);
         });
 
         it("should call calculate cell adjustments for every cell", function () {
-            expect(render.calculateCellAdjustments.callCount).toEqual(4);
+            expect(render.calculateCellAdjustments.calls.count()).toEqual(4);
             expect(render.calculateCellAdjustments).toHaveBeenCalledWith(2, 1);
             expect(render.calculateCellAdjustments).toHaveBeenCalledWith(2, 2);
             expect(render.calculateCellAdjustments).toHaveBeenCalledWith(3, 1);
@@ -137,7 +137,7 @@ define(['d3', 'mock', 'render/getDataInBounds'], function (d3, mock) {
 
         it("should set the sort icon to none if none is set", function () {
             mock.init();
-            mock.internal.render.calculateCellAdjustments = jasmine.createSpy("calculate cell with no icon").andReturn({});
+            mock.internal.render.calculateCellAdjustments = jasmine.createSpy("calculate cell with no icon").and.returnValue({});
             result = underTest.call(mock, viewArea);
             expect(result[0].sortIcon).toEqual("none");
             expect(result[1].sortIcon).toEqual("none");

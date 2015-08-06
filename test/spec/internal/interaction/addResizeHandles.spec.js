@@ -114,7 +114,7 @@ define(['d3', 'mock', 'interaction/addResizeHandles'], function (d3, mock) {
                     expect(mock.internal.interaction.autoResizeColumn).toHaveBeenCalledWith("column object");
                 });
 
-                it("should call the getColumnResizer method", function  () {
+                it("should call the getColumnResizer method", function () {
                     expect(rect.call).toHaveBeenCalled();
                     expect(mock.internal.interaction.getColumnResizer).toHaveBeenCalled();
                 });

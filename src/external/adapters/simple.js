@@ -27,15 +27,15 @@ Scrollgrid.adapters.simple = function (data, options) {
         sort: function (column, headers, footers, descending, compareFunction) {
             var heads = table.splice(0, headers),
                 foots = table.splice(table.length - footers),
-                i;
+                j;
             table.sort(function (a, b) {
                 return compareFunction(a[column], b[column]) * (descending ? -1 : 1);
             });
-            for (i = heads.length - 1; i >= 0; i -= 1) {
-                table.splice(0, 0, heads[i]);
+            for (j = heads.length - 1; j >= 0; j -= 1) {
+                table.splice(0, 0, heads[j]);
             }
-            for (i = 0; i < foots.length; i += 1) {
-                table.push(foots[i]);
+            for (j = 0; j < foots.length; j += 1) {
+                table.push(foots[j]);
             }
         },
         loadDataRange: function () {

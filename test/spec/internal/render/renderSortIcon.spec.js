@@ -56,7 +56,7 @@ define(['d3', 'mock', 'render/renderSortIcon'], function (d3, mock) {
 
             it("should call the sort icon method", function () {
                 expect(target.children.g[0].call).toHaveBeenCalled();
-                target.children.g[0].call.mostRecentCall.args[0]("Data Point");
+                target.children.g[0].call.calls.argsFor(0)[0]("Data Point");
                 expect(mock.internal.render.sortIcon).toHaveBeenCalledWith("Data Point");
             });
 

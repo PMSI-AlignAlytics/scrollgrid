@@ -29,7 +29,7 @@ define(['d3', 'mock', 'interaction/getColumnResizer'], function (d3, mock) {
 
         it("should pass the datum back to the origin property", function () {
             var result = underTest.call(mock),
-                fn = result.origin.mostRecentCall.args[0];
+                fn = result.origin.calls.argsFor(0)[0];
             expect(fn("passed in value")).toEqual("passed in value");
         });
 

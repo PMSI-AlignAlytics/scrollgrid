@@ -111,37 +111,37 @@ define(['d3', 'mock', 'render/draw'], function (d3, mock) {
         it("should call layoutDOM with a null fixed width if the grid is smaller than the total width", function () {
             dom.parent.nodeObject.offsetWidth = totalWidth - 1;
             underTest.call(mock, clearCache);
-            expect(dom.layoutDOM.mostRecentCall.args[0].width).toBeNull();
+            expect(dom.layoutDOM.calls.argsFor(0)[0].width).toBeNull();
         });
 
         it("should call layoutDOM with a null fixed width if the grid width is equal to the total width", function () {
             dom.parent.nodeObject.offsetWidth = totalWidth;
             underTest.call(mock, clearCache);
-            expect(dom.layoutDOM.mostRecentCall.args[0].width).toBeNull();
+            expect(dom.layoutDOM.calls.argsFor(0)[0].width).toBeNull();
         });
 
         it("should call layoutDOM with a fixed width if the grid is larger than the total width", function () {
             dom.parent.nodeObject.offsetWidth = totalWidth + 1;
             underTest.call(mock, clearCache);
-            expect(dom.layoutDOM.mostRecentCall.args[0].width).toEqual(totalWidth);
+            expect(dom.layoutDOM.calls.argsFor(0)[0].width).toEqual(totalWidth);
         });
 
         it("should call layoutDOM with a null fixed height if the grid is smaller than the total height", function () {
             dom.parent.nodeObject.offsetHeight = totalHeight - 1;
             underTest.call(mock, clearCache);
-            expect(dom.layoutDOM.mostRecentCall.args[0].height).toBeNull();
+            expect(dom.layoutDOM.calls.argsFor(0)[0].height).toBeNull();
         });
 
         it("should call layoutDOM with a null fixed height if the grid height is equal to the total height", function () {
             dom.parent.nodeObject.offsetHeight = totalHeight;
             underTest.call(mock, clearCache);
-            expect(dom.layoutDOM.mostRecentCall.args[0].height).toBeNull();
+            expect(dom.layoutDOM.calls.argsFor(0)[0].height).toBeNull();
         });
 
         it("should call layoutDOM with a fixed height if the grid is larger than the total height", function () {
             dom.parent.nodeObject.offsetHeight = totalHeight + 1;
             underTest.call(mock, clearCache);
-            expect(dom.layoutDOM.mostRecentCall.args[0].height).toEqual(totalHeight);
+            expect(dom.layoutDOM.calls.argsFor(0)[0].height).toEqual(totalHeight);
         });
 
     });

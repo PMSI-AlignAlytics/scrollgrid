@@ -195,7 +195,7 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
             });
 
             it("should get the key from the view data", function () {
-                expect(selection.data.mostRecentCall.args[1]({ key: "My Key" })).toEqual("My Key");
+                expect(selection.data.calls.argsFor(0)[1]({ key: "My Key" })).toEqual("My Key");
             });
 
             it("should call enter on the cells", function () {
@@ -218,7 +218,7 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
 
                 beforeEach(function () {
                     group = selection.children.g[0];
-                    each = group.each.mostRecentCall.args[0];
+                    each = group.each.calls.argsFor(0)[0];
                     datum  = {
                         sortIcon: "Sort Icon",
                         rowIndex: 7,
@@ -274,7 +274,7 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
             var panel;
             panel = mock.internal.dom.top.left;
             underTest.call(mock, panel, physicalOffset, xVirtual, yVirtual, false);
-            panel.content.selections[".sg-no-style--cell-selector"][0].children.g[0].each.mostRecentCall.args[0]({
+            panel.content.selections[".sg-no-style--cell-selector"][0].children.g[0].each.calls.argsFor(0)[0]({
                 sortIcon: "Sort Icon",
                 rowIndex: 7,
                 columnIndex: 11
@@ -286,7 +286,7 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
             var panel;
             panel = mock.internal.dom.top;
             underTest.call(mock, panel, physicalOffset, xVirtual, yVirtual, false);
-            panel.content.selections[".sg-no-style--cell-selector"][0].children.g[0].each.mostRecentCall.args[0]({
+            panel.content.selections[".sg-no-style--cell-selector"][0].children.g[0].each.calls.argsFor(0)[0]({
                 sortIcon: "Sort Icon",
                 rowIndex: 7,
                 columnIndex: 11
@@ -298,7 +298,7 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
             var panel;
             panel = mock.internal.dom.top.right;
             underTest.call(mock, panel, physicalOffset, xVirtual, yVirtual, false);
-            panel.content.selections[".sg-no-style--cell-selector"][0].children.g[0].each.mostRecentCall.args[0]({
+            panel.content.selections[".sg-no-style--cell-selector"][0].children.g[0].each.calls.argsFor(0)[0]({
                 sortIcon: "Sort Icon",
                 rowIndex: 7,
                 columnIndex: 11

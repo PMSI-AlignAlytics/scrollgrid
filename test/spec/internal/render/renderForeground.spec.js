@@ -19,7 +19,7 @@ define(['d3', 'mock', 'render/renderForeground'], function (d3, mock) {
                 textHeight: 7,
                 rowIndex: 11,
                 columnIndex: 13,
-                getValue: jasmine.createSpy("getValue method").andCallFake(function (rowIndex, columnIndex, cb) {
+                getValue: jasmine.createSpy("getValue method").and.callFake(function (rowIndex, columnIndex, cb) {
                     ri = rowIndex;
                     ci = columnIndex;
                     callback = cb;
@@ -80,7 +80,7 @@ define(['d3', 'mock', 'render/renderForeground'], function (d3, mock) {
         describe("getValue callback with formatter", function () {
 
             beforeEach(function () {
-                data.formatter = jasmine.createSpy("formatter").andReturn("Formatted Value");
+                data.formatter = jasmine.createSpy("formatter").and.returnValue("Formatted Value");
                 underTest.call(mock, target, data);
                 callback("Async Value");
             });

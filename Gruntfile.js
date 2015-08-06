@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     "use strict";
     // Project configuration.
     grunt.initConfig({
@@ -41,32 +41,34 @@ module.exports = function(grunt) {
             }
         },
         jslint: {
-            files: [
-                'Gruntfile.js',
-                'test/spec/**/*.spec.js',
-                'dist/<%= pkg.name %>.v<%= pkg.version %>.js'
-            ],
-            directives: {
-                browser: true,
-                predef: [
-                    'd3',
-                    'scrollgrid',
-                    'Scrollgrid',
-                    'module',
-                    'console',
-                    'jasmine',
-                    'define',
-                    'require',
-                    'exports',
-                    'describe',
-                    'spyOn',
-                    'expect',
-                    'it',
-                    'xdescribe',
-                    'xit',
-                    'beforeEach',
-                    'afterEach'
-                ]
+            client: {
+                src: [
+                    'Gruntfile.js',
+                    'test/spec/**/*.spec.js',
+                    'src/**/*.js'
+                ],
+                directives: {
+                    browser: true,
+                    predef: [
+                        'd3',
+                        'scrollgrid',
+                        'Scrollgrid',
+                        'module',
+                        'console',
+                        'jasmine',
+                        'define',
+                        'require',
+                        'exports',
+                        'describe',
+                        'spyOn',
+                        'expect',
+                        'it',
+                        'xdescribe',
+                        'xit',
+                        'beforeEach',
+                        'afterEach'
+                    ]
+                }
             }
         },
         karma: {

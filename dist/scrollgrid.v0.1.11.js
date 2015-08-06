@@ -1279,29 +1279,16 @@ Scrollgrid.prototype.internal.sizes.getExistingTextBound = function (surface, co
 
     var int = this.internal,
         render = int.render,
+        sizes = int.sizes,
         returnBounds = { width: 0, height: 0 };
 
-    // Measuring header values is easier because they are all rendered
     surface.selectAll("text")
         .filter(function (d) {
             return (column === undefined || d.columnIndex === column) && (row === undefined || d.rowIndex === row);
         })
         .each(function (d) {
-            var shape = d3.select(this),
-                originalText = shape.text(),
-                b;
-            // Remove any abbreviation
-            shape.text(shape.datum().originalText || shape.text());
-            // Get the bounds
-            b = shape.node().getBBox();
-            if (b.width + 2 * d.cellPadding > returnBounds.width) {
-                returnBounds.width = b.width + 2 * d.cellPadding + (d.sortIcon && d.sortIcon !== 'none' ? render.sortIconSize + d.cellPadding : 0);
-            }
-            if (b.height > returnBounds.height) {
-                returnBounds.height = b.height;
-            }
-            // Reapply abbreviation
-            shape.text(originalText);
+            var sortIconSize = (d.sortIcon && d.sortIcon !== 'none' ? render.sortIconSize + d.cellPadding : 0);
+            returnBounds = sizes.pushTextBound(returnBounds, d3.select(this), d.cellPadding, sortIconSize);
         });
 
     return returnBounds;
@@ -1372,6 +1359,34 @@ Scrollgrid.prototype.internal.sizes.physical.initialiseColumns = function () {
 
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+// Source: /src/internal/sizes/pushTextBound.js
+Scrollgrid.prototype.internal.sizes.pushTextBound = function (currentBounds, shape, cellPadding, sortIconSize) {
+    "use strict";
+
+    var originalText = shape.text(),
+        b;
+
+    // Remove any abbreviation
+    shape.text(shape.datum().originalText || shape.text());
+
+    // Get the bounds
+    b = shape.node().getBBox();
+    if (b.width + 2 * cellPadding > currentBounds.width) {
+        currentBounds.width = b.width + 2 * cellPadding + sortIconSize;
+    }
+    if (b.height > currentBounds.height) {
+        currentBounds.height = b.height;
+    }
+    // Reapply abbreviation
+    shape.text(originalText);
+
+    // Return the newly stretched bounds
+    return currentBounds;
+
+};
+
+// Copyright: 2015 AlignAlytics
+// License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/adapters/json.js
 Scrollgrid.adapters.json = function (data, columns, options) {
     "use strict";
@@ -1412,15 +1427,15 @@ Scrollgrid.adapters.json = function (data, columns, options) {
         sort: function (column, headers, footers, descending, compareFunction) {
             var heads = table.splice(0, headers),
                 foots = table.splice(table.length - footers),
-                i;
+                j;
             table.sort(function (a, b) {
                 return compareFunction(a[cols[column]], b[cols[column]]) * (descending ? -1 : 1);
             });
-            for (i = heads.length - 1; i >= 0; i -= 1) {
-                table.splice(0, 0, heads[i]);
+            for (j = heads.length - 1; j >= 0; j -= 1) {
+                table.splice(0, 0, heads[j]);
             }
-            for (i = 0; i < foots.length; i += 1) {
-                table.push(foots[i]);
+            for (j = 0; j < foots.length; j += 1) {
+                table.push(foots[j]);
             }
         },
         loadDataRange: function () {
@@ -1459,15 +1474,15 @@ Scrollgrid.adapters.simple = function (data, options) {
         sort: function (column, headers, footers, descending, compareFunction) {
             var heads = table.splice(0, headers),
                 foots = table.splice(table.length - footers),
-                i;
+                j;
             table.sort(function (a, b) {
                 return compareFunction(a[column], b[column]) * (descending ? -1 : 1);
             });
-            for (i = heads.length - 1; i >= 0; i -= 1) {
-                table.splice(0, 0, heads[i]);
+            for (j = heads.length - 1; j >= 0; j -= 1) {
+                table.splice(0, 0, heads[j]);
             }
-            for (i = 0; i < foots.length; i += 1) {
-                table.push(foots[i]);
+            for (j = 0; j < foots.length; j += 1) {
+                table.push(foots[j]);
             }
         },
         loadDataRange: function () {
