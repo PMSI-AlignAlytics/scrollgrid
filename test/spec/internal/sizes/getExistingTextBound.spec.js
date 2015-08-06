@@ -11,7 +11,7 @@ define(['d3', 'mock', 'sizes/getExistingTextBound'], function (d3, mock) {
             mock.init();
             d3.init();
 
-            surface = new d3.shape();
+            surface = new d3.shape(mock.vals);
 
         });
 

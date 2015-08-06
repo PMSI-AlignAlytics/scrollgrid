@@ -5,7 +5,7 @@
 Scrollgrid.prototype.internal.sizes.pushTextBound = function (currentBounds, shape, cellPadding, sortIconSize) {
     "use strict";
 
-    var originalText = shape.text(),
+    var cellText = shape.text(),
         b;
 
     // Remove any abbreviation
@@ -13,14 +13,14 @@ Scrollgrid.prototype.internal.sizes.pushTextBound = function (currentBounds, sha
 
     // Get the bounds
     b = shape.node().getBBox();
-    if (b.width + 2 * cellPadding > currentBounds.width) {
+    if (b.width + 2 * cellPadding + sortIconSize > currentBounds.width) {
         currentBounds.width = b.width + 2 * cellPadding + sortIconSize;
     }
     if (b.height > currentBounds.height) {
         currentBounds.height = b.height;
     }
     // Reapply abbreviation
-    shape.text(originalText);
+    shape.text(cellText);
 
     // Return the newly stretched bounds
     return currentBounds;
