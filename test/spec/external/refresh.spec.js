@@ -3,7 +3,7 @@ define(['d3', 'mock', 'external/refresh'], function (d3, mock) {
 
     describe("data", function () {
 
-        var underTest = Scrollgrid.refresh;
+        var underTest = Scrollgrid.prototype.refresh;
 
         beforeEach(function () {
             mock.init();
@@ -12,7 +12,6 @@ define(['d3', 'mock', 'external/refresh'], function (d3, mock) {
             underTest();
 
         });
-
 
     });
 

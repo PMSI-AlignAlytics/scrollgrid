@@ -97,7 +97,8 @@ define(["d3"], function (d3) {
                     totalInnerHeight: scrollgrid.vals.totalInnerHeight,
                     totalInnerWidth: scrollgrid.vals.totalInnerWidth,
                     getRowHeight: jasmine.createSpy("getRowHeight").and.returnValue(scrollgrid.vals.physRowHeight),
-                    cellPadding: scrollgrid.vals.cellPadding
+                    cellPadding: scrollgrid.vals.cellPadding,
+                    initialiseColumns: jasmine.createSpy("initialiseColumns")
                 },
                 virtual: {
                     top: scrollgrid.vals.virtTop,
