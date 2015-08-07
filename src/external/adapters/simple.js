@@ -40,7 +40,7 @@ Scrollgrid.adapters.simple = function (data, options) {
         },
         loadDataRange: function () {
             return function (row, column, callback) {
-                callback(table[row][column]);
+                callback(table[row][column] || 0);
             };
         }
     };
