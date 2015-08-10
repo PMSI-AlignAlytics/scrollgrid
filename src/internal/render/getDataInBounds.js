@@ -59,7 +59,7 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
             // We abuse the key here, cells will be rendered on enter only, we therefore
             // want to key by any value which should result in a redraw of a particular cell,
             // this has huge performance benefits.  The
-            visibleData[i].key = visibleData[i].columnIndex + '_' + visibleData[i].rowIndex + "_" + visibleData[i].boxWidth + "_" + visibleData[i].sortIcon;
+            visibleData[i].key = visibleData[i].columnIndex + '_' + visibleData[i].rowIndex + "_" + visibleData[i].boxHeight + "_" + visibleData[i].boxWidth + "_" + visibleData[i].sortIcon;
             runningX += column.width;
         }
         runningY += rowHeight;

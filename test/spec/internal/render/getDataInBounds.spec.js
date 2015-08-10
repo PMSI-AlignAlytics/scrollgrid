@@ -48,10 +48,10 @@ define(['d3', 'mock', 'render/getDataInBounds'], function (d3, mock) {
         });
 
         it("should contain a key based on all values which invalidate cache", function () {
-            expect(result[0].key).toEqual("1_2_186_sort icon");
-            expect(result[1].key).toEqual("2_2_190_sort icon");
-            expect(result[2].key).toEqual("1_3_186_sort icon");
-            expect(result[3].key).toEqual("2_3_190_sort icon");
+            expect(result[0].key).toEqual("1_2_318_186_sort icon");
+            expect(result[1].key).toEqual("2_2_318_190_sort icon");
+            expect(result[2].key).toEqual("1_3_318_186_sort icon");
+            expect(result[3].key).toEqual("2_3_318_190_sort icon");
         });
 
         it("should contain physical x position for each element", function () {
