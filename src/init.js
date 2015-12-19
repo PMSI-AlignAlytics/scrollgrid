@@ -15,7 +15,7 @@
             });
         } else {
             // No AMD, expect d3 to exist in the current context and publish
-            // dimple to the global namespace
+            // scrollgrid to the global namespace
             if (!context.d3) {
                 if (console && console.warn) {
                     console.warn("scrollgrid requires d3 to run.  Are you missing a reference to the d3 library?");
@@ -102,10 +102,12 @@
     // Build namespaces
     Scrollgrid.adapters = {};
     Scrollgrid.prototype.internal = {
+        eventHandlers: [],
         sizes: {
             virtual: {},
             physical: {}
         },
+        events: {},
         interaction: {},
         dom: {},
         render: {}

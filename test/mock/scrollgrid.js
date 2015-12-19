@@ -131,7 +131,8 @@ define(["d3"], function (d3) {
                     returnPanel.style = css;
                     return returnPanel;
                 }),
-                layoutDOM: jasmine.createSpy("layoutDOM")
+                layoutDOM: jasmine.createSpy("layoutDOM"),
+                redirectViewportEvents: jasmine.createSpy("redirectViewportEvents")
             },
             interaction: {
                 addResizeHandles: jasmine.createSpy("addResizeHandles"),
@@ -179,7 +180,19 @@ define(["d3"], function (d3) {
                 renderSortIcon: jasmine.createSpy("renderSortIcon"),
                 cropText: jasmine.createSpy("cropText"),
                 sortIcon: jasmine.createSpy("sortIcon")
-            }
+            },
+            events: {
+                addEventHandlers: jasmine.createSpy("addEventHandlers")
+            },
+            eventHandlers: [
+                {
+                    type: 'click',
+                    handler: function() {
+                        return 'clicked';
+                    },
+                    capture: false
+                }
+            ]
         };
         scrollgrid.style = {
             left: { panel: 'left' },
@@ -206,6 +219,7 @@ define(["d3"], function (d3) {
         scrollgrid.reporter = {
             error: jasmine.createSpy("error")
         };
+
         return scrollgrid;
     };
 

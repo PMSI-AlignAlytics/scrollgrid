@@ -25,6 +25,13 @@ define(['d3', 'mock', 'external/data'], function (d3, mock) {
             expect(mock.refresh).not.toHaveBeenCalled();
         });
 
+        it("should not refresh if false is passed to refresh argument", function () {
+            Scrollgrid.adapters.simple = jasmine.createSpy("Simple").and.returnValue(mockSimple);
+            result = underTest.call(mock, [1, 2, 3], false);
+            expect(mock.refresh).not.toHaveBeenCalled();
+            expect(result).toEqual(mockSimple);
+        });
+
         it("should use the simple adapter if an array is passed", function () {
             Scrollgrid.adapters.simple = jasmine.createSpy("Simple").and.returnValue(mockSimple);
             result = underTest.call(mock, [1, 2, 3]);
