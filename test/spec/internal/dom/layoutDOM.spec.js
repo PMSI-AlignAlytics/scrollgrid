@@ -191,6 +191,11 @@ define(['mock', 'dom/layoutDOM'], function (mock) {
             expect(mockDom.setAbsolutePosition).toHaveBeenCalledWith(svg, x, y, width, height);
         });
 
+        it("should call stylePanels, passing in the default styles", function () {
+            underTest.call(mock);
+            expect(mockDom.stylePanels).toHaveBeenCalledWith(mock.style);
+        });
+
         it("should transform the top right panel because the extra drag handle width is included", function () {
             underTest.call(mock);
             expect(mockDom.top.right.transform.attributes.transform).toEqual("translate(" + (mock.vals.dragHandleWidth / 2) + ", 0)");

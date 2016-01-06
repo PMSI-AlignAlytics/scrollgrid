@@ -12,28 +12,28 @@ define(['d3', 'mock', 'render/setDefaultStyles'], function (d3, mock) {
         });
 
         it("should set a style for the left panel", function () {
-            expect(mock.style.left.panel).toEqual("sg-fixed sg-left");
+            expect(mock.style.left.panel).toEqual("sg-grid sg-fixed sg-left");
         });
         it("should set a style for the top panel", function () {
-            expect(mock.style.top.panel).toEqual("sg-fixed sg-top");
+            expect(mock.style.top.panel).toEqual("sg-grid sg-fixed sg-top");
         });
         it("should set a style for the top left panel", function () {
-            expect(mock.style.top.left.panel).toEqual("sg-fixed sg-top-left");
+            expect(mock.style.top.left.panel).toEqual("sg-grid sg-fixed sg-top sg-left");
         });
         it("should set a style for the top right panel", function () {
-            expect(mock.style.top.right.panel).toEqual("sg-fixed sg-top-right");
+            expect(mock.style.top.right.panel).toEqual("sg-grid sg-fixed sg-top sg-right");
         });
         it("should set a style for the right panel", function () {
-            expect(mock.style.right.panel).toEqual("sg-fixed sg-right");
+            expect(mock.style.right.panel).toEqual("sg-grid sg-fixed sg-right");
         });
         it("should set a style for the bottom panel", function () {
-            expect(mock.style.bottom.panel).toEqual("sg-fixed sg-bottom");
+            expect(mock.style.bottom.panel).toEqual("sg-grid sg-fixed sg-bottom");
         });
         it("should set a style for the bottom left panel", function () {
-            expect(mock.style.bottom.left.panel).toEqual("sg-fixed sg-bottom-left");
+            expect(mock.style.bottom.left.panel).toEqual("sg-grid sg-fixed sg-bottom sg-left");
         });
         it("should set a style for the bottom right panel", function () {
-            expect(mock.style.bottom.right.panel).toEqual("sg-fixed sg-bottom-right");
+            expect(mock.style.bottom.right.panel).toEqual("sg-grid sg-fixed sg-bottom sg-right");
         });
         it("should set a style for the main panel", function () {
             expect(mock.style.main.panel).toEqual("sg-grid");

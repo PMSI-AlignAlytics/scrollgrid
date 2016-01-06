@@ -17,11 +17,6 @@ define(['mock', 'dom/populatePanel'], function (mock) {
             expect(panel.svg).toEqual(mockDom.container.children.svg[0]);
         });
 
-        it("should add the passed class to the classes of the panel svg", function () {
-            var panel = underTest.call(mock, "my-test-class");
-            expect(panel.svg.attributes["class"]).toContain("my-test-class");
-        });
-
         it("should add a group to the panel svg and store it as transform", function () {
             var panel = underTest.call(mock);
             expect(panel.svg.children.g[0]).toBeDefined();

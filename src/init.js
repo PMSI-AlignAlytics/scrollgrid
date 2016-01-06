@@ -94,6 +94,7 @@
     };
 
     Scrollgrid.init = function (target, options) {
+        options = options || {};
         options.target = target;
         var scrollgrid = new Scrollgrid(options);
         return scrollgrid;

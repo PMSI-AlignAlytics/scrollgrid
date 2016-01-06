@@ -8,27 +8,27 @@ Scrollgrid.prototype.internal.render.setDefaultStyles = function () {
     // Define default classes, these are kept external as users might want to use their own
     this.style = {
         left: {
-            panel: 'sg-fixed sg-left'
+            panel: 'sg-grid sg-fixed sg-left'
         },
         top: {
-            panel: 'sg-fixed sg-top',
+            panel: 'sg-grid sg-fixed sg-top',
             left: {
-                panel: 'sg-fixed sg-top-left'
+                panel: 'sg-grid sg-fixed sg-top sg-left'
             },
             right: {
-                panel: 'sg-fixed sg-top-right'
+                panel: 'sg-grid sg-fixed sg-top sg-right'
             }
         },
         right: {
-            panel: 'sg-fixed sg-right'
+            panel: 'sg-grid sg-fixed sg-right'
         },
         bottom: {
-            panel: 'sg-fixed sg-bottom',
+            panel: 'sg-grid sg-fixed sg-bottom',
             left: {
-                panel: 'sg-fixed sg-bottom-left'
+                panel: 'sg-grid sg-fixed sg-bottom sg-left'
             },
             right: {
-                panel: 'sg-fixed sg-bottom-right'
+                panel: 'sg-grid sg-fixed sg-bottom sg-right'
             }
         },
         main: {

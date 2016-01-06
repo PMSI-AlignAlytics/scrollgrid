@@ -52,6 +52,9 @@ Scrollgrid.prototype.internal.dom.layoutDOM = function (fixedSize) {
     dom.setAbsolutePosition.call(self, dom.bottom.right.svg, physical.left + physical.visibleInnerWidth, physical.top + physical.visibleInnerHeight + topMargin,  physical.right, physical.bottom);
     dom.setAbsolutePosition.call(self, dom.main.svg, physical.left, physical.top + topMargin,  physical.visibleInnerWidth, physical.visibleInnerHeight);
 
+    // Style all panels
+    dom.stylePanels.call(this, this.style);
+
     // Top right panel needs a small offset for the handle
     dom.top.right.transform.attr('transform', 'translate(' + physical.dragHandleWidth / 2 + ', 0)');
 

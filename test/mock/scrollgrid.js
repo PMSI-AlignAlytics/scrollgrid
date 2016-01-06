@@ -126,6 +126,7 @@ define(["d3"], function (d3) {
                 setAbsolutePosition: jasmine.createSpy("setAbsolutePosition"),
                 setRelativePosition: jasmine.createSpy("setRelativePosition"),
                 setScrollerSize: jasmine.createSpy("setScrollerSize"),
+                stylePanels: jasmine.createSpy("stylePanel"),
                 populatePanel: jasmine.createSpy("populatePanel").and.callFake(function (css) {
                     var returnPanel = new scrollgrid.panel();
                     returnPanel.style = css;

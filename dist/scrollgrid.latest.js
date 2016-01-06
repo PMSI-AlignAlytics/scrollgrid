@@ -94,6 +94,7 @@
     };
 
     Scrollgrid.init = function (target, options) {
+        options = options || {};
         options.target = target;
         var scrollgrid = new Scrollgrid(options);
         return scrollgrid;
@@ -194,6 +195,9 @@ Scrollgrid.prototype.internal.dom.layoutDOM = function (fixedSize) {
     dom.setAbsolutePosition.call(self, dom.bottom.right.svg, physical.left + physical.visibleInnerWidth, physical.top + physical.visibleInnerHeight + topMargin,  physical.right, physical.bottom);
     dom.setAbsolutePosition.call(self, dom.main.svg, physical.left, physical.top + topMargin,  physical.visibleInnerWidth, physical.visibleInnerHeight);
 
+    // Style all panels
+    dom.stylePanels.call(this, this.style);
+
     // Top right panel needs a small offset for the handle
     dom.top.right.transform.attr('transform', 'translate(' + physical.dragHandleWidth / 2 + ', 0)');
 
@@ -216,7 +220,6 @@ Scrollgrid.prototype.internal.dom.populateDOM = function () {
     "use strict";
 
     var int = this.internal,
-        style = this.style,
         dom = int.dom;
 
     // Get the parent container
@@ -225,19 +228,19 @@ Scrollgrid.prototype.internal.dom.populateDOM = function () {
     dom.container = dom.parent.append('div');
 
     // Populate the 5 regions of the control
-    dom.left = dom.populatePanel.call(this, style.left.panel);
-    dom.top = dom.populatePanel.call(this, style.top.panel);
-    dom.top.left = dom.populatePanel.call(this, style.top.left.panel);
-    dom.top.right = dom.populatePanel.call(this, style.top.right.panel);
-    dom.main = dom.populatePanel.call(this, style.main.panel);
+    dom.left = dom.populatePanel.call(this);
+    dom.top = dom.populatePanel.call(this);
+    dom.top.left = dom.populatePanel.call(this);
+    dom.top.right = dom.populatePanel.call(this);
+    dom.main = dom.populatePanel.call(this);
 
     // Add the viewport which is the fixed area with scroll bars
     dom.main.viewport = dom.container.append('div');
 
-    dom.right = dom.populatePanel.call(this, style.right.panel);
-    dom.bottom = dom.populatePanel.call(this, style.bottom.panel);
-    dom.bottom.left = dom.populatePanel.call(this, style.bottom.left.panel);
-    dom.bottom.right = dom.populatePanel.call(this, style.bottom.right.panel);
+    dom.right = dom.populatePanel.call(this);
+    dom.bottom = dom.populatePanel.call(this);
+    dom.bottom.left = dom.populatePanel.call(this);
+    dom.bottom.right = dom.populatePanel.call(this);
 
     // The scroller is going to be as large as the virtual size of
     // the data (as if it had all been rendered) this is so that
@@ -249,14 +252,13 @@ Scrollgrid.prototype.internal.dom.populateDOM = function () {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/internal/dom/populatePanel.js
-Scrollgrid.prototype.internal.dom.populatePanel = function (css) {
+Scrollgrid.prototype.internal.dom.populatePanel = function () {
     "use strict";
 
     var dom = this.internal.dom,
         panel = {};
 
     panel.svg = dom.container.append('svg');
-    panel.svg.attr('class', css);
     panel.transform = panel.svg.append('g');
     panel.content = panel.transform.append('g');
 
@@ -328,6 +330,29 @@ Scrollgrid.prototype.internal.dom.setScrollerSize = function () {
     dom.main.scroller
         .style('width', physical.totalInnerWidth + 'px')
         .style('height', physical.totalInnerHeight + 'px');
+
+};
+
+// Copyright: 2015 AlignAlytics
+// License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+// Source: /src/internal/dom/stylePanels.js
+Scrollgrid.prototype.internal.dom.stylePanels = function (style) {
+    "use strict";
+
+    var int = this.internal,
+        dom = int.dom;
+
+    this.style = style || this.style;
+
+    dom.left.svg.attr('class', this.style.left.panel);
+    dom.top.svg.attr('class', this.style.top.panel);
+    dom.right.svg.attr('class', this.style.right.panel);
+    dom.bottom.svg.attr('class', this.style.bottom.panel);
+    dom.top.left.svg.attr('class', this.style.top.left.panel);
+    dom.top.right.svg.attr('class', this.style.top.right.panel);
+    dom.bottom.left.svg.attr('class', this.style.bottom.left.panel);
+    dom.bottom.right.svg.attr('class', this.style.bottom.right.panel);
+    dom.main.svg.attr('class', this.style.main.panel);
 
 };
 
@@ -1155,27 +1180,27 @@ Scrollgrid.prototype.internal.render.setDefaultStyles = function () {
     // Define default classes, these are kept external as users might want to use their own
     this.style = {
         left: {
-            panel: 'sg-fixed sg-left'
+            panel: 'sg-grid sg-fixed sg-left'
         },
         top: {
-            panel: 'sg-fixed sg-top',
+            panel: 'sg-grid sg-fixed sg-top',
             left: {
-                panel: 'sg-fixed sg-top-left'
+                panel: 'sg-grid sg-fixed sg-top sg-left'
             },
             right: {
-                panel: 'sg-fixed sg-top-right'
+                panel: 'sg-grid sg-fixed sg-top sg-right'
             }
         },
         right: {
-            panel: 'sg-fixed sg-right'
+            panel: 'sg-grid sg-fixed sg-right'
         },
         bottom: {
-            panel: 'sg-fixed sg-bottom',
+            panel: 'sg-grid sg-fixed sg-bottom',
             left: {
-                panel: 'sg-fixed sg-bottom-left'
+                panel: 'sg-grid sg-fixed sg-bottom sg-left'
             },
             right: {
-                panel: 'sg-fixed sg-bottom-right'
+                panel: 'sg-grid sg-fixed sg-bottom sg-right'
             }
         },
         main: {

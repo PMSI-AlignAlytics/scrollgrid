@@ -19,17 +19,8 @@
             font-family: sans-serif;
             font-size: 12pt;
         }
-        .sg-fixed rect {
 
-            fill: #aaa;
-            stroke: #888;
-        }
-        .sg-fixed text {
-            fill: black;
-            font-family: sans-serif;
-            font-size: 12pt;
-        }
-        text.my-cool-class {
+        .my-cool-class text {
             fill: white;
             stroke: red;
             font-family: sans-serif;
@@ -51,25 +42,15 @@
             }
             d[r] = (tr);
         }
-        Scrollgrid.init('#myTable', {
-            data: d,
+        var sg = new Scrollgrid.init('#myTable', {
             headerRows: 2,
             headerColumns: 2,
             footerRows: 2,
-            footerColumns: 2,
-            autoResize: true,
-            formatRules: [
-                { row: "*", column: "*", formatter: d3.format(",.0f"), cellPadding: 20, alignment: 'right'}
-//                { row: "2", column: "*", formatter: d3.format("%")},
-//                { row: "5", column: "5, 10, 300", foregroundStyle: 'my-cool-class'},
-//                { row: "8, 9, 10", column: "7:9", formatter: d3.format("%"), alignment: 'center'},
-//                { row: "-2", column: "7:9", formatter: d3.format("%")},
-//                { row: "-2:-1", column: "-2:-1", formatter: d3.format("@"), alignment: 'right'},
-//                { row: "*", column: "2", cellPadding: 2 },
-//                { row: "1", column: "2", cellPadding: 20 },
-//                { row: "*", column: "1:2,-2:-1", columnWidth: 100}
-            ]
+            footerColumns: 2
         });
+        sg.data(d);
 
+        sg.style.left.panel = "my-cool-class";
+        sg.refresh(true);
     </script>
 </div>
