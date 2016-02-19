@@ -55,31 +55,31 @@
         } else {
 
             // Set the display options
-            physical.rowHeight = options.rowHeight || 30;
-            physical.dragHandleWidth = options.dragHandleWidth || 8;
-            physical.headerRowHeight = options.headerRowHeight || physical.rowHeight;
-            physical.footerRowHeight = options.footerRowHeight || physical.rowHeight;
-            physical.defaultColumnWidth = options.defaultColumnWidth || 100;
-            physical.cellPadding = options.cellPadding || 6;
-            physical.verticalAlignment = options.verticalAlignment || 'top';
+            this.rowHeight = physical.rowHeight = options.rowHeight || 30;
+            this.dragHandleWidth = physical.dragHandleWidth = options.dragHandleWidth || 8;
+            this.headerRowHeight = physical.headerRowHeight = options.headerRowHeight || physical.rowHeight;
+            this.footerRowHeight = physical.footerRowHeight = options.footerRowHeight || physical.rowHeight;
+            this.defaultColumnWidth = physical.defaultColumnWidth = options.defaultColumnWidth || 100;
+            this.cellPadding = physical.cellPadding = options.cellPadding || 6;
+            this.verticalAlignment = physical.verticalAlignment = options.verticalAlignment || 'top';
 
             // Set the interaction options
-            interaction.allowColumnResizing = options.allowColumnResizing || true;
-            interaction.allowSorting = options.allowSorting || true;
+            this.allowColumnResizing = interaction.allowColumnResizing = options.allowColumnResizing || true;
+            this.allowSorting = interaction.allowSorting = options.allowSorting || true;
 
             // Set the number of header or footer rows or columns
-            virtual.top = options.headerRows || 0;
-            virtual.bottom = options.footerRows || 0;
-            virtual.left = options.headerColumns || 0;
-            virtual.right = options.footerColumns || 0;
+            this.headerRows = virtual.top = options.headerRows || 0;
+            this.footerRows = virtual.bottom = options.footerRows || 0;
+            this.headerColumns = virtual.left = options.headerColumns || 0;
+            this.footerColumns = virtual.right = options.footerColumns || 0;
 
             // Set a reference to the parent object
             this.target = options.target;
 
             render.setDefaultStyles.call(this);
-            render.formatRules = options.formatRules || [];
-            render.cellWaitText = options.cellWaitText || "loading...";
-            render.sortIconSize = options.sortIconSize || 7;
+            this.formatRules = render.formatRules = options.formatRules || [];
+            this.cellWaitText = render.cellWaitText = options.cellWaitText || "loading...";
+            this.sortIconSize = render.sortIconSize = options.sortIconSize || 7;
 
             // Create the DOM shapes required
             dom.populateDOM.call(this);
