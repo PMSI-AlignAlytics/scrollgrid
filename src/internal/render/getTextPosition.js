@@ -5,8 +5,7 @@
 Scrollgrid.prototype.internal.render.getTextPosition = function (d) {
     "use strict";
 
-    var int = this.internal,
-        render = int.render,
+    var self = this,
         x = 0;
 
     if (d.alignment === 'center') {
@@ -16,7 +15,7 @@ Scrollgrid.prototype.internal.render.getTextPosition = function (d) {
     } else {
         x += d.cellPadding;
         if (d.sortIcon && d.sortIcon !== 'none') {
-            x += render.sortIconSize + d.cellPadding;
+            x += self.sortIconSize + d.cellPadding;
         }
     }
 

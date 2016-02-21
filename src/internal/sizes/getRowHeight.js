@@ -5,18 +5,18 @@
 Scrollgrid.prototype.internal.sizes.physical.getRowHeight = function (row) {
     "use strict";
 
-    var int = this.internal,
+    var self = this,
+        int = self.internal,
         sizes = int.sizes,
-        physical = sizes.physical,
         virtual = sizes.virtual,
         rowHeight = 0;
 
-    if (row < virtual.top) {
-        rowHeight = physical.headerRowHeight;
-    } else if (row < virtual.outerHeight - virtual.bottom) {
-        rowHeight = physical.rowHeight;
+    if (row < self.headerRows) {
+        rowHeight = self.headerRowHeight;
+    } else if (row < virtual.outerHeight - self.footerRows) {
+        rowHeight = self.rowHeight;
     } else {
-        rowHeight = physical.footerRowHeight;
+        rowHeight = self.footerRowHeight;
     }
 
     return rowHeight;

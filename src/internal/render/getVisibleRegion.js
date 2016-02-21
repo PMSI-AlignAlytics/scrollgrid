@@ -5,7 +5,8 @@
 Scrollgrid.prototype.internal.render.getVisibleRegion = function () {
     "use strict";
 
-    var int = this.internal,
+    var self = this,
+        int = self.internal,
         dom = int.dom,
         visibleRegion;
 

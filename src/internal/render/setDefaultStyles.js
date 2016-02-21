@@ -5,8 +5,10 @@
 Scrollgrid.prototype.internal.render.setDefaultStyles = function () {
     "use strict";
 
+    var self = this;
+
     // Define default classes, these are kept external as users might want to use their own
-    this.style = {
+    self.style = {
         left: {
             panel: 'sg-fixed sg-left'
         },

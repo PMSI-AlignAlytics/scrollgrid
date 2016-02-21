@@ -84,7 +84,6 @@ define(["d3"], function (d3) {
         scrollgrid.internal = {
             sizes: {
                 physical: {
-                    verticalAlignment: scrollgrid.vals.gridAlignment,
                     verticalScrollbarWidth: scrollgrid.vals.verticalScrollbarWidth,
                     horizontalScrollbarHeight: scrollgrid.vals.horizontalScrollbarHeight,
                     top: scrollgrid.vals.physTop,
@@ -93,18 +92,12 @@ define(["d3"], function (d3) {
                     bottom: scrollgrid.vals.physBottom,
                     visibleInnerHeight: scrollgrid.vals.visibleInnerHeight,
                     visibleInnerWidth: scrollgrid.vals.visibleInnerWidth,
-                    dragHandleWidth: scrollgrid.vals.dragHandleWidth,
                     totalInnerHeight: scrollgrid.vals.totalInnerHeight,
                     totalInnerWidth: scrollgrid.vals.totalInnerWidth,
                     getRowHeight: jasmine.createSpy("getRowHeight").and.returnValue(scrollgrid.vals.physRowHeight),
-                    cellPadding: scrollgrid.vals.cellPadding,
                     initialiseColumns: jasmine.createSpy("initialiseColumns")
                 },
                 virtual: {
-                    top: scrollgrid.vals.virtTop,
-                    left: scrollgrid.vals.virtLeft,
-                    right: scrollgrid.vals.virtRight,
-                    bottom: scrollgrid.vals.virtBottom,
                     outerWidth: scrollgrid.vals.virtOuterWidth,
                     outerHeight: scrollgrid.vals.virtOuterHeight,
                     innerWidth: scrollgrid.vals.virtInnerWidth,
@@ -144,7 +137,6 @@ define(["d3"], function (d3) {
                 addSortButtons: jasmine.createSpy("addSortButtons")
             },
             render: {
-                cellWaitText: scrollgrid.vals.cellWaitText,
                 matchRule: jasmine.createSpy("matchRule").and.returnValue(true),
                 draw: jasmine.createSpy("draw"),
                 getVisibleRegion: jasmine.createSpy("getVisibleRegion").and.returnValue("visible region"),
@@ -172,7 +164,6 @@ define(["d3"], function (d3) {
                     sortIcon:  scrollgrid.vals.sortIcon
                 }),
                 applyRules: jasmine.createSpy("applyRules"),
-                sortIconSize: scrollgrid.vals.sortIconSize,
                 getTextAnchor: jasmine.createSpy("getTextAnchor").and.returnValue("Text Anchor"),
                 getTextPosition: jasmine.createSpy("getTextPosition").and.returnValue("Text Position"),
                 renderText: jasmine.createSpy("renderText"),
@@ -192,6 +183,16 @@ define(["d3"], function (d3) {
             cellForegroundPrefix: 'fore-',
             sortIcon: 'sort-icon'
         };
+
+        scrollgrid.dragHandleWidth = scrollgrid.vals.dragHandleWidth;
+        scrollgrid.headerRows = scrollgrid.vals.virtTop;
+        scrollgrid.headerColumns = scrollgrid.vals.virtLeft;
+        scrollgrid.footerColumns = scrollgrid.vals.virtRight;
+        scrollgrid.footerRows = scrollgrid.vals.virtBottom;
+        scrollgrid.cellPadding = scrollgrid.vals.cellPadding;
+        scrollgrid.verticalAlignment = scrollgrid.vals.gridAlignment;
+        scrollgrid.cellWaitText = scrollgrid.vals.cellWaitText;
+        scrollgrid.sortIconSize = scrollgrid.vals.sortIconSize;
         scrollgrid.target = scrollgrid.vals.target;
         scrollgrid.refresh = jasmine.createSpy("refresh");
         scrollgrid.columns = [

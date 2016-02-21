@@ -5,7 +5,8 @@
 Scrollgrid.prototype.internal.render.applyRules = function (data) {
     "use strict";
 
-    var int = this.internal,
+    var self = this,
+        int = self.internal,
         render = int.render,
         sizes = int.sizes,
         virtual = sizes.virtual,
@@ -17,7 +18,7 @@ Scrollgrid.prototype.internal.render.applyRules = function (data) {
         r,
         c;
 
-    if (render.formatRules) {
+    if (self.formatRules) {
 
         // Iterate the focus data
         for (i = 0; i < data.length; i += 1) {
@@ -30,9 +31,9 @@ Scrollgrid.prototype.internal.render.applyRules = function (data) {
             r = data[i].rowIndex + 1;
             c = data[i].columnIndex + 1;
 
-            for (k = 0; k < render.formatRules.length; k += 1) {
-                rule = render.formatRules[k];
-                if (render.matchRule.call(this, rule.row, r, virtual.outerHeight) && render.matchRule.call(this, rule.column, c, virtual.outerWidth)) {
+            for (k = 0; k < self.formatRules.length; k += 1) {
+                rule = self.formatRules[k];
+                if (render.matchRule.call(self, rule.row, r, virtual.outerHeight) && render.matchRule.call(self, rule.column, c, virtual.outerWidth)) {
                     // Iterate the rule properties and apply them to the object
                     for (key in rule) {
                         if (rule.hasOwnProperty(key) && key !== "row" && key !== "column") {

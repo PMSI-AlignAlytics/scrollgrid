@@ -46,14 +46,14 @@ Scrollgrid.prototype.internal.dom.layoutDOM = function (fixedSize) {
     dom.setRelativePosition.call(self, dom.main.viewport, physical.left, physical.visibleInnerWidth, physical.visibleInnerHeight, 'auto');
     dom.setAbsolutePosition.call(self, dom.right.svg, physical.left + physical.visibleInnerWidth, physical.top + topMargin, physical.right, physical.visibleInnerHeight);
     dom.setRelativePosition.call(self, dom.bottom.svg, physical.left, physical.visibleInnerWidth, physical.bottom, 'hidden');
-    dom.setAbsolutePosition.call(self, dom.top.left.svg, 0, topMargin, physical.left + physical.dragHandleWidth / 2, physical.top);
-    dom.setAbsolutePosition.call(self, dom.top.right.svg, physical.left + physical.visibleInnerWidth - physical.dragHandleWidth / 2, topMargin, physical.right + physical.dragHandleWidth / 2, physical.top);
+    dom.setAbsolutePosition.call(self, dom.top.left.svg, 0, topMargin, physical.left + self.dragHandleWidth / 2, physical.top);
+    dom.setAbsolutePosition.call(self, dom.top.right.svg, physical.left + physical.visibleInnerWidth - self.dragHandleWidth / 2, topMargin, physical.right + self.dragHandleWidth / 2, physical.top);
     dom.setAbsolutePosition.call(self, dom.bottom.left.svg, 0, physical.top + physical.visibleInnerHeight + topMargin, physical.left, physical.bottom);
     dom.setAbsolutePosition.call(self, dom.bottom.right.svg, physical.left + physical.visibleInnerWidth, physical.top + physical.visibleInnerHeight + topMargin,  physical.right, physical.bottom);
     dom.setAbsolutePosition.call(self, dom.main.svg, physical.left, physical.top + topMargin,  physical.visibleInnerWidth, physical.visibleInnerHeight);
 
     // Top right panel needs a small offset for the handle
-    dom.top.right.transform.attr('transform', 'translate(' + physical.dragHandleWidth / 2 + ', 0)');
+    dom.top.right.transform.attr('transform', 'translate(' + self.dragHandleWidth / 2 + ', 0)');
 
     // Invoke draw on scroll
     dom.main.viewport.on('scroll', function () { render.draw.call(self, false); });

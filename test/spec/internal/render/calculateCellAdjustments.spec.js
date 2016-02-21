@@ -13,10 +13,10 @@ define(['d3', 'mock', 'render/calculateCellAdjustments'], function (d3, mock) {
             // Describe a 10x10 grid with a single row and column header or footer
             virtual.outerHeight = 10;
             virtual.outerWidth = 10;
-            virtual.top = 1;
-            virtual.left = 1;
-            virtual.right = 1;
-            virtual.bottom = 1;
+            mock.headerRows = 1;
+            mock.headerColumns = 1;
+            mock.footerColumns = 1;
+            mock.footerRows = 1;
         });
 
         it("should not apply cell adjustments to any non special cells", function () {

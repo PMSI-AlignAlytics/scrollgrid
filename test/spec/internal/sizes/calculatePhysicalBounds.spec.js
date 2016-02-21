@@ -27,15 +27,15 @@ define(['d3', 'mock', 'sizes/calculatePhysicalBounds'], function (d3, mock) {
                 { width: 11 }, { width: 13 }, { width: 17 }, { width: 23 }, { width: 37 }
             ];
 
-            virtual.left = 4;
-            virtual.right = 2;
+            mock.headerColumns = 4;
+            mock.footerColumns = 2;
             virtual.outerWidth = 10;
-            virtual.top = 2;
-            virtual.bottom = 3;
+            mock.headerRows = 2;
+            mock.footerRows = 3;
             virtual.innerHeight = 5;
-            physical.headerRowHeight = 41;
-            physical.footerRowHeight = 43;
-            physical.rowHeight = 47;
+            mock.headerRowHeight = 41;
+            mock.footerRowHeight = 43;
+            mock.rowHeight = 47;
             dom.container.nodeObject.offsetHeight = 49;
             dom.container.nodeObject.offsetWidth = 51;
             topMargin = 53;

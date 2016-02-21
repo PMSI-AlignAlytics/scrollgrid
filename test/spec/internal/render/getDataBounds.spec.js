@@ -16,14 +16,14 @@ define(['d3', 'mock', 'render/getDataBounds'], function (d3, mock) {
             // Define a 100x200px physical grid for testing
             physical.totalInnerWidth = 100;
             physical.totalInnerHeight = 200;
-            physical.rowHeight = 10;
+            mock.rowHeight = 10;
             // Define a 10 column by 20 row virtual grid for testing
             virtual.innerWidth = 10;
             virtual.innerHeight = 20;
-            virtual.left = 1;
-            virtual.right = 1;
-            virtual.top = 1;
-            virtual.bottom = 1;
+            mock.headerColumns = 1;
+            mock.footerColumns = 1;
+            mock.headerRows = 1;
+            mock.footerRows = 1;
             mock.columns = [];
             for (i = 0; i < 12; i += 1) {
                 mock.columns.push({ width: 10 });

@@ -16,7 +16,7 @@ Scrollgrid.prototype.internal.render.renderForeground = function (g, viewData) {
         .attr("x", render.getTextPosition.call(self, viewData))
         .attr("y", viewData.textHeight / 2)
         .style("text-anchor", render.getTextAnchor.call(self, viewData))
-        .text(render.cellWaitText);
+        .text(self.cellWaitText);
 
     viewData.getValue(viewData.rowIndex, viewData.columnIndex, function (value) {
         if (viewData.formatter) {
@@ -24,7 +24,7 @@ Scrollgrid.prototype.internal.render.renderForeground = function (g, viewData) {
         } else {
             text.text(value);
         }
-        render.cropText.call(this, text, viewData.textWidth - viewData.cellPadding - (!(!viewData.sortIcon || viewData.sortIcon === 'none') ? render.sortIconSize + viewData.cellPadding : 0));
+        render.cropText.call(self, text, viewData.textWidth - viewData.cellPadding - (!(!viewData.sortIcon || viewData.sortIcon === 'none') ? self.sortIconSize + viewData.cellPadding : 0));
     });
 
 };

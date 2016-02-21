@@ -35,13 +35,10 @@
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     var Scrollgrid = function (options) {
 
-        var int = this.internal,
-            sizes = int.sizes,
-            interaction = int.interaction,
+        var self = this,
+            int = self.internal,
             render = int.render,
-            dom = int.dom,
-            virtual = sizes.virtual,
-            physical = sizes.physical;
+            dom = int.dom;
 
         options = options || {};
 
@@ -55,48 +52,47 @@
         } else {
 
             // Set the display options
-            this.rowHeight = physical.rowHeight = options.rowHeight || 30;
-            this.dragHandleWidth = physical.dragHandleWidth = options.dragHandleWidth || 8;
-            this.headerRowHeight = physical.headerRowHeight = options.headerRowHeight || physical.rowHeight;
-            this.footerRowHeight = physical.footerRowHeight = options.footerRowHeight || physical.rowHeight;
-            this.defaultColumnWidth = physical.defaultColumnWidth = options.defaultColumnWidth || 100;
-            this.cellPadding = physical.cellPadding = options.cellPadding || 6;
-            this.verticalAlignment = physical.verticalAlignment = options.verticalAlignment || 'top';
+            self.rowHeight = options.rowHeight || 30;
+            self.dragHandleWidth  = options.dragHandleWidth || 8;
+            self.headerRowHeight = options.headerRowHeight || self.rowHeight;
+            self.footerRowHeight = options.footerRowHeight || self.rowHeight;
+            self.defaultColumnWidth = options.defaultColumnWidth || 100;
+            self.cellPadding = options.cellPadding || 6;
+            self.verticalAlignment = options.verticalAlignment || 'top';
 
             // Set the interaction options
-            this.allowColumnResizing = interaction.allowColumnResizing = options.allowColumnResizing || true;
-            this.allowSorting = interaction.allowSorting = options.allowSorting || true;
+            self.allowColumnResizing = options.allowColumnResizing || true;
+            self.allowSorting = options.allowSorting || true;
 
             // Set the number of header or footer rows or columns
-            this.headerRows = virtual.top = options.headerRows || 0;
-            this.footerRows = virtual.bottom = options.footerRows || 0;
-            this.headerColumns = virtual.left = options.headerColumns || 0;
-            this.footerColumns = virtual.right = options.footerColumns || 0;
+            self.headerRows = options.headerRows || 0;
+            self.footerRows = options.footerRows || 0;
+            self.headerColumns = options.headerColumns || 0;
+            self.footerColumns = options.footerColumns || 0;
 
             // Set a reference to the parent object
-            this.target = options.target;
+            self.target = options.target;
 
-            render.setDefaultStyles.call(this);
-            this.formatRules = render.formatRules = options.formatRules || [];
-            this.cellWaitText = render.cellWaitText = options.cellWaitText || "loading...";
-            this.sortIconSize = render.sortIconSize = options.sortIconSize || 7;
+            render.setDefaultStyles.call(self);
+            self.formatRules = options.formatRules || [];
+            self.cellWaitText = options.cellWaitText || "loading...";
+            self.sortIconSize = options.sortIconSize || 7;
 
             // Create the DOM shapes required
-            dom.populateDOM.call(this);
+            dom.populateDOM.call(self);
 
             // Pass the data or adapter through to setData
-            this.data(options.data || options.adapter);
+            self.data(options.data || options.adapter);
 
             if (options.autoResize) {
-                dom.setAutoResize.call(this);
+                dom.setAutoResize.call(self);
             }
         }
     };
 
     Scrollgrid.init = function (target, options) {
         options.target = target;
-        var scrollgrid = new Scrollgrid(options);
-        return scrollgrid;
+        return new Scrollgrid(options);
     };
 
     // Build namespaces

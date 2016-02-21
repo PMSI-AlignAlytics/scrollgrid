@@ -15,11 +15,11 @@ define(['d3', 'mock', 'sizes/getRowHeight'], function (d3, mock) {
             sizes = int.sizes;
 
             sizes.virtual.outerHeight = 10;
-            sizes.virtual.top = 2;
-            sizes.virtual.bottom = 3;
-            sizes.physical.headerRowHeight = 17;
-            sizes.physical.rowHeight = 23;
-            sizes.physical.footerRowHeight = 29;
+            mock.headerRows = 2;
+            mock.footerRows = 3;
+            mock.headerRowHeight = 17;
+            mock.rowHeight = 23;
+            mock.footerRowHeight = 29;
         });
 
         it("should return the header row height for a header row", function () {

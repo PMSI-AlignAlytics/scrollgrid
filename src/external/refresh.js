@@ -5,13 +5,14 @@
 Scrollgrid.prototype.refresh = function (maintainCache) {
     "use strict";
 
-    var int = this.internal,
+    var self = this,
+        int = self.internal,
         render = int.render,
         dom = int.dom;
 
     // Call the instantiated layout refresh
-    dom.layoutDOM.call(this);
-    render.draw.call(this, !maintainCache);
-    dom.setScrollerSize.call(this);
+    dom.layoutDOM.call(self);
+    render.draw.call(self, !maintainCache);
+    dom.setScrollerSize.call(self);
 
 };

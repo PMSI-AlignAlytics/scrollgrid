@@ -14,11 +14,11 @@ define(['d3', 'mock', 'render/applyRules'], function (d3, mock) {
                 { rowIndex: 3, columnIndex: 5 }
             ];
             rule = { row: "4:4", column: "6:6" };
-            mock.internal.render.formatRules = [rule];
+            mock.formatRules = [rule];
         });
 
         it("should not apply any rules if there are no rules set", function () {
-            mock.internal.render.formatRules = null;
+            mock.formatRules = null;
             underTest.call(mock, data);
             expect(data[0].formatter).not.toBeDefined();
             expect(data[0].alignment).not.toBeDefined();

@@ -5,17 +5,15 @@
 Scrollgrid.prototype.internal.dom.getTopMargin = function (containerSize, parent) {
     "use strict";
 
-    var int = this.internal,
-        sizes = int.sizes,
-        physical = sizes.physical,
+    var self = this,
         topMargin = 0,
         parentHeight;
 
     if (containerSize && containerSize.height && parent) {
         parentHeight = parent.node().offsetHeight;
-        if (physical.verticalAlignment === 'middle') {
+        if (self.verticalAlignment === 'middle') {
             topMargin = ((parentHeight - containerSize.height) / 2);
-        } else if (physical.verticalAlignment === 'bottom') {
+        } else if (self.verticalAlignment === 'bottom') {
             topMargin = parentHeight - containerSize.height - 1;
         }
     }

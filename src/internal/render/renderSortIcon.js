@@ -9,11 +9,11 @@ Scrollgrid.prototype.internal.render.renderSortIcon = function (d, target, sorte
         int = self.internal,
         render = int.render;
 
-    if (sorted && d.textWidth > d.cellPadding + render.sortIconSize) {
+    if (sorted && d.textWidth > d.cellPadding + self.sortIconSize) {
         target.append("g")
             .datum(d.sortIcon)
             .attr("class", "sg-no-style--sort-icon-selector")
-            .attr("transform", "translate(" + (d.cellPadding + render.sortIconSize / 2) + "," + (d.textHeight / 2) + ")")
+            .attr("transform", "translate(" + (d.cellPadding + self.sortIconSize / 2) + "," + (d.textHeight / 2) + ")")
             .call(function (d) { return render.sortIcon.call(self, d); });
     }
 

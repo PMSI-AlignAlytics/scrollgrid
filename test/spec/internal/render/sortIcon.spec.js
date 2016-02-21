@@ -10,7 +10,7 @@ define(['d3', 'mock', 'render/sortIcon'], function (d3, mock) {
             mock.init();
             d3.init();
             target = new d3.shape(mock.vals);
-            mock.internal.render.sortIconSize = 2;
+            mock.sortIconSize = 2;
         });
 
         it("should append a path", function () {

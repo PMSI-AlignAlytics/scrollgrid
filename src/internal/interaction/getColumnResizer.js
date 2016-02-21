@@ -5,9 +5,9 @@
 Scrollgrid.prototype.internal.interaction.getColumnResizer = function () {
     "use strict";
 
-    var int = this.internal,
-        interaction = int.interaction,
-        self = this;
+    var self = this,
+        int = self.internal,
+        interaction = int.interaction;
 
     return d3.behavior.drag()
         .origin(function (c) { return c; })
