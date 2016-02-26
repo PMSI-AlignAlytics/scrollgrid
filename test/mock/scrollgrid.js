@@ -56,8 +56,10 @@ define(["d3"], function (d3) {
         nodeScrollLeft: 197,
         nodeScrollTop: 199,
         cellWaitText: 211,
-        pushedTextBoundWidth: 213,
-        pushedTextBoundHeight: 217
+        pushedTextBoundWidth: 223,
+        pushedTextBoundHeight: 227,
+        footerRowHeight: 229,
+        headerRowHeight: 233
     };
 
     scrollgrid.panel = function () {
@@ -87,6 +89,9 @@ define(["d3"], function (d3) {
                     verticalAlignment: scrollgrid.vals.gridAlignment,
                     verticalScrollbarWidth: scrollgrid.vals.verticalScrollbarWidth,
                     horizontalScrollbarHeight: scrollgrid.vals.horizontalScrollbarHeight,
+                    footerRowHeight: scrollgrid.vals.footerRowHeight,
+                    headerRowHeight: scrollgrid.vals.headerRowHeight,
+                    rowHeight: scrollgrid.vals.physRowHeight,
                     top: scrollgrid.vals.physTop,
                     left: scrollgrid.vals.physLeft,
                     right: scrollgrid.vals.physRight,
@@ -134,6 +139,8 @@ define(["d3"], function (d3) {
                 layoutDOM: jasmine.createSpy("layoutDOM")
             },
             interaction: {
+                allowColumnResizing: true,
+                allowSorting: true,
                 addResizeHandles: jasmine.createSpy("addResizeHandles"),
                 autoResizeColumn: jasmine.createSpy("autoResizeColumn"),
                 getColumnResizer: jasmine.createSpy("getColumnResizer").and.returnValue("column resizer"),
@@ -178,7 +185,8 @@ define(["d3"], function (d3) {
                 renderText: jasmine.createSpy("renderText"),
                 renderSortIcon: jasmine.createSpy("renderSortIcon"),
                 cropText: jasmine.createSpy("cropText"),
-                sortIcon: jasmine.createSpy("sortIcon")
+                sortIcon: jasmine.createSpy("sortIcon"),
+                formatRules: ['A','B','C']
             }
         };
         scrollgrid.style = {

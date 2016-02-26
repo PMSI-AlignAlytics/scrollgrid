@@ -57,7 +57,7 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
                 }
                 render.renderSortIcon.call(self, d, group, !(!d.sortIcon || d.sortIcon === 'none'));
                 // Add some interaction to the headers
-                if (target === dom.top || target === dom.top.left || target === dom.top.right) {
+                if (interaction.allowSorting && (target === dom.top || target === dom.top.left || target === dom.top.right)) {
                     interaction.addSortButtons.call(self, group, d);
                 }
             });

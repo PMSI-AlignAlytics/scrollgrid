@@ -44,9 +44,9 @@
         var table = Scrollgrid.init('#myTable', {
             autoResize: true,
             headerRows: 1,
+            footerRows: 1,
             formatRules: [
-                { row: "*", column: "*", columnWidth: 100 },
-                { row: "*", column: "2", alignment: 'left' },
+                { row: "*", column: "2", alignment: 'left', columnWidth: 300 },
                 { row: "*", column: "3", alignment: 'right' },
                 { row: "*", column: "4", alignment: 'center' },
                 { row: "2:-1", column: "11", formatter: d3.format(",.0f")}
@@ -54,6 +54,43 @@
         });
         d3.tsv("/examples/data/example_data.tsv", function (data) {
             table.data(Scrollgrid.adapters.json(data));
+
+            setTimeout(function () {
+
+                console.log(table.rowHeight());
+                console.log(table.dragHandleWidth());
+                console.log(table.headerRowHeight());
+                console.log(table.footerRowHeight());
+                console.log(table.cellPadding());
+                console.log(table.allowColumnResizing());
+                console.log(table.allowSorting());
+                console.log(table.formatRules());
+
+                table
+                    .rowHeight(200)
+                    .dragHandleWidth(100)
+                    .headerRowHeight(40)
+                    .footerRowHeight(140)
+                    .cellPadding(10)
+                    .allowColumnResizing(false)
+                    .sortIconSize(10)
+                    .headerRows(2)
+                    .footerRows(3)
+                    .headerColumns(1)
+                    .footerColumns(5);
+
+                table.addFormatRules([
+                        { "row": 3, "column":3, foregroundStyle:"my-cool-class", columnWidth: 200 },
+                        { "row": 1, "column":1, foregroundStyle:"my-cool-class", columnWidth: 200 }
+                ]);
+                setTimeout(function () {
+                    setTimeout(function () {
+                        table.formatRules([{ "row": "3:4", "column":"3,5,8", foregroundStyle:"my-cool-class" }]);
+                    }, 1000);
+                }, 1000);
+            }, 2000);
         });
+
+
     </script>
 </div>

@@ -93,17 +93,26 @@ define(['d3', 'mock', 'render/draw'], function (d3, mock) {
             expect(render.renderRegion).toHaveBeenCalledWith(dom.bottom.right, {}, hRight, vBottom, clearCache);
         });
 
-        it("should call add resize handles for the top left panel", function () {
+        it("should not call add resize handles if column resizing is off", function () {
+            interaction.allowColumnResizing = false;
+            underTest.call(mock, clearCache);
+            expect(interaction.addResizeHandles).not.toHaveBeenCalled();
+        });
+
+        it("should call add resize handles for the top left panel if column resizing is on", function () {
+            interaction.allowColumnResizing = true;
             underTest.call(mock, clearCache);
             expect(interaction.addResizeHandles).toHaveBeenCalledWith(dom.top.left, hLeft);
         });
 
-        it("should call add resize handles for the top middle panel", function () {
+        it("should call add resize handles for the top middle panel if column resizing is on", function () {
+            interaction.allowColumnResizing = true;
             underTest.call(mock, clearCache);
             expect(interaction.addResizeHandles).toHaveBeenCalledWith(dom.top, hMiddle, vals.viewAreaPhysX);
         });
 
-        it("should call add resize handles for the top right panel", function () {
+        it("should call add resize handles for the top right panel if column resizing is on", function () {
+            interaction.allowColumnResizing = true;
             underTest.call(mock, clearCache);
             expect(interaction.addResizeHandles).toHaveBeenCalledWith(dom.top.right, hRight);
         });
