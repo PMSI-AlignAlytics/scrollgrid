@@ -5,8 +5,6 @@
 Scrollgrid.prototype.internal.interaction.columnResizing = function (shape, column) {
     "use strict";
 
-    var self = this;
-
     // Some resize handle should be inverted
     column.width -= column.x - d3.event.x;
 
@@ -22,6 +20,6 @@ Scrollgrid.prototype.internal.interaction.columnResizing = function (shape, colu
     shape.attr('x', column.x);
 
     // Redraw
-    self.refresh(true);
+    this.refresh(true);
 
 };

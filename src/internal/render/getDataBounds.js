@@ -6,9 +6,8 @@ Scrollgrid.prototype.internal.render.getDataBounds = function (physicalViewArea)
     "use strict";
 
     var i,
-        self = this,
-        int = self.internal,
-        cols = self.columns,
+        int = this.internal,
+        cols = this.columns,
         sizes = int.sizes,
         virtual = sizes.virtual,
         physical = sizes.physical,
@@ -27,9 +26,9 @@ Scrollgrid.prototype.internal.render.getDataBounds = function (physicalViewArea)
             }
         };
 
-    bounds.physical.y = bounds.virtual.top * self.rowHeight - physicalViewArea.top;
+    bounds.physical.y = bounds.virtual.top * physical.rowHeight - physicalViewArea.top;
     for (i = 0; i < virtual.innerWidth; i += 1) {
-        columnWidth = cols[i + self.headerColumns].width;
+        columnWidth = cols[i + virtual.left].width;
         if (left === undefined && (i === virtual.innerWidth - 1 || runningX + columnWidth > physicalViewArea.left)) {
             left = i;
             bounds.physical.x = runningX - physicalViewArea.left;

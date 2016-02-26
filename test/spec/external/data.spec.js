@@ -70,15 +70,15 @@ define(['d3', 'mock', 'external/data'], function (d3, mock) {
         });
 
         it("should calculate the inner width", function () {
-            mock.headerColumns = 5;
-            mock.footerColumns = 7;
+            mock.internal.sizes.virtual.left = 5;
+            mock.internal.sizes.virtual.right = 7;
             result = underTest.call(mock, mockSimple);
             expect(mock.internal.sizes.virtual.innerWidth).toEqual(73 - 5 - 7);
         });
 
         it("should calculate the inner height", function () {
-            mock.headerRows = 11;
-            mock.footerRows = 13;
+            mock.internal.sizes.virtual.top = 11;
+            mock.internal.sizes.virtual.bottom = 13;
             result = underTest.call(mock, mockSimple);
             expect(mock.internal.sizes.virtual.innerHeight).toEqual(71 - 11 - 13);
         });

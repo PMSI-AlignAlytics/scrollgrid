@@ -4,10 +4,12 @@ define(['d3', 'mock', 'dom/getTopMargin'], function (d3, mock) {
     describe("getTopMargin", function () {
 
         var underTest = Scrollgrid.prototype.internal.dom.getTopMargin,
-            result;
+            result,
+            mockPhys;
 
         beforeEach(function () {
             mock.init();
+            mockPhys = mock.internal.sizes.physical;
         });
 
         it("should return 0 if containerSize is not passed", function () {
@@ -26,25 +28,25 @@ define(['d3', 'mock', 'dom/getTopMargin'], function (d3, mock) {
         });
 
         it("should default to 0 if alignment is not set", function () {
-            mock.verticalAlignment = undefined;
+            mockPhys.verticalAlignment = undefined;
             result = underTest.call(mock, { height: mock.vals.containerHeight }, new d3.shape(mock.vals));
             expect(result).toEqual(0);
         });
 
         it("should return 0 if alignment is top", function () {
-            mock.verticalAlignment = "top";
+            mockPhys.verticalAlignment = "top";
             result = underTest.call(mock, { height: mock.vals.containerHeight }, new d3.shape(mock.vals));
             expect(result).toEqual(0);
         });
 
         it("should return half parent height minus half container height if alignment is middle", function () {
-            mock.verticalAlignment = "middle";
+            mockPhys.verticalAlignment = "middle";
             result = underTest.call(mock, { height: mock.vals.containerHeight }, new d3.shape(mock.vals));
             expect(result).toEqual(mock.vals.nodeOffsetHeight / 2 - mock.vals.containerHeight / 2);
         });
 
         it("should return parent height minus container height with 1 pixel margin if alignment is bottom", function () {
-            mock.verticalAlignment = "bottom";
+            mockPhys.verticalAlignment = "bottom";
             result = underTest.call(mock, { height: mock.vals.containerHeight }, new d3.shape(mock.vals));
             expect(result).toEqual(mock.vals.nodeOffsetHeight - mock.vals.containerHeight - 1);
         });

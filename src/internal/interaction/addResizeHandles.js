@@ -19,18 +19,18 @@ Scrollgrid.prototype.internal.interaction.addResizeHandles = function (target, b
 
     target.content
         .selectAll(".sg-no-style--handle-selector")
-        .data(self.columns.slice(bounds.left, bounds.right))
+        .data(this.columns.slice(bounds.left, bounds.right))
         .enter()
         .append("rect")
         .attr("class", "sg-no-style--handle-selector " + style.resizeHandle)
-        .attr("transform", "translate(" + (-1 * self.dragHandleWidth / 2) + ", 0)")
+        .attr("transform", "translate(" + (-1 * physical.dragHandleWidth / 2) + ", 0)")
         .attr("x", function (c) {
             runningTotal += c.width;
             c.x = runningTotal;
             return c.x;
         })
         .attr("y", 0)
-        .attr("width", self.dragHandleWidth)
+        .attr("width", physical.dragHandleWidth)
         .attr("height", physical.top)
         .on("dblclick", function (c) { interaction.autoResizeColumn.call(self, c); })
         .call(interaction.getColumnResizer.call(self));

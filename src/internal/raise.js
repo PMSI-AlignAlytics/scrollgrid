@@ -5,9 +5,7 @@
 Scrollgrid.prototype.internal.raise = function (err) {
     "use strict";
 
-    var self = this,
-        log = self.reporter || console;
-
+    var log = this.reporter || console;
     if (log && log.error) {
         log.error(err);
     } else {

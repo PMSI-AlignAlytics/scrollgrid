@@ -5,8 +5,7 @@
 Scrollgrid.prototype.internal.dom.setScrollerSize = function () {
     "use strict";
 
-    var self = this,
-        int = self.internal,
+    var int = this.internal,
         dom = int.dom,
         sizes = int.sizes,
         physical = sizes.physical;

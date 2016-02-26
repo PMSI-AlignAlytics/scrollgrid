@@ -5,22 +5,23 @@
 Scrollgrid.prototype.internal.interaction.sortColumn = function (index, toggle) {
     "use strict";
 
-    var self = this,
-        int = self.internal,
+    var int = this.internal,
         interaction = int.interaction,
+        sizes = int.sizes,
+        virtual = sizes.virtual,
         c;
 
     // Clear existing sorts and set the new one
-    for (c = 0; c < self.columns.length; c += 1) {
+    for (c = 0; c < this.columns.length; c += 1) {
         if (c !== index) {
-            delete self.columns[c].sort;
+            delete this.columns[c].sort;
         } else if (toggle) {
-            self.columns[c].sort = (self.columns[c].sort === 'desc' ? 'asc' : 'desc');
+            this.columns[c].sort = (this.columns[c].sort === 'desc' ? 'asc' : 'desc');
         }
     }
 
     // Instruct the adapter to perform a sort
-    self.adapter.sort(index, self.headerRows, self.footerRows, self.columns[index].sort === 'desc', self.columns[index].compareFunction || interaction.defaultComparer);
-    self.refresh(false);
+    this.adapter.sort(index, virtual.top, virtual.bottom, this.columns[index].sort === 'desc', this.columns[index].compareFunction || interaction.defaultComparer);
+    this.refresh(false);
 
 };

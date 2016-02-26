@@ -31,7 +31,7 @@ define(['d3', 'mock', 'render/getTextPosition'], function (d3, mock) {
         it("should include the sort icon size and another cell padding for left alignment", function () {
             datum.sortIcon = "sort icon";
             result = underTest.call(mock, datum);
-            expect(result).toEqual(mock.sortIconSize + 2 * datum.cellPadding);
+            expect(result).toEqual(mock.vals.sortIconSize + 2 * datum.cellPadding);
         });
 
         it("should set the x position to the center of the cell for center alignment", function () {

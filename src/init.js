@@ -35,10 +35,13 @@
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     var Scrollgrid = function (options) {
 
-        var self = this,
-            int = self.internal,
+        var int = this.internal,
+            sizes = int.sizes,
+            interaction = int.interaction,
             render = int.render,
-            dom = int.dom;
+            dom = int.dom,
+            virtual = sizes.virtual,
+            physical = sizes.physical;
 
         options = options || {};
 
@@ -52,47 +55,48 @@
         } else {
 
             // Set the display options
-            self.rowHeight = options.rowHeight || 30;
-            self.dragHandleWidth  = options.dragHandleWidth || 8;
-            self.headerRowHeight = options.headerRowHeight || self.rowHeight;
-            self.footerRowHeight = options.footerRowHeight || self.rowHeight;
-            self.defaultColumnWidth = options.defaultColumnWidth || 100;
-            self.cellPadding = options.cellPadding || 6;
-            self.verticalAlignment = options.verticalAlignment || 'top';
+            physical.rowHeight = options.rowHeight || 30;
+            physical.dragHandleWidth = options.dragHandleWidth || 8;
+            physical.headerRowHeight = options.headerRowHeight || physical.rowHeight;
+            physical.footerRowHeight = options.footerRowHeight || physical.rowHeight;
+            physical.defaultColumnWidth = options.defaultColumnWidth || 100;
+            physical.cellPadding = options.cellPadding || 6;
+            physical.verticalAlignment = options.verticalAlignment || 'top';
 
             // Set the interaction options
-            self.allowColumnResizing = options.allowColumnResizing || true;
-            self.allowSorting = options.allowSorting || true;
+            interaction.allowColumnResizing = options.allowColumnResizing || true;
+            interaction.allowSorting = options.allowSorting || true;
 
             // Set the number of header or footer rows or columns
-            self.headerRows = options.headerRows || 0;
-            self.footerRows = options.footerRows || 0;
-            self.headerColumns = options.headerColumns || 0;
-            self.footerColumns = options.footerColumns || 0;
+            virtual.top = options.headerRows || 0;
+            virtual.bottom = options.footerRows || 0;
+            virtual.left = options.headerColumns || 0;
+            virtual.right = options.footerColumns || 0;
 
             // Set a reference to the parent object
-            self.target = options.target;
+            this.target = options.target;
 
-            render.setDefaultStyles.call(self);
-            self.formatRules = options.formatRules || [];
-            self.cellWaitText = options.cellWaitText || "loading...";
-            self.sortIconSize = options.sortIconSize || 7;
+            render.setDefaultStyles.call(this);
+            render.formatRules = options.formatRules || [];
+            render.cellWaitText = options.cellWaitText || "loading...";
+            render.sortIconSize = options.sortIconSize || 7;
 
             // Create the DOM shapes required
-            dom.populateDOM.call(self);
+            dom.populateDOM.call(this);
 
             // Pass the data or adapter through to setData
-            self.data(options.data || options.adapter);
+            this.data(options.data || options.adapter);
 
             if (options.autoResize) {
-                dom.setAutoResize.call(self);
+                dom.setAutoResize.call(this);
             }
         }
     };
 
     Scrollgrid.init = function (target, options) {
         options.target = target;
-        return new Scrollgrid(options);
+        var scrollgrid = new Scrollgrid(options);
+        return scrollgrid;
     };
 
     // Build namespaces

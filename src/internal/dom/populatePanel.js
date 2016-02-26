@@ -5,8 +5,7 @@
 Scrollgrid.prototype.internal.dom.populatePanel = function (css) {
     "use strict";
 
-    var self = this,
-        dom = self.internal.dom,
+    var dom = this.internal.dom,
         panel = {};
 
     panel.svg = dom.container.append('svg');
