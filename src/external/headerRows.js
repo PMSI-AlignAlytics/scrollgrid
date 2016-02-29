@@ -13,6 +13,7 @@ Scrollgrid.prototype.headerRows = function (value) {
     } else {
         // Set the value and redraw but return self for chaining
         virtual.top = value;
+        virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
         result = this;
         this.refresh();
     }

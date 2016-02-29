@@ -13,6 +13,7 @@ Scrollgrid.prototype.footerColumns = function (value) {
     } else {
         // Set the value and redraw but return self for chaining
         virtual.right = value;
+        virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;
         result = this;
         this.refresh();
     }
