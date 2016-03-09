@@ -25,6 +25,7 @@ requirejs.config({
         'interaction': '../src/internal/interaction',
         'render': '../src/internal/render',
         'sizes': '../src/internal/sizes',
+        'events': '../src/internal/events',        
         'external': '../src/external',
         'adapters': '../src/external/adapters'
     },

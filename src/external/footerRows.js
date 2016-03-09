@@ -2,7 +2,7 @@
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/footerRows.js
-Scrollgrid.prototype.footerRows = function (value) {
+Scrollgrid.prototype.footerRows = function (value, silent) {
     "use strict";
 
     var virtual = this.internal.sizes.virtual,
@@ -15,7 +15,9 @@ Scrollgrid.prototype.footerRows = function (value) {
         virtual.bottom = value;
         virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
         result = this;
-        this.refresh();
+        if (!silent) {
+            this.refresh();
+        }
     }
 
     return result;

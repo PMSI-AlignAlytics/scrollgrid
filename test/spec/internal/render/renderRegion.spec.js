@@ -254,6 +254,11 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
                     expect(mock.internal.interaction.addSortButtons).not.toHaveBeenCalled();
                 });
 
+                it("should call addEventHandlers", function () {
+                    each(datum);
+                    expect(mock.internal.events.addEventHandlers).toHaveBeenCalled();
+                });
+
             });
 
             it("should set the transform to offset the x and y", function () {

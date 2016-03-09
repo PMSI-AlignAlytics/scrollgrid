@@ -2,7 +2,7 @@
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/formatRules.js
-Scrollgrid.prototype.formatRules = function (value) {
+Scrollgrid.prototype.formatRules = function (value, silent) {
     "use strict";
 
     var render = this.internal.render,
@@ -16,7 +16,9 @@ Scrollgrid.prototype.formatRules = function (value) {
         render.formatRules = value;
         physical.initialiseColumns.call(this);
         result = this;
-        this.refresh();
+        if (!silent) {
+            this.refresh();
+        }
     }
 
     return result;

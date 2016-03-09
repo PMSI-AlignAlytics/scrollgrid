@@ -203,6 +203,17 @@ define(['mock', 'dom/layoutDOM'], function (mock) {
             expect(mockRender.draw).toHaveBeenCalled();
         });
 
+        it("should invoke redirectViewportEvents", function () {
+            underTest.call(mock);
+            expect(mockDom.redirectViewportEvents).toHaveBeenCalled();
+        });
+
+        it("should register recdirecting event handler", function () {
+            underTest.call(mock);
+            expect(mockDom.redirectViewportEvents).toHaveBeenCalled();
+            expect(mockDom.main.viewport.on('click')).toBeDefined();
+        });
+
         it("should update the scroller bounds", function () {
             underTest.call(mock);
             expect(mockDom.setScrollerSize).toHaveBeenCalled();

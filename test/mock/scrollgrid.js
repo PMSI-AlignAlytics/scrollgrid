@@ -136,7 +136,8 @@ define(["d3"], function (d3) {
                     returnPanel.style = css;
                     return returnPanel;
                 }),
-                layoutDOM: jasmine.createSpy("layoutDOM")
+                layoutDOM: jasmine.createSpy("layoutDOM"),
+                redirectViewportEvents: jasmine.createSpy("redirectViewportEvents")
             },
             interaction: {
                 allowColumnResizing: true,
@@ -176,7 +177,7 @@ define(["d3"], function (d3) {
                     boxWidth: scrollgrid.vals.adjBoxWidth,
                     textHeight: scrollgrid.vals.adjTextHeight,
                     textWidth: scrollgrid.vals.adjTextWidth,
-                    sortIcon:  scrollgrid.vals.sortIcon
+                    sortIcon: scrollgrid.vals.sortIcon
                 }),
                 applyRules: jasmine.createSpy("applyRules"),
                 sortIconSize: scrollgrid.vals.sortIconSize,
@@ -186,8 +187,20 @@ define(["d3"], function (d3) {
                 renderSortIcon: jasmine.createSpy("renderSortIcon"),
                 cropText: jasmine.createSpy("cropText"),
                 sortIcon: jasmine.createSpy("sortIcon"),
-                formatRules: ['A','B','C']
-            }
+                formatRules: ['A', 'B', 'C']
+            },
+            events: {
+                addEventHandlers: jasmine.createSpy("addEventHandlers")
+            },
+            eventHandlers: [
+                {
+                    type: 'click',
+                    handler: function() {
+                        return 'clicked';
+                    },
+                    capture: false
+                }
+            ]
         };
         scrollgrid.style = {
             left: { panel: 'left' },
@@ -214,6 +227,7 @@ define(["d3"], function (d3) {
         scrollgrid.reporter = {
             error: jasmine.createSpy("error")
         };
+
         return scrollgrid;
     };
 
