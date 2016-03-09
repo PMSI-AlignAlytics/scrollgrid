@@ -2,7 +2,7 @@
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/rowHeight.js
-Scrollgrid.prototype.rowHeight = function (value) {
+Scrollgrid.prototype.rowHeight = function (value, silent) {
     "use strict";
 
     var physical = this.internal.sizes.physical,
@@ -14,7 +14,9 @@ Scrollgrid.prototype.rowHeight = function (value) {
         // Set the value and redraw but return self for chaining
         physical.rowHeight = value;
         result = this;
-        this.refresh();
+        if (!silent) {
+            this.refresh();
+        }
     }
 
     return result;

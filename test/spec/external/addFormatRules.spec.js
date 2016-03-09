@@ -10,6 +10,11 @@ define(['d3', 'mock', 'external/addFormatRules'], function (d3, mock) {
             d3.init();
         });
 
+        it("should not refresh if true is passed to the 'silent' argument", function () {
+            underTest.call(mock, {}, true);
+            expect(mock.refresh).not.toHaveBeenCalled();
+        });
+
         it("should return the format rules if no parameter is passed", function () {
             expect(underTest.call(mock)).toEqual(['A', 'B', 'C']);
         });

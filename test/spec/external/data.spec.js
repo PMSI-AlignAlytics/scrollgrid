@@ -25,6 +25,11 @@ define(['d3', 'mock', 'external/data'], function (d3, mock) {
             expect(mock.refresh).not.toHaveBeenCalled();
         });
 
+        it("should not refresh if true is passed to the 'silent' argument", function () {
+            underTest.call(mock, [1, 2, 3], true);
+            expect(mock.refresh).not.toHaveBeenCalled();
+        });
+
         it("should use the simple adapter if an array is passed", function () {
             Scrollgrid.adapters.simple = jasmine.createSpy("Simple").and.returnValue(mockSimple);
             result = underTest.call(mock, [1, 2, 3]);

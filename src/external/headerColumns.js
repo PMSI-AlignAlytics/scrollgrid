@@ -2,7 +2,7 @@
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/headerColumns.js
-Scrollgrid.prototype.headerColumns = function (value) {
+Scrollgrid.prototype.headerColumns = function (value, silent) {
     "use strict";
 
     var virtual = this.internal.sizes.virtual,
@@ -15,7 +15,9 @@ Scrollgrid.prototype.headerColumns = function (value) {
         virtual.left = value;
         virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;
         result = this;
-        this.refresh();
+        if (!silent) {
+            this.refresh();
+        }
     }
 
     return result;

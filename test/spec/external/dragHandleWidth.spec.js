@@ -10,6 +10,11 @@ define(['d3', 'mock', 'external/dragHandleWidth'], function (d3, mock) {
             d3.init();
         });
 
+        it("should not refresh if true is passed to the 'silent' argument", function () {
+            underTest.call(mock, 7, true);
+            expect(mock.refresh).not.toHaveBeenCalled();
+        });
+
         it("should return the column resizing value if no parameter is passed", function () {
             expect(underTest.call(mock)).toEqual(mock.vals.dragHandleWidth);
         });

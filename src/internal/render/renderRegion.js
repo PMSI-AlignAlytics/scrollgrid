@@ -10,6 +10,7 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
         render = int.render,
         dom = int.dom,
         interaction = int.interaction,
+        events = int.events,
         cells,
         data;
 
@@ -60,6 +61,9 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
                 if (interaction.allowSorting && (target === dom.top || target === dom.top.left || target === dom.top.right)) {
                     interaction.addSortButtons.call(self, group, d);
                 }
+
+                // Register events
+                events.addEventHandlers.call(self, group, d);
             });
 
         cells.attr("transform", function (d) {
