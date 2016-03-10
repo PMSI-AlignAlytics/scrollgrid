@@ -15,7 +15,7 @@
             });
         } else {
             // No AMD, expect d3 to exist in the current context and publish
-            // scrollgrid to the global namespace
+            // dimple to the global namespace
             if (!context.d3) {
                 if (console && console.warn) {
                     console.warn("scrollgrid requires d3 to run.  Are you missing a reference to the d3 library?");
@@ -101,12 +101,10 @@
     // Build namespaces
     Scrollgrid.adapters = {};
     Scrollgrid.prototype.internal = {
-        eventHandlers: [],
         sizes: {
             virtual: {},
             physical: {}
         },
-        events: {},
         interaction: {},
         dom: {},
         render: {}
@@ -201,9 +199,6 @@ Scrollgrid.prototype.internal.dom.layoutDOM = function (fixedSize) {
     // Invoke draw on scroll
     dom.main.viewport.on('scroll', function () { render.draw.call(self, false); });
 
-    // Invoke eventHandlers of the target group behind the main viewport
-    dom.redirectViewportEvents.call(self);
-
     // Set the scrollable area
     dom.setScrollerSize.call(self);
 
@@ -212,7 +207,6 @@ Scrollgrid.prototype.internal.dom.layoutDOM = function (fixedSize) {
     physical.horizontalScrollbarHeight = dom.main.viewport.node().offsetHeight - dom.main.viewport.node().clientHeight;
 
 };
-
 
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
@@ -267,60 +261,6 @@ Scrollgrid.prototype.internal.dom.populatePanel = function (css) {
 
     return panel;
 };
-
-// Copyright: 2015 AlignAlytics
-// License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-// Source: /src/internal/dom/redirectViewportEvents.js
-Scrollgrid.prototype.internal.dom.redirectViewportEvents = function () {
-    "use strict";
-
-    var self = this,
-        int = self.internal,
-        dom = int.dom,
-        viewport = dom.main.viewport,
-        eventHandlers = int.eventHandlers,
-        n = eventHandlers.length,
-        j,
-        eventHandler,
-        getRedirectHandler;
-
-    getRedirectHandler = function (dom, eventType) {
-        return function () {
-            var mouse,
-                svg,
-                rpos,
-                list,
-                target,
-                g,
-                targetEventHandler;
-
-            mouse = d3.mouse(this);
-
-            svg = dom.main.svg.node();
-            rpos = svg.createSVGRect();
-            rpos.x = mouse[0];
-            rpos.y = mouse[1];
-            rpos.width = 1;
-            rpos.height = 1;
-
-            list = svg.getIntersectionList(rpos, null);
-            if (list.length) {
-                target = list[0].parentNode;
-                g = d3.select(target);
-                targetEventHandler = g.on(eventType);
-                if (targetEventHandler) {
-                    targetEventHandler.call(target, g.datum());
-                }
-            }
-        };
-    };
-
-    for (j = 0; j < n; j += 1) {
-        eventHandler = eventHandlers[j];
-        viewport.on(eventHandler.type, getRedirectHandler(dom, eventHandler.type));
-    }
-};
-
 
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
@@ -389,31 +329,6 @@ Scrollgrid.prototype.internal.dom.setScrollerSize = function () {
         .style('height', physical.totalInnerHeight + 'px');
 
 };
-
-// Copyright: 2015 AlignAlytics
-// License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-// Source: /src/internal/render/renderBackground.js
-Scrollgrid.prototype.internal.events.addEventHandlers = function (g, viewData) {
-    "use strict";
-
-    var self = this,
-        int = self.internal,
-        eventHandlers = int.eventHandlers,
-        n = eventHandlers.length,
-        i,
-        eventHandler;
-
-    g.attr("data-row", viewData.rowIndex)
-        .attr("data-col", viewData.columnIndex);
-
-    for (i = 0; i < n; i += 1) {
-        eventHandler = eventHandlers[i];
-        g.on(eventHandler.type, eventHandler.listener, eventHandler.capture);
-    }
-};
-
-
-
 
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
@@ -1150,7 +1065,6 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
         render = int.render,
         dom = int.dom,
         interaction = int.interaction,
-        events = int.events,
         cells,
         data;
 
@@ -1201,9 +1115,6 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
                 if (interaction.allowSorting && (target === dom.top || target === dom.top.left || target === dom.top.right)) {
                     interaction.addSortButtons.call(self, group, d);
                 }
-
-                // Register events
-                events.addEventHandlers.call(self, group, d);
             });
 
         cells.attr("transform", function (d) {
@@ -1215,7 +1126,6 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
 
     }
 };
-
 
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
@@ -1588,7 +1498,7 @@ Scrollgrid.adapters.simple = function (data, options) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/addFormatRules.js
-Scrollgrid.prototype.addFormatRules = function (rules, silent) {
+Scrollgrid.prototype.addFormatRules = function (rules) {
     "use strict";
 
     var render = this.internal.render,
@@ -1598,9 +1508,7 @@ Scrollgrid.prototype.addFormatRules = function (rules, silent) {
         // Set the value and redraw but return self for chaining
         render.formatRules = render.formatRules.concat(rules);
         physical.initialiseColumns.call(this);
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return render.formatRules;
@@ -1610,7 +1518,7 @@ Scrollgrid.prototype.addFormatRules = function (rules, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/allowColumnResizing.js
-Scrollgrid.prototype.allowColumnResizing = function (value, silent) {
+Scrollgrid.prototype.allowColumnResizing = function (value) {
     "use strict";
 
     var interaction = this.internal.interaction,
@@ -1622,9 +1530,7 @@ Scrollgrid.prototype.allowColumnResizing = function (value, silent) {
         // Set the value and redraw but return self for chaining
         interaction.allowColumnResizing = value;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1634,7 +1540,7 @@ Scrollgrid.prototype.allowColumnResizing = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/allowSorting.js
-Scrollgrid.prototype.allowSorting = function (value, silent) {
+Scrollgrid.prototype.allowSorting = function (value) {
     "use strict";
 
     var interaction = this.internal.interaction,
@@ -1646,9 +1552,7 @@ Scrollgrid.prototype.allowSorting = function (value, silent) {
         // Set the value and redraw but return self for chaining
         interaction.allowSorting = value;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1658,7 +1562,7 @@ Scrollgrid.prototype.allowSorting = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/cellPadding.js
-Scrollgrid.prototype.cellPadding = function (value, silent) {
+Scrollgrid.prototype.cellPadding = function (value) {
     "use strict";
 
     var physical = this.internal.sizes.physical,
@@ -1670,9 +1574,7 @@ Scrollgrid.prototype.cellPadding = function (value, silent) {
         // Set the value and redraw but return self for chaining
         physical.cellPadding = value;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1682,7 +1584,7 @@ Scrollgrid.prototype.cellPadding = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/data.js
-Scrollgrid.prototype.data = function (data, silent) {
+Scrollgrid.prototype.data = function (data) {
     "use strict";
 
     var int = this.internal,
@@ -1718,9 +1620,7 @@ Scrollgrid.prototype.data = function (data, silent) {
         virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
 
         // Render the control
-        if (!silent) {
-            this.refresh(false);
-        }
+        this.refresh(false);
 
     }
 
@@ -1731,7 +1631,7 @@ Scrollgrid.prototype.data = function (data, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/dragHandleWidth.js
-Scrollgrid.prototype.dragHandleWidth = function (value, silent) {
+Scrollgrid.prototype.dragHandleWidth = function (value) {
     "use strict";
 
     var physical = this.internal.sizes.physical,
@@ -1743,9 +1643,7 @@ Scrollgrid.prototype.dragHandleWidth = function (value, silent) {
         // Set the value and redraw but return self for chaining
         physical.dragHandleWidth = value;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1755,7 +1653,7 @@ Scrollgrid.prototype.dragHandleWidth = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/footerColumns.js
-Scrollgrid.prototype.footerColumns = function (value, silent) {
+Scrollgrid.prototype.footerColumns = function (value) {
     "use strict";
 
     var virtual = this.internal.sizes.virtual,
@@ -1768,9 +1666,7 @@ Scrollgrid.prototype.footerColumns = function (value, silent) {
         virtual.right = value;
         virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1780,7 +1676,7 @@ Scrollgrid.prototype.footerColumns = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/footerRowHeight.js
-Scrollgrid.prototype.footerRowHeight = function (value, silent) {
+Scrollgrid.prototype.footerRowHeight = function (value) {
     "use strict";
 
     var physical = this.internal.sizes.physical,
@@ -1792,9 +1688,7 @@ Scrollgrid.prototype.footerRowHeight = function (value, silent) {
         // Set the value and redraw but return self for chaining
         physical.footerRowHeight = value;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1804,7 +1698,7 @@ Scrollgrid.prototype.footerRowHeight = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/footerRows.js
-Scrollgrid.prototype.footerRows = function (value, silent) {
+Scrollgrid.prototype.footerRows = function (value) {
     "use strict";
 
     var virtual = this.internal.sizes.virtual,
@@ -1817,9 +1711,7 @@ Scrollgrid.prototype.footerRows = function (value, silent) {
         virtual.bottom = value;
         virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1829,7 +1721,7 @@ Scrollgrid.prototype.footerRows = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/formatRules.js
-Scrollgrid.prototype.formatRules = function (value, silent) {
+Scrollgrid.prototype.formatRules = function (value) {
     "use strict";
 
     var render = this.internal.render,
@@ -1843,9 +1735,7 @@ Scrollgrid.prototype.formatRules = function (value, silent) {
         render.formatRules = value;
         physical.initialiseColumns.call(this);
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1855,7 +1745,7 @@ Scrollgrid.prototype.formatRules = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/headerColumns.js
-Scrollgrid.prototype.headerColumns = function (value, silent) {
+Scrollgrid.prototype.headerColumns = function (value) {
     "use strict";
 
     var virtual = this.internal.sizes.virtual,
@@ -1868,9 +1758,7 @@ Scrollgrid.prototype.headerColumns = function (value, silent) {
         virtual.left = value;
         virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1880,7 +1768,7 @@ Scrollgrid.prototype.headerColumns = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/headerRowHeight.js
-Scrollgrid.prototype.headerRowHeight = function (value, silent) {
+Scrollgrid.prototype.headerRowHeight = function (value) {
     "use strict";
 
     var physical = this.internal.sizes.physical,
@@ -1892,9 +1780,7 @@ Scrollgrid.prototype.headerRowHeight = function (value, silent) {
         // Set the value and redraw but return self for chaining
         physical.headerRowHeight = value;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1904,7 +1790,7 @@ Scrollgrid.prototype.headerRowHeight = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/headerRows.js
-Scrollgrid.prototype.headerRows = function (value, silent) {
+Scrollgrid.prototype.headerRows = function (value) {
     "use strict";
 
     var virtual = this.internal.sizes.virtual,
@@ -1917,31 +1803,12 @@ Scrollgrid.prototype.headerRows = function (value, silent) {
         virtual.top = value;
         virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
 
 };
-
-// Copyright: 2015 AlignAlytics
-// License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
-// Source: /src/external/on.js
-Scrollgrid.prototype.on = function (type, listener, capture) {
-    "use strict";
-
-    var int = this.internal,
-        eventHandlers = int.eventHandlers;
-
-    eventHandlers.push({
-        type: type,
-        listener: listener,
-        capture: capture
-    });
-};
-
 
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
@@ -1963,7 +1830,7 @@ Scrollgrid.prototype.refresh = function (maintainCache) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/rowHeight.js
-Scrollgrid.prototype.rowHeight = function (value, silent) {
+Scrollgrid.prototype.rowHeight = function (value) {
     "use strict";
 
     var physical = this.internal.sizes.physical,
@@ -1975,9 +1842,7 @@ Scrollgrid.prototype.rowHeight = function (value, silent) {
         // Set the value and redraw but return self for chaining
         physical.rowHeight = value;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;
@@ -1987,7 +1852,7 @@ Scrollgrid.prototype.rowHeight = function (value, silent) {
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/sortIconSize.js
-Scrollgrid.prototype.sortIconSize = function (value, silent) {
+Scrollgrid.prototype.sortIconSize = function (value) {
     "use strict";
 
     var render = this.internal.render,
@@ -1999,9 +1864,7 @@ Scrollgrid.prototype.sortIconSize = function (value, silent) {
         // Set the value and redraw but return self for chaining
         render.sortIconSize = value;
         result = this;
-        if (!silent) {
-            this.refresh();
-        }
+        this.refresh();
     }
 
     return result;

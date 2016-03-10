@@ -42,9 +42,11 @@ Scrollgrid.prototype.internal.render.draw = function (clearCache) {
     render.renderRegion.call(this, dom.bottom.right, {}, x.right, y.bottom, clearCache);
 
     // Add resize handles
-    interaction.addResizeHandles.call(this, dom.top.left, x.left);
-    interaction.addResizeHandles.call(this, dom.top, x.middle, p.x);
-    interaction.addResizeHandles.call(this, dom.top.right, x.right);
+    if (interaction.allowColumnResizing) {
+        interaction.addResizeHandles.call(this, dom.top.left, x.left);
+        interaction.addResizeHandles.call(this, dom.top, x.middle, p.x);
+        interaction.addResizeHandles.call(this, dom.top.right, x.right);
+    }
 
     // Calculate if the rendering means that the width of the
     // whole table should change and layout accordingly

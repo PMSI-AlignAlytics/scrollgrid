@@ -2,7 +2,7 @@
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/external/data.js
-Scrollgrid.prototype.data = function (data) {
+Scrollgrid.prototype.data = function (data, silent) {
     "use strict";
 
     var int = this.internal,
@@ -38,7 +38,9 @@ Scrollgrid.prototype.data = function (data) {
         virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
 
         // Render the control
-        this.refresh(false);
+        if (!silent) {
+            this.refresh(false);
+        }
 
     }
 

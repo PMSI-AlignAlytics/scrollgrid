@@ -27,16 +27,21 @@
         var table = Scrollgrid.init('#myTable', {
             autoResize: true,
             headerRows: 1,
+            footerRows: 1,
             formatRules: [
-                { row: "*", column: "*", columnWidth: 100 },
-                { row: "*", column: "2", alignment: 'left' },
+                { row: "*", column: "2", alignment: 'left', columnWidth: 300 },
                 { row: "*", column: "3", alignment: 'right' },
                 { row: "*", column: "4", alignment: 'center' },
                 { row: "2:-1", column: "11", formatter: d3.format(",.0f")}
             ]
         });
+        table.on("click", function (d) {
+            table.addFormatRules({ row: d.rowIndex + 1, column: d.columnIndex + 1, foregroundStyle: "my-cool-class" });
+        });
         d3.tsv("/examples/data/example_data.tsv", function (data) {
             table.data(Scrollgrid.adapters.json(data));
         });
+
+
     </script>
 </div>

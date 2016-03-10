@@ -61,6 +61,9 @@ Scrollgrid.prototype.internal.dom.layoutDOM = function (fixedSize) {
     // Invoke draw on scroll
     dom.main.viewport.on('scroll', function () { render.draw.call(self, false); });
 
+    // Invoke eventHandlers of the target group behind the main viewport
+    dom.redirectViewportEvents.call(self);
+
     // Set the scrollable area
     dom.setScrollerSize.call(self);
 

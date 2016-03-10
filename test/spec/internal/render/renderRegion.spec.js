@@ -254,6 +254,11 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
                     expect(mock.internal.interaction.addSortButtons).not.toHaveBeenCalled();
                 });
 
+                it("should call addEventHandlers", function () {
+                    each(datum);
+                    expect(mock.internal.events.addEventHandlers).toHaveBeenCalled();
+                });
+
             });
 
             it("should set the transform to offset the x and y", function () {
@@ -270,9 +275,18 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
 
         });
 
-        it("should add sort buttons to the top left panel", function () {
+        it("should not add sort buttons to the top left panel if column sorting is off", function () {
             var panel;
             panel = mock.internal.dom.top.left;
+            mock.internal.interaction.allowSorting = true;
+            underTest.call(mock, panel, physicalOffset, xVirtual, yVirtual, false);
+            expect(mock.internal.interaction.addSortButtons).not.toHaveBeenCalled();
+        });
+
+        it("should add sort buttons to the top left panel if column sorting is on", function () {
+            var panel;
+            panel = mock.internal.dom.top.left;
+            mock.internal.interaction.allowSorting = true;
             underTest.call(mock, panel, physicalOffset, xVirtual, yVirtual, false);
             panel.content.selections[".sg-no-style--cell-selector"][0].children.g[0].each.calls.argsFor(0)[0]({
                 sortIcon: "Sort Icon",
@@ -285,6 +299,7 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
         it("should add sort buttons to the top panel", function () {
             var panel;
             panel = mock.internal.dom.top;
+            mock.internal.interaction.allowSorting = true;
             underTest.call(mock, panel, physicalOffset, xVirtual, yVirtual, false);
             panel.content.selections[".sg-no-style--cell-selector"][0].children.g[0].each.calls.argsFor(0)[0]({
                 sortIcon: "Sort Icon",
@@ -297,6 +312,7 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
         it("should add sort buttons to the top right panel", function () {
             var panel;
             panel = mock.internal.dom.top.right;
+            mock.internal.interaction.allowSorting = true;
             underTest.call(mock, panel, physicalOffset, xVirtual, yVirtual, false);
             panel.content.selections[".sg-no-style--cell-selector"][0].children.g[0].each.calls.argsFor(0)[0]({
                 sortIcon: "Sort Icon",
