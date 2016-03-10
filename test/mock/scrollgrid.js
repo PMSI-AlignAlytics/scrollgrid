@@ -186,6 +186,7 @@ define(["d3"], function (d3) {
                 getTextPosition: jasmine.createSpy("getTextPosition").and.returnValue("Text Position"),
                 renderText: jasmine.createSpy("renderText"),
                 renderSortIcon: jasmine.createSpy("renderSortIcon"),
+                renderRegionForeground: jasmine.createSpy("renderRegionForeground"),
                 cropText: jasmine.createSpy("cropText"),
                 sortIcon: jasmine.createSpy("sortIcon"),
                 formatRules: ['A', 'B', 'C']

@@ -25,10 +25,6 @@ define(['d3', 'mock', 'render/getDataInBounds'], function (d3, mock) {
             result = underTest.call(mock, viewArea);
         });
 
-        it("should pass the view area to the adapter to load the data or the area", function () {
-            expect(mock.adapter.loadDataRange).toHaveBeenCalledWith(viewArea);
-        });
-
         it("should return an array for every cell in the view area", function () {
             expect(result.length).toEqual(4); // (right - left) * (bottom - top)
         });
@@ -185,13 +181,6 @@ define(['d3', 'mock', 'render/getDataInBounds'], function (d3, mock) {
             expect(result[1].formatter).toBeNull();
             expect(result[2].formatter).toBeNull();
             expect(result[3].formatter).toBeNull();
-        });
-
-        it("should set the load method", function () {
-            expect(result[0].getValue).toEqual("getValue method");
-            expect(result[1].getValue).toEqual("getValue method");
-            expect(result[2].getValue).toEqual("getValue method");
-            expect(result[3].getValue).toEqual("getValue method");
         });
 
         it("should call the apply rules method passing the returned dataset", function () {
