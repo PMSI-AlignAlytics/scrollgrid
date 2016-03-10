@@ -11,18 +11,21 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
         dom = int.dom,
         interaction = int.interaction,
         cells,
-        data;
+        metadata,
+        bounds;
 
     if ((xVirtual.left || 0) !== (xVirtual.right || 0) && (yVirtual.top || 0) !== (yVirtual.bottom || 0)) {
 
-        data = render.getDataInBounds.call(self, {
+        bounds = {
             startX: physicalOffset.x || 0,
             startY: physicalOffset.y || 0,
             top: yVirtual.top || 0,
             bottom: yVirtual.bottom || 0,
             left: xVirtual.left || 0,
             right: xVirtual.right || 0
-        });
+        };
+
+        metadata = render.getDataInBounds.call(self, bounds);
 
         // On refresh we will clear and redraw everything.  This can
         // be invoked externally or internally on full grid changes.  On scroll or resize
@@ -35,7 +38,7 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
 
         cells = target.content
             .selectAll(".sg-no-style--cell-selector")
-            .data(data, function (d) {
+            .data(metadata, function (d) {
                 return d.key;
             });
 
@@ -49,18 +52,15 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
                 if (d.renderBackground) {
                     d.renderBackground.call(self, group, d);
                 }
-                if (d.renderBetween) {
-                    d.renderBetween.call(self, group, d);
-                }
-                if (d.renderForeground) {
-                    d.renderForeground.call(self, group, d);
-                }
                 render.renderSortIcon.call(self, d, group, !(!d.sortIcon || d.sortIcon === 'none'));
                 // Add some interaction to the headers
                 if (target === dom.top || target === dom.top.left || target === dom.top.right) {
                     interaction.addSortButtons.call(self, group, d);
                 }
             });
+
+        // Draw the foreground separately to allow for asynchronous adapters
+        render.renderRegionForeground.call(this, bounds, cells);
 
         cells.attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")";

@@ -5,7 +5,7 @@
 Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
     "use strict";
 
-    var i, r, c, x,
+    var i, r, c, x, vc, vr = 0,
         int = this.internal,
         sizes = int.sizes,
         render = int.render,
@@ -16,17 +16,14 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
         runningY,
         rowHeight = 0,
         visibleData = [],
-        adjustments,
-        getValue;
+        adjustments;
 
     runningY = viewArea.startY;
-
-    // Load the data range and get the accessor
-    getValue = this.adapter.loadDataRange(viewArea);
 
     for (r = viewArea.top || 0, i = 0; r < viewArea.bottom || 0; r += 1) {
         rowHeight = physical.getRowHeight.call(this, r);
         runningX = viewArea.startX || 0;
+        vc = 0;
         for (c = viewArea.left || 0; c < viewArea.right || 0; c += 1, i += 1) {
             // Get any measurement modifiers based on cell position
             adjustments = render.calculateCellAdjustments.call(this, r, c);
@@ -38,6 +35,8 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
             visibleData[i] = {
                 x: x,
                 y: Math.floor(runningY) + adjustments.y + 0.5,
+                visibleRow: vr,
+                visibleColumn: vc,
                 boxWidth: Math.ceil(column.width) + adjustments.boxWidth,
                 boxHeight: Math.ceil(rowHeight) + adjustments.boxHeight,
                 textWidth: Math.ceil(column.width) + adjustments.textWidth,
@@ -51,7 +50,6 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
                 columnIndex: c,
                 column: column,
                 formatter: null,
-                getValue: getValue,
                 renderForeground: render.renderForeground,
                 renderBetween: null,
                 renderBackground: render.renderBackground
@@ -60,8 +58,10 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
             // want to key by any value which should result in a redraw of a particular cell,
             // this has huge performance benefits.  The
             visibleData[i].key = visibleData[i].columnIndex + '_' + visibleData[i].rowIndex + "_" + visibleData[i].boxHeight + "_" + visibleData[i].boxWidth + "_" + visibleData[i].sortIcon;
+            vc += 1;
             runningX += column.width;
         }
+        vr += 1;
         runningY += rowHeight;
     }
 
