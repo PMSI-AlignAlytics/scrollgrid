@@ -110,16 +110,19 @@ define(['d3', 'mock', 'adapters/json'], function (d3, mock) {
                 ]);
             });
 
-            it("should return a function which gets data from the original table", function () {
-                var cb = jasmine.createSpy("Callback");
-                result.loadDataRange()(2, 1, cb);
-                expect(cb).toHaveBeenCalledWith(50);
-            });
-
-            it("should return zero for data out of the bounds of the data", function () {
-                var cb = jasmine.createSpy("Callback");
-                result.loadDataRange()(2, 5, cb);
-                expect(cb).toHaveBeenCalledWith(0);
+            it("should invoke the callback with the correct subset of data", function () {
+                var cb = jasmine.createSpy("callback");
+                data = [
+                    { "A": 1, "B": 40, "C": 300 },
+                    { "A": 3, "B": 50, "C": 700 },
+                    { "A": 5, "B": 20, "C": 400 },
+                    { "A": 4, "B": 70, "C": 200 },
+                    { "A": 2, "B": 10, "C": 100 },
+                    { "A": 7, "B": 60, "C": 600 },
+                    { "A": 6, "B": 30, "C": 500 }
+                ];
+                result.loadDataRange({top: 0, bottom: 2, left: 0, right: 2}, cb);
+                expect(cb).toHaveBeenCalledWith([["A", "B"], [1, 40]]);
             });
 
         });

@@ -38,10 +38,16 @@ Scrollgrid.adapters.simple = function (data, options) {
                 table.push(foots[j]);
             }
         },
-        loadDataRange: function () {
-            return function (row, column, callback) {
-                callback(table[row][column] || 0);
-            };
+        loadDataRange: function (viewArea, callback) {
+            var r, c, row, d = [];
+            for (r = viewArea.top; r < viewArea.bottom; r += 1) {
+                row = [];
+                for (c = viewArea.left; c < viewArea.right; c += 1) {
+                    row.push(table[r][c]);
+                }
+                d.push(row);
+            }
+            callback(d);
         }
     };
 

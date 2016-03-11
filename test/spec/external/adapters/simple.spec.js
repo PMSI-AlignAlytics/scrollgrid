@@ -106,16 +106,20 @@ define(['d3', 'mock', 'adapters/simple'], function (d3, mock) {
                 ]);
             });
 
-            it("should return a function which gets data from the original table", function () {
-                var cb = jasmine.createSpy("Callback");
-                result.loadDataRange()(2, 1, cb);
-                expect(cb).toHaveBeenCalledWith(50);
-            });
-
-            it("should return zero for data out of the bounds of the data", function () {
-                var cb = jasmine.createSpy("Callback");
-                result.loadDataRange()(2, 5, cb);
-                expect(cb).toHaveBeenCalledWith(0);
+            it("should invoke the callback with the correct subset of data", function () {
+                var cb = jasmine.createSpy("callback");
+                data = [
+                    ["A", "B", "C"],
+                    [1, 40, 300],
+                    [4, 70, 200],
+                    [7, 60, 600],
+                    [3, 50, 700],
+                    [5, 20, 400],
+                    [2, 10, 100],
+                    [6, 30, 500]
+                ];
+                result.loadDataRange({top: 0, bottom: 2, left: 0, right: 2}, cb);
+                expect(cb).toHaveBeenCalledWith([["A", "B"], [1, 40]]);
             });
 
         });
