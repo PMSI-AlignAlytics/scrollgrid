@@ -50,15 +50,15 @@ define(['d3', 'mock', 'render/matchRule'], function (d3, mock) {
             expect(underTest.call(mock, "1,3,-2", 2, 100)).toEqual(false);
         });
 
-        it("should match first element an array of elements", function () {
+        it("should match first element of an array of elements", function () {
             expect(underTest.call(mock, "2:4", 2, 100)).toEqual(true);
         });
 
-        it("should match middle element an array of elements", function () {
+        it("should match middle element of an array of elements", function () {
             expect(underTest.call(mock, "2:4", 3, 100)).toEqual(true);
         });
 
-        it("should match last element an array of elements", function () {
+        it("should match last element of an array of elements", function () {
             expect(underTest.call(mock, "2:4", 4, 100)).toEqual(true);
         });
 
@@ -88,6 +88,22 @@ define(['d3', 'mock', 'render/matchRule'], function (d3, mock) {
 
         it("should not match elements outside array of elements as part of a list", function () {
             expect(underTest.call(mock, "1,5:6,9", 4, 100)).toEqual(false);
+        });
+
+        it("should match the first element in a skipped array", function () {
+            expect(underTest.call(mock, "1(2)10", 1, 100)).toEqual(true);
+        });
+
+        it("should not match a skipped element in a skipped array", function () {
+            expect(underTest.call(mock, "1(2)10", 2, 100)).toEqual(false);
+        });
+
+        it("should match an unskipped element in a skipped array", function () {
+            expect(underTest.call(mock, "1(2)10", 3, 100)).toEqual(true);
+        });
+
+        it("should match whole array when skip value is less than 1", function () {
+            expect(underTest.call(mock, "1(0)10", 2, 100)).toEqual(true);
         });
 
     });
