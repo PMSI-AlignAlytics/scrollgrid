@@ -20,6 +20,10 @@
         rect.sg-resize-handle:hover {
             opacity: 0.5;
         }
+        .test {
+            fill: blue !important;
+            stroke: red !important;
+        }
     </style>
     <script src="/lib/d3.v3.4.8.js"></script>
     <script src="/dist/scrollgrid.latest.js"></script>
@@ -27,12 +31,15 @@
         var table = Scrollgrid.init('#myTable', {
             autoResize: true,
             headerRows: 1,
+            headerColumns: 1,
             footerRows: 1,
+            footerColumns: 1,
             formatRules: [
                 { row: "*", column: "2", alignment: 'left', columnWidth: 300 },
                 { row: "*", column: "3", alignment: 'right' },
                 { row: "*", column: "4", alignment: 'center' },
-                { row: "2:-1", column: "11", formatter: d3.format(",.0f")}
+                { row: "2:-1", column: "11", formatter: d3.format(",.0f")},
+                { row: "3,1,-2", column: "1,5,-2", columnSpan: 3, rowSpan: 4, alignment: 'center', backgroundStyle: 'test'}
             ]
         });
         table.on("click", function (d) {

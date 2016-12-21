@@ -2,16 +2,26 @@
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/internal/render/matchRule.js
-Scrollgrid.prototype.internal.render.matchRule = function (ruleSelector, toCompare, extremity) {
+Scrollgrid.prototype.internal.render.matchRule = function (ruleSelector, toCompare, extremity, span, cutPoints) {
     "use strict";
 
     // Default for selection is to match.  So no row or column definition will match all
     var match = false,
         defs,
+        upperOffset,
         rangeMarker,
         lhs,
         rhs,
-        i;
+        upper,
+        lower,
+        i,
+        c;
+
+    // Get the number of places to add to the upper extremity of the range
+    upperOffset = Math.max((span || 0) - 1, 0);
+    // If there is a header and/or a footer there will be intermediate points over which spans do not cross
+    // this array should contain each index at which a region ends
+    cutPoints = cutPoints || [0, extremity];
 
     // Valid rule selectors are:
     //      "12"            Match 12th element of dimension
@@ -42,7 +52,18 @@ Scrollgrid.prototype.internal.render.matchRule = function (ruleSelector, toCompa
             lhs = (lhs < 0 ? extremity + lhs + 1 : lhs);
             rhs = (rhs < 0 ? extremity + rhs + 1 : rhs);
             // Match them from min to max regardless of the way they are defined
-            match = match || (Math.min(lhs, rhs) <= toCompare && Math.max(lhs, rhs) >= toCompare);
+            lower = Math.min(lhs, rhs);
+            upper = Math.max(lhs, rhs);
+            // If the range crosses any cut points they need to be evaluated as separate ranges
+            for (c = 0; c < cutPoints.length - 1; c += 1) {
+                if (toCompare > cutPoints[c] && upper > cutPoints[c] && toCompare <= cutPoints[c + 1] && lower <= cutPoints[c + 1]) {
+                    match = match || (Math.max(lower, cutPoints[c]) <= toCompare && Math.min(upper + upperOffset, cutPoints[c + 1]) >= toCompare);
+                    // If any match the rule passes
+                    if (match) {
+                        break;
+                    }
+                }
+            }
             // If any match the rule passes
             if (match) {
                 break;

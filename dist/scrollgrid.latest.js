@@ -660,6 +660,7 @@ Scrollgrid.prototype.internal.render.applyRules = function (data) {
     var int = this.internal,
         render = int.render,
         sizes = int.sizes,
+        physical = sizes.physical,
         virtual = sizes.virtual,
         rule,
         key,
@@ -667,57 +668,93 @@ Scrollgrid.prototype.internal.render.applyRules = function (data) {
         i,
         k,
         r,
-        c;
+        c,
+        row,
+        col,
+        bound;
 
     if (render.formatRules) {
 
         // Iterate the focus data
         for (i = 0; i < data.length; i += 1) {
 
-            ruleDefinition = {};
+            if (data[i]) {
 
-            // Rules use 1 based indices for rows and columns, this is because they use negative
-            // notation to refer to elements from the end e.g. row: -1 = last row.  This would be
-            // inconsistent if 0 was the first row.
-            r = data[i].rowIndex + 1;
-            c = data[i].columnIndex + 1;
+                ruleDefinition = {};
 
-            for (k = 0; k < render.formatRules.length; k += 1) {
-                rule = render.formatRules[k];
-                if (render.matchRule.call(this, rule.row, r, virtual.outerHeight) && render.matchRule.call(this, rule.column, c, virtual.outerWidth)) {
-                    // Iterate the rule properties and apply them to the object
-                    for (key in rule) {
-                        if (rule.hasOwnProperty(key) && key !== "row" && key !== "column") {
-                            ruleDefinition[key] = rule[key];
+                // Rules use 1 based indices for rows and columns, this is because they use negative
+                // notation to refer to elements from the end e.g. row: -1 = last row.  This would be
+                // inconsistent if 0 was the first row.
+                r = data[i].rowIndex + 1;
+                c = data[i].columnIndex + 1;
+
+                for (k = 0; k < render.formatRules.length; k += 1) {
+                    rule = render.formatRules[k];
+                    if (render.matchRule.call(this, rule.row, r, virtual.outerHeight) && render.matchRule.call(this, rule.column, c, virtual.outerWidth)) {
+                        // Iterate the rule properties and apply them to the object
+                        for (key in rule) {
+                            if (rule.hasOwnProperty(key) && key !== "row" && key !== "column") {
+                                ruleDefinition[key] = rule[key];
+                            }
                         }
                     }
                 }
-            }
 
-            // Apply the combined rules
-            if (ruleDefinition.formatter) {
-                data[i].formatter = ruleDefinition.formatter;
-            }
-            if (ruleDefinition.alignment) {
-                data[i].alignment = ruleDefinition.alignment;
-            }
-            if (ruleDefinition.cellPadding) {
-                data[i].cellPadding = ruleDefinition.cellPadding;
-            }
-            if (ruleDefinition.backgroundStyle) {
-                data[i].backgroundStyle += " " + ruleDefinition.backgroundStyle;
-            }
-            if (ruleDefinition.foregroundStyle) {
-                data[i].foregroundStyle += " " + ruleDefinition.foregroundStyle;
-            }
-            if (ruleDefinition.renderBackground) {
-                data[i].renderBackground = ruleDefinition.renderBackground;
-            }
-            if (ruleDefinition.renderBetween) {
-                data[i].renderBetween = ruleDefinition.renderBetween;
-            }
-            if (ruleDefinition.renderForeground) {
-                data[i].renderForeground = ruleDefinition.renderForeground;
+                // Apply the combined rules
+                if (ruleDefinition.formatter) {
+                    data[i].formatter = ruleDefinition.formatter;
+                }
+                if (ruleDefinition.alignment) {
+                    data[i].alignment = ruleDefinition.alignment;
+                }
+                if (ruleDefinition.cellPadding) {
+                    data[i].cellPadding = ruleDefinition.cellPadding;
+                }
+                if (ruleDefinition.backgroundStyle) {
+                    data[i].backgroundStyle += " " + ruleDefinition.backgroundStyle;
+                }
+                if (ruleDefinition.foregroundStyle) {
+                    data[i].foregroundStyle += " " + ruleDefinition.foregroundStyle;
+                }
+                if (ruleDefinition.renderBackground) {
+                    data[i].renderBackground = ruleDefinition.renderBackground;
+                }
+                if (ruleDefinition.renderBetween) {
+                    data[i].renderBetween = ruleDefinition.renderBetween;
+                }
+                if (ruleDefinition.renderForeground) {
+                    data[i].renderForeground = ruleDefinition.renderForeground;
+                }
+                if (ruleDefinition.columnSpan) {
+                    data[i].columnSpan = ruleDefinition.columnSpan;
+                    if (data[i].columnIndex < virtual.left) {
+                        bound = virtual.left;
+                    } else if (data[i].columnIndex > virtual.outerWidth - virtual.right) {
+                        bound = virtual.outerWidth;
+                    } else {
+                        bound = virtual.outerWidth - virtual.right;
+                    }
+                    bound = Math.min(bound, data[i].columnIndex + data[i].columnSpan);
+                    for (col = data[i].columnIndex + 1; col < bound; col += 1) {
+                        data[i].boxWidth += this.columns[col].width;
+                        data[i].textWidth += this.columns[col].width;
+                    }
+                }
+                if (ruleDefinition.rowSpan) {
+                    data[i].rowSpan = ruleDefinition.rowSpan;
+                    if (data[i].rowIndex < virtual.top) {
+                        bound = virtual.top;
+                    } else if (data[i].rowIndex > virtual.outerHeight - virtual.bottom) {
+                        bound = virtual.outerHeight;
+                    } else {
+                        bound = virtual.outerHeight - virtual.bottom;
+                    }
+                    bound = Math.min(bound, data[i].rowIndex + data[i].rowSpan);
+                    for (row = data[i].rowIndex + 1; row < bound; row += 1) {
+                        data[i].boxHeight += physical.getRowHeight.call(this, row);
+                        data[i].textHeight += physical.getRowHeight.call(this, row);
+                    }
+                }
             }
         }
     }
@@ -892,7 +929,9 @@ Scrollgrid.prototype.internal.render.getDataBounds = function (physicalViewArea)
         sizes = int.sizes,
         virtual = sizes.virtual,
         physical = sizes.physical,
+        render = int.render,
         runningX = 0,
+        rule,
         columnWidth,
         left,
         right,
@@ -924,9 +963,40 @@ Scrollgrid.prototype.internal.render.getDataBounds = function (physicalViewArea)
     bounds.virtual.left = Math.max(Math.floor(left), 0);
     bounds.virtual.right = Math.min(Math.ceil(right + 1), virtual.innerWidth);
 
+    // Check for rules with spans intersecting the top or left edges of the bounds and stretch accordingly
+    // We don't need to stretch the bottom or right as the top left cell in each case contains the information
+    // we are interested in
+    if (render.formatRules) {
+        i = 0;
+        while (i < render.formatRules.length && bounds.virtual.left > 0) {
+            rule = render.formatRules[i];
+            // If the left hand edge matches a span push the bound out by one and run the same rule again.  There is no
+            // need to recheck earlier rules as the bounds will only move in one direction
+            if (rule.columnSpan && render.matchRule.call(this, rule.column, bounds.virtual.left, virtual.outerWidth, rule.columnSpan)) {
+                bounds.virtual.left -= 1;
+                bounds.physical.x -= cols[bounds.virtual.left].width;
+            } else {
+                i += 1;
+            }
+        }
+        i = 0;
+        while (i < render.formatRules.length && bounds.virtual.top > 0) {
+            rule = render.formatRules[i];
+            // If the left hand edge matches a span push the bound out by one and run the same rule again.  There is no
+            // need to recheck earlier rules as the bounds will only move in one direction
+            if (rule.rowSpan && render.matchRule.call(this, rule.row, bounds.virtual.top, virtual.outerHeight, rule.rowSpan)) {
+                bounds.virtual.top -= 1;
+                bounds.physical.y -= physical.getRowHeight.call(this, bounds.virtual.top);
+            } else {
+                i += 1;
+            }
+        }
+    }
+
     return bounds;
 
 };
+
 
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
@@ -934,15 +1004,16 @@ Scrollgrid.prototype.internal.render.getDataBounds = function (physicalViewArea)
 Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
     "use strict";
 
-    var i, r, c, x, vc, vr = 0,
+    var i, r, c, vc, vr = 0,
         int = this.internal,
         sizes = int.sizes,
         render = int.render,
         physical = sizes.physical,
+        virtual = sizes.virtual,
         cols = this.columns,
-        column,
         runningX,
         runningY,
+        cap,
         rowHeight = 0,
         visibleData = [],
         adjustments;
@@ -953,42 +1024,41 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
         rowHeight = physical.getRowHeight.call(this, r);
         runningX = viewArea.startX || 0;
         vc = 0;
-        for (c = viewArea.left || 0; c < viewArea.right || 0; c += 1, i += 1) {
-            // Get any measurement modifiers based on cell position
-            adjustments = render.calculateCellAdjustments.call(this, r, c);
-            // Get the column definition
-            column = cols[c];
-            // Get the x position of the cell
-            x = Math.floor(runningX) + adjustments.x + 0.5;
-            // Using direct assignment for speed
-            visibleData[i] = {
-                x: x,
-                y: Math.floor(runningY) + adjustments.y + 0.5,
-                visibleRow: vr,
-                visibleColumn: vc,
-                boxWidth: Math.ceil(column.width) + adjustments.boxWidth,
-                boxHeight: Math.ceil(rowHeight) + adjustments.boxHeight,
-                textWidth: Math.ceil(column.width) + adjustments.textWidth,
-                textHeight: Math.ceil(rowHeight) + adjustments.textHeight,
-                backgroundStyle: this.style.cellBackgroundPrefix + 'r' + (r + 1) + ' ' + this.style.cellBackgroundPrefix + 'c' + (c + 1),
-                foregroundStyle: this.style.cellForegroundPrefix + 'r' + (r + 1) + ' ' + this.style.cellForegroundPrefix + 'c' + (c + 1),
-                sortIcon: adjustments.sortIcon || 'none',
-                cellPadding: physical.cellPadding,
-                alignment: 'left',
-                rowIndex: r,
-                columnIndex: c,
-                column: column,
-                formatter: null,
-                renderForeground: render.renderForeground,
-                renderBetween: null,
-                renderBackground: render.renderBackground
-            };
-            // We abuse the key here, cells will be rendered on enter only, we therefore
-            // want to key by any value which should result in a redraw of a particular cell,
-            // this has huge performance benefits.  The
-            visibleData[i].key = visibleData[i].columnIndex + '_' + visibleData[i].rowIndex + "_" + visibleData[i].boxHeight + "_" + visibleData[i].boxWidth + "_" + visibleData[i].sortIcon;
+        for (c = viewArea.left || 0; c < viewArea.right || 0; c += 1) {
+
+            // Check for and ignore any cells which are consumed by a merge
+            if (!render.isMergeVictim.call(this, r + 1, c + 1)) {
+
+                // Using direct assignment for speed
+                visibleData[i] = {
+                    x: Math.floor(runningX) + 0.5,
+                    y: Math.floor(runningY) + 0.5,
+                    visibleRow: vr,
+                    visibleColumn: vc,
+                    boxWidth: Math.ceil(cols[c].width),
+                    boxHeight: Math.ceil(rowHeight),
+                    textWidth: Math.ceil(cols[c].width),
+                    textHeight: Math.ceil(rowHeight),
+                    backgroundStyle: this.style.cellBackgroundPrefix + 'r' + (r + 1) + ' ' + this.style.cellBackgroundPrefix + 'c' + (c + 1),
+                    foregroundStyle: this.style.cellForegroundPrefix + 'r' + (r + 1) + ' ' + this.style.cellForegroundPrefix + 'c' + (c + 1),
+                    cellPadding: physical.cellPadding,
+                    alignment: 'left',
+                    rowIndex: r,
+                    columnIndex: c,
+                    column: cols[c],
+                    columnSpan: 1,
+                    rowSpan: 1,
+                    formatter: null,
+                    renderForeground: render.renderForeground,
+                    renderBetween: null,
+                    renderBackground: render.renderBackground
+                };
+
+                // Increment i
+                i += 1;
+            }
             vc += 1;
-            runningX += column.width;
+            runningX += cols[c].width;
         }
         vr += 1;
         runningY += rowHeight;
@@ -996,6 +1066,46 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
 
     // Modify the data based on the user rules
     render.applyRules.call(this, visibleData);
+
+    // This has to be done after applying rules as box size depends on column and row span rules
+    for (i = 0; i < visibleData.length; i += 1) {
+
+        // Get any measurement modifiers based on cell position of the bottom right of the span, capped at the
+        // edge of the current fixed panel
+        if (visibleData[i].rowIndex < virtual.top) {
+            cap = virtual.top;
+        } else if (visibleData[i].rowIndex < virtual.outerHeight - virtual.bottom) {
+            cap = virtual.outerHeight - virtual.bottom;
+        } else {
+            cap = virtual.outerHeight;
+        }
+        r = Math.min(visibleData[i].rowIndex + (visibleData[i].rowSpan || 1) - 1, cap);
+
+        if (visibleData[i].columnIndex < virtual.left) {
+            cap = virtual.left;
+        } else if (visibleData[i].columnIndex < virtual.outerWidth - virtual.right) {
+            cap = virtual.outerWidth - virtual.right;
+        } else {
+            cap = virtual.outerWidth;
+        }
+        c = Math.min(visibleData[i].columnIndex + (visibleData[i].columnSpan || 1) - 1, cap);
+
+        adjustments = render.calculateCellAdjustments.call(this, r, c);
+
+        // Update data with adjustments
+        visibleData[i].x += adjustments.x;
+        visibleData[i].y += adjustments.y;
+        visibleData[i].boxWidth += adjustments.boxWidth;
+        visibleData[i].boxHeight += adjustments.boxHeight;
+        visibleData[i].textWidth += adjustments.textWidth;
+        visibleData[i].textHeight += adjustments.textHeight;
+        visibleData[i].sortIcon = adjustments.sortIcon || 'none';
+
+        // We abuse the key here, cells will be rendered on enter only, we therefore
+        // want to key by any value which should result in a redraw of a particular cell,
+        // this has huge performance benefits.
+        visibleData[i].key = visibleData[i].columnIndex + '_' + visibleData[i].rowIndex + "_" + visibleData[i].boxHeight + "_" + visibleData[i].boxWidth + "_" + visibleData[i].sortIcon;
+    }
 
     return visibleData;
 
@@ -1067,17 +1177,66 @@ Scrollgrid.prototype.internal.render.getVisibleRegion = function () {
 
 // Copyright: 2015 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
+// Source: /src/internal/render/isMergeVictim.js
+Scrollgrid.prototype.internal.render.isMergeVictim = function (row, column) {
+    "use strict";
+
+    var int = this.internal,
+        render = int.render,
+        sizes = int.sizes,
+        virtual = sizes.virtual,
+        intersected = false,
+        rowCutOffs,
+        colCutOffs,
+        rule,
+        k;
+
+    if (render.formatRules) {
+
+        // Pass the bounds of the fixed panel which the current cell is in
+        colCutOffs = [0, virtual.left, virtual.outerWidth - virtual.right, virtual.outerWidth];
+        rowCutOffs = [0, virtual.top, virtual.outerHeight - virtual.bottom, virtual.outerHeight];
+
+        for (k = 0; k < render.formatRules.length; k += 1) {
+            rule = render.formatRules[k];
+            // Check that the rule doesn't match directly but does match with span
+            intersected = intersected || (
+                !(
+                    render.matchRule.call(this, rule.column, column, virtual.outerWidth) &&
+                    render.matchRule.call(this, rule.row, row, virtual.outerHeight)
+                ) &&
+                render.matchRule.call(this, rule.column, column, virtual.outerWidth, rule.columnSpan, colCutOffs) &&
+                render.matchRule.call(this, rule.row, row, virtual.outerHeight, rule.rowSpan, rowCutOffs)
+            );
+        }
+    }
+
+    return intersected;
+};
+
+// Copyright: 2015 AlignAlytics
+// License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/internal/render/matchRule.js
-Scrollgrid.prototype.internal.render.matchRule = function (ruleSelector, toCompare, extremity) {
+Scrollgrid.prototype.internal.render.matchRule = function (ruleSelector, toCompare, extremity, span, cutPoints) {
     "use strict";
 
     // Default for selection is to match.  So no row or column definition will match all
     var match = false,
         defs,
+        upperOffset,
         rangeMarker,
         lhs,
         rhs,
-        i;
+        upper,
+        lower,
+        i,
+        c;
+
+    // Get the number of places to add to the upper extremity of the range
+    upperOffset = Math.max((span || 0) - 1, 0);
+    // If there is a header and/or a footer there will be intermediate points over which spans do not cross
+    // this array should contain each index at which a region ends
+    cutPoints = cutPoints || [0, extremity];
 
     // Valid rule selectors are:
     //      "12"            Match 12th element of dimension
@@ -1108,7 +1267,18 @@ Scrollgrid.prototype.internal.render.matchRule = function (ruleSelector, toCompa
             lhs = (lhs < 0 ? extremity + lhs + 1 : lhs);
             rhs = (rhs < 0 ? extremity + rhs + 1 : rhs);
             // Match them from min to max regardless of the way they are defined
-            match = match || (Math.min(lhs, rhs) <= toCompare && Math.max(lhs, rhs) >= toCompare);
+            lower = Math.min(lhs, rhs);
+            upper = Math.max(lhs, rhs);
+            // If the range crosses any cut points they need to be evaluated as separate ranges
+            for (c = 0; c < cutPoints.length - 1; c += 1) {
+                if (toCompare > cutPoints[c] && upper > cutPoints[c] && toCompare <= cutPoints[c + 1] && lower <= cutPoints[c + 1]) {
+                    match = match || (Math.max(lower, cutPoints[c]) <= toCompare && Math.min(upper + upperOffset, cutPoints[c + 1]) >= toCompare);
+                    // If any match the rule passes
+                    if (match) {
+                        break;
+                    }
+                }
+            }
             // If any match the rule passes
             if (match) {
                 break;

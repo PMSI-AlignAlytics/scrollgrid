@@ -171,6 +171,7 @@ define(["d3"], function (d3) {
                 }),
                 getDataInBounds: jasmine.createSpy("getDataInBounds").and.returnValue("data in bounds"),
                 renderRegion: jasmine.createSpy("renderRegion"),
+                isMergeVictim: jasmine.createSpy("isMergeVictim").and.returnValue(false),
                 calculateCellAdjustments: jasmine.createSpy("calculateCellAdjustments").and.returnValue({
                     x: scrollgrid.vals.adjX,
                     y: scrollgrid.vals.adjY,
