@@ -24,6 +24,7 @@ define(function () {
             clientWidth: defaults.nodeClientWidth || 5,
             scrollLeft: defaults.nodeScrollLeft || 7,
             scrollTop: defaults.nodeScrollTop || 11,
+            style: {},
             getBBox: jasmine.createSpy("getBBox").and.returnValue(self.bounds)
         };
         self.selections = {};
@@ -42,6 +43,7 @@ define(function () {
                 returnVal = self.styles[key];
             } else {
                 self.styles[key] = value;
+                self.nodeObject.style[key.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); })] = value;
             }
             return returnVal;
         });

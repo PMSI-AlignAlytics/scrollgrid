@@ -1,8 +1,8 @@
 
-// Copyright: 2015 AlignAlytics
+// Copyright: 2017 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/internal/render/draw.js
-Scrollgrid.prototype.internal.render.draw = function (clearCache) {
+Scrollgrid.prototype.internal.render.draw = function (clearCache, reviewSize) {
     "use strict";
 
     var int = this.internal,
@@ -49,11 +49,14 @@ Scrollgrid.prototype.internal.render.draw = function (clearCache) {
     }
 
     // Calculate if the rendering means that the width of the
-    // whole table should change and layout accordingly
-    totalWidth = (physical.left + physical.totalInnerWidth + physical.right + physical.verticalScrollbarWidth);
-    fixedSize.width = (totalWidth < dom.parent.node().offsetWidth ? totalWidth : null);
-    totalHeight = (physical.top + physical.totalInnerHeight + physical.bottom + physical.horizontalScrollbarHeight);
-    fixedSize.height = (totalHeight < dom.parent.node().offsetHeight ? totalHeight : null);
-    dom.layoutDOM.call(this, fixedSize);
+    // whole table should change and layout accordingly, this only runs if the flag is set
+    // this is because it can be slow to run when scrolling
+    if (reviewSize) {
+        totalWidth = (physical.left + physical.totalInnerWidth + physical.right + physical.verticalScrollbarWidth);
+        fixedSize.width = (totalWidth < dom.parent.node().offsetWidth ? totalWidth : null);
+        totalHeight = (physical.top + physical.totalInnerHeight + physical.bottom + physical.horizontalScrollbarHeight);
+        fixedSize.height = (totalHeight < dom.parent.node().offsetHeight ? totalHeight : null);
+        dom.layoutDOM.call(this, fixedSize);
+    }
 
 };

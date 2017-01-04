@@ -34,7 +34,7 @@
     <script type="text/javascript">
 
         // GENERATE TEST DATA
-        var rc = 10, cc = 10,  d = [rc];
+        var rc = 1000, cc = 1000,  d = [rc];
         for (var r = 0; r < rc; r += 1) {
             var tr = [cc];
             for (var c = 0; c < cc; c += 1) {
@@ -49,8 +49,6 @@
             footerColumns: 2
         });
         sg.data(d);
-
-        sg.style.left.panel = "my-cool-class";
         sg.refresh(true);
     </script>
 </div>

@@ -69,21 +69,40 @@ define(['d3', 'mock', 'render/renderForeground'], function (d3, mock) {
             expect(target.children.text[0].attributes.y).toEqual(3.5);
         });
 
-        it("should call crop text with the width minus cell padding if no sort icon is specified", function () {
+        it("should not call crop text if clip path is functional", function () {
             underTest.call(mock, target, data);
-            expect(mock.internal.render.cropText).toHaveBeenCalledWith(target.children.text[0], data.textWidth - data.cellPadding);
+            expect(mock.internal.render.cropText).not.toHaveBeenCalled();
         });
 
-        it("should call crop text with the width minus cell padding if no sort icon is set to none", function () {
-            data.sortIcon = 'none';
-            underTest.call(mock, target, data);
-            expect(mock.internal.render.cropText).toHaveBeenCalledWith(target.children.text[0], data.textWidth - data.cellPadding);
-        });
+        describe("browsers which don't support clip-path", function () {
 
-        it("should should take off sort icon size and an additional padding if sort icon is defined", function () {
-            data.sortIcon = 'A defined icon';
-            underTest.call(mock, target, data);
-            expect(mock.internal.render.cropText).toHaveBeenCalledWith(target.children.text[0], data.textWidth - 2 * data.cellPadding - mock.vals.sortIconSize);
+            beforeEach(function () {
+                mock.internal.render.getClipPath = function () {
+                    return "";
+                };
+            });
+
+            it("should call crop text if clip path is not functional", function () {
+                underTest.call(mock, target, data);
+                expect(mock.internal.render.cropText).toHaveBeenCalled();
+            });
+
+            it("should call crop text with the width minus cell padding if no sort icon is specified", function () {
+                underTest.call(mock, target, data);
+                expect(mock.internal.render.cropText).toHaveBeenCalledWith(target.children.text[0], data.textWidth - data.cellPadding);
+            });
+
+            it("should call crop text with the width minus cell padding if no sort icon is set to none", function () {
+                data.sortIcon = 'none';
+                underTest.call(mock, target, data);
+                expect(mock.internal.render.cropText).toHaveBeenCalledWith(target.children.text[0], data.textWidth - data.cellPadding);
+            });
+
+            it("should should take off sort icon size and an additional padding if sort icon is defined", function () {
+                data.sortIcon = 'A defined icon';
+                underTest.call(mock, target, data);
+                expect(mock.internal.render.cropText).toHaveBeenCalledWith(target.children.text[0], data.textWidth - 2 * data.cellPadding - mock.vals.sortIconSize);
+            });
         });
 
     });

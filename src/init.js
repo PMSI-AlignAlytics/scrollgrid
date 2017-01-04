@@ -31,7 +31,7 @@
 }(this, function (d3) {
     "use strict";
 
-    // Copyright: 2015 AlignAlytics
+    // Copyright: 2017 AlignAlytics
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     var Scrollgrid = function (options) {
 

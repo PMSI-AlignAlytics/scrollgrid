@@ -1,5 +1,5 @@
 
-// Copyright: 2015 AlignAlytics
+// Copyright: 2017 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/internal/dom/stylePanels.js
 Scrollgrid.prototype.internal.dom.stylePanels = function (style) {

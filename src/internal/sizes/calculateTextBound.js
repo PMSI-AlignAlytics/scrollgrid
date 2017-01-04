@@ -1,5 +1,5 @@
 
-// Copyright: 2015 AlignAlytics
+// Copyright: 2017 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/internal/sizes/calculateTextBound.js
 Scrollgrid.prototype.internal.sizes.calculateTextBound = function (surface, text) {

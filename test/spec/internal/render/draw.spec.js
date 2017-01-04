@@ -17,7 +17,8 @@ define(['d3', 'mock', 'render/draw'], function (d3, mock) {
             vBottom,
             totalWidth,
             totalHeight,
-            clearCache;
+            clearCache,
+            reviewSize;
 
         beforeEach(function () {
             mock.init();
@@ -28,6 +29,7 @@ define(['d3', 'mock', 'render/draw'], function (d3, mock) {
             physical = mock.internal.sizes.physical;
             vals = mock.vals;
             clearCache = "Clear Cache";
+            reviewSize = true;
             hLeft = { left: 0, right: vals.virtLeft };
             hMiddle = { left: vals.virtLeft + vals.viewAreaVirtLeft, right: vals.virtLeft + vals.viewAreaVirtRight };
             hRight = { left: vals.virtOuterWidth - vals.virtRight, right: vals.virtOuterWidth };
@@ -39,117 +41,122 @@ define(['d3', 'mock', 'render/draw'], function (d3, mock) {
         });
 
         it("should call the getVisibleRegion method to get the physical view area", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.getVisibleRegion).toHaveBeenCalled();
         });
 
         it("should call the getDataBounds method process the visible view area against the data", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.getDataBounds).toHaveBeenCalledWith("visible region");
         });
 
         it("should call render region for the top left panel", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.renderRegion).toHaveBeenCalledWith(dom.top.left, {}, hLeft, vTop, clearCache);
         });
 
         it("should call render region for the top middle panel", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.renderRegion).toHaveBeenCalledWith(dom.top, { x: vals.viewAreaPhysX }, hMiddle, vTop, clearCache);
         });
 
         it("should call render region for the top right panel", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.renderRegion).toHaveBeenCalledWith(dom.top.right, {}, hRight, vTop, clearCache);
         });
 
         it("should call render region for the middle left panel", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.renderRegion).toHaveBeenCalledWith(dom.left, { y: vals.viewAreaPhysY }, hLeft, vMiddle, clearCache);
         });
 
         it("should call render region for the center panel", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.renderRegion).toHaveBeenCalledWith(dom.main, { x: vals.viewAreaPhysX, y: vals.viewAreaPhysY }, hMiddle, vMiddle, clearCache);
         });
 
         it("should call render region for the middle right panel", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.renderRegion).toHaveBeenCalledWith(dom.right, { y: vals.viewAreaPhysY }, hRight, vMiddle, clearCache);
         });
 
         it("should call render region for the bottom left panel", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.renderRegion).toHaveBeenCalledWith(dom.bottom.left, {}, hLeft, vBottom, clearCache);
         });
 
         it("should call render region for the bottom middle panel", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.renderRegion).toHaveBeenCalledWith(dom.bottom, { x: vals.viewAreaPhysX }, hMiddle, vBottom, clearCache);
         });
 
         it("should call render region for the bottom right panel", function () {
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(render.renderRegion).toHaveBeenCalledWith(dom.bottom.right, {}, hRight, vBottom, clearCache);
         });
 
         it("should not call add resize handles if column resizing is off", function () {
             interaction.allowColumnResizing = false;
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(interaction.addResizeHandles).not.toHaveBeenCalled();
         });
 
         it("should call add resize handles for the top left panel if column resizing is on", function () {
             interaction.allowColumnResizing = true;
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(interaction.addResizeHandles).toHaveBeenCalledWith(dom.top.left, hLeft);
         });
 
         it("should call add resize handles for the top middle panel if column resizing is on", function () {
             interaction.allowColumnResizing = true;
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(interaction.addResizeHandles).toHaveBeenCalledWith(dom.top, hMiddle, vals.viewAreaPhysX);
         });
 
         it("should call add resize handles for the top right panel if column resizing is on", function () {
             interaction.allowColumnResizing = true;
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(interaction.addResizeHandles).toHaveBeenCalledWith(dom.top.right, hRight);
+        });
+
+        it("should not call layoutDOM if reviewSize is not set", function () {
+            underTest.call(mock, clearCache, false);
+            expect(dom.layoutDOM).not.toHaveBeenCalled();
         });
 
         it("should call layoutDOM with a null fixed width if the grid is smaller than the total width", function () {
             dom.parent.nodeObject.offsetWidth = totalWidth - 1;
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(dom.layoutDOM.calls.argsFor(0)[0].width).toBeNull();
         });
 
         it("should call layoutDOM with a null fixed width if the grid width is equal to the total width", function () {
             dom.parent.nodeObject.offsetWidth = totalWidth;
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(dom.layoutDOM.calls.argsFor(0)[0].width).toBeNull();
         });
 
         it("should call layoutDOM with a fixed width if the grid is larger than the total width", function () {
             dom.parent.nodeObject.offsetWidth = totalWidth + 1;
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(dom.layoutDOM.calls.argsFor(0)[0].width).toEqual(totalWidth);
         });
 
         it("should call layoutDOM with a null fixed height if the grid is smaller than the total height", function () {
             dom.parent.nodeObject.offsetHeight = totalHeight - 1;
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(dom.layoutDOM.calls.argsFor(0)[0].height).toBeNull();
         });
 
         it("should call layoutDOM with a null fixed height if the grid height is equal to the total height", function () {
             dom.parent.nodeObject.offsetHeight = totalHeight;
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(dom.layoutDOM.calls.argsFor(0)[0].height).toBeNull();
         });
 
         it("should call layoutDOM with a fixed height if the grid is larger than the total height", function () {
             dom.parent.nodeObject.offsetHeight = totalHeight + 1;
-            underTest.call(mock, clearCache);
+            underTest.call(mock, clearCache, reviewSize);
             expect(dom.layoutDOM.calls.argsFor(0)[0].height).toEqual(totalHeight);
         });
 

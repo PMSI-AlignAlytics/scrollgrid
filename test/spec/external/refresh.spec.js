@@ -17,12 +17,12 @@ define(['d3', 'mock', 'external/refresh'], function (d3, mock) {
 
         it("should call draw with no clear cache if maintain cache is passed true", function () {
             underTest.call(mock, true);
-            expect(mock.internal.render.draw).toHaveBeenCalledWith(false);
+            expect(mock.internal.render.draw).toHaveBeenCalledWith(false, true);
         });
 
         it("should call draw with clear cache if maintain cache is passed false", function () {
             underTest.call(mock, false);
-            expect(mock.internal.render.draw).toHaveBeenCalledWith(true);
+            expect(mock.internal.render.draw).toHaveBeenCalledWith(true, true);
         });
 
         it("should call setScrollerSize", function () {

@@ -1,5 +1,5 @@
 
-// Copyright: 2015 AlignAlytics
+// Copyright: 2017 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/internal/dom/layoutDOM.js
 Scrollgrid.prototype.internal.dom.layoutDOM = function (fixedSize) {
@@ -59,7 +59,7 @@ Scrollgrid.prototype.internal.dom.layoutDOM = function (fixedSize) {
     dom.top.right.transform.attr('transform', 'translate(' + physical.dragHandleWidth / 2 + ', 0)');
 
     // Invoke draw on scroll
-    dom.main.viewport.on('scroll', function () { render.draw.call(self, false); });
+    dom.main.viewport.on('scroll', function () { render.draw.call(self, false, false); });
 
     // Invoke eventHandlers of the target group behind the main viewport
     dom.redirectViewportEvents.call(self);

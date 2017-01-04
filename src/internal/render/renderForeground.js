@@ -1,5 +1,5 @@
 
-// Copyright: 2015 AlignAlytics
+// Copyright: 2017 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/internal/render/renderForeground.js
 Scrollgrid.prototype.internal.render.renderForeground = function (g, viewData) {
@@ -8,6 +8,7 @@ Scrollgrid.prototype.internal.render.renderForeground = function (g, viewData) {
     var self = this,
         int = self.internal,
         render = int.render,
+        path,
         text;
 
     // Clear any existing text
@@ -18,13 +19,18 @@ Scrollgrid.prototype.internal.render.renderForeground = function (g, viewData) {
         .attr("dy", "0.35em")
         .attr("x", render.getTextPosition.call(self, viewData))
         .attr("y", viewData.textHeight / 2)
-        .style("text-anchor", render.getTextAnchor.call(self, viewData));
+        .style("text-anchor", render.getTextAnchor.call(self, viewData))
+        .style("clip-path", render.getClipPath.call(self, viewData));
 
     if (viewData.formatter) {
         text.text(viewData.formatter(viewData.value));
     } else {
         text.text(viewData.value);
     }
-    render.cropText.call(this, text, viewData.textWidth - viewData.cellPadding - (!(!viewData.sortIcon || viewData.sortIcon === 'none') ? render.sortIconSize + viewData.cellPadding : 0));
 
+    path = text.node().style.clipPath;
+    // If the new clip path css doesn't work (I'm looking at you IE and Firefox) revert to the slower method
+    if (!path || path === "") {
+        render.cropText.call(self, text, viewData.textWidth - viewData.cellPadding - (!(!viewData.sortIcon || viewData.sortIcon === 'none') ? render.sortIconSize + viewData.cellPadding : 0));
+    }
 };

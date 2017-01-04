@@ -169,6 +169,7 @@ define(["d3"], function (d3) {
                         y: scrollgrid.vals.viewAreaPhysY
                     }
                 }),
+                getClipPath: jasmine.createSpy("getClipPath").and.returnValue("polygon(0px 0px, 0px 10px, 10px 10px, 10px 0px)"),
                 getDataInBounds: jasmine.createSpy("getDataInBounds").and.returnValue("data in bounds"),
                 renderRegion: jasmine.createSpy("renderRegion"),
                 calculateCellAdjustments: jasmine.createSpy("calculateCellAdjustments").and.returnValue({
