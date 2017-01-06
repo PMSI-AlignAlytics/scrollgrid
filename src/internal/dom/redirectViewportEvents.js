@@ -6,16 +6,11 @@ Scrollgrid.prototype.internal.dom.redirectViewportEvents = function () {
     "use strict";
 
     var self = this,
-        int = self.internal,
-        dom = int.dom,
-        viewport = dom.main.viewport,
-        eventHandlers = int.eventHandlers,
-        n = eventHandlers.length,
+        elems = self.elements,
         j,
-        eventHandler,
         getRedirectHandler;
 
-    getRedirectHandler = function (dom, eventType) {
+    getRedirectHandler = function (elems, eventType) {
         return function () {
             var mouse,
                 svg,
@@ -27,7 +22,7 @@ Scrollgrid.prototype.internal.dom.redirectViewportEvents = function () {
 
             mouse = d3.mouse(this);
 
-            svg = dom.main.svg.node();
+            svg = elems.main.svg.node();
             rpos = svg.createSVGRect();
             rpos.x = mouse[0];
             rpos.y = mouse[1];
@@ -46,8 +41,7 @@ Scrollgrid.prototype.internal.dom.redirectViewportEvents = function () {
         };
     };
 
-    for (j = 0; j < n; j += 1) {
-        eventHandler = eventHandlers[j];
-        viewport.on(eventHandler.type, getRedirectHandler(dom, eventHandler.type));
+    for (j = 0; j < this.eventHandlers.length; j += 1) {
+        elems.main.viewport.on(this.eventHandlers[j].type, getRedirectHandler(elems, this.eventHandlers[j].type));
     }
 };

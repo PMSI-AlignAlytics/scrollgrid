@@ -4,17 +4,17 @@ define(['mock', 'dom/populatePanel'], function (mock) {
     describe("populatePanel", function () {
 
         var underTest = Scrollgrid.prototype.internal.dom.populatePanel,
-            mockDom;
+            elems;
 
         beforeEach(function () {
             mock.init();
-            mockDom = mock.internal.dom;
+            elems = mock.elements;
         });
 
         it("should add an svg to the container and store it in svg", function () {
             var panel = underTest.call(mock);
-            expect(mockDom.container.children.svg[0]).toBeDefined();
-            expect(panel.svg).toEqual(mockDom.container.children.svg[0]);
+            expect(elems.container.children.svg[0]).toBeDefined();
+            expect(panel.svg).toEqual(elems.container.children.svg[0]);
         });
 
         it("should add a group to the panel svg and store it as transform", function () {

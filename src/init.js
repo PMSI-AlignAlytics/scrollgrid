@@ -35,13 +35,8 @@
     // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
     var Scrollgrid = function (options) {
 
-        var int = this.internal,
-            sizes = int.sizes,
-            interaction = int.interaction,
-            render = int.render,
-            dom = int.dom,
-            virtual = sizes.virtual,
-            physical = sizes.physical;
+        var props,
+            int = this.internal;
 
         options = options || {};
 
@@ -54,40 +49,50 @@
                 'where you have a div with id "tableContainer".  Please check that your selector is matching 1 and only 1 div.');
         } else {
 
+            // This will store the dom elements for this grid
+            this.elements = {};
+            // This will store the event handlers for this grid
+            this.eventHandlers = [];
+            // This will store the active properties for this grid
+            this.properties = {};
+
+            props = this.properties;
+
             // Set the display options
-            physical.rowHeight = options.rowHeight || 30;
-            physical.dragHandleWidth = options.dragHandleWidth || 8;
-            physical.headerRowHeight = options.headerRowHeight || physical.rowHeight;
-            physical.footerRowHeight = options.footerRowHeight || physical.rowHeight;
-            physical.defaultColumnWidth = options.defaultColumnWidth || 100;
-            physical.cellPadding = options.cellPadding || 6;
+            props.rowHeight = options.rowHeight || 30;
+            props.dragHandleWidth = options.dragHandleWidth || 8;
+            props.headerRowHeight = options.headerRowHeight || props.rowHeight;
+            props.footerRowHeight = options.footerRowHeight || props.rowHeight;
+            props.defaultColumnWidth = options.defaultColumnWidth || 100;
+            props.cellPadding = options.cellPadding || 6;
 
             // Set the interaction options
-            interaction.allowColumnResizing = options.allowColumnResizing || true;
-            interaction.allowSorting = options.allowSorting || true;
+            props.allowColumnResizing = options.allowColumnResizing || true;
+            props.allowSorting = options.allowSorting || true;
 
             // Set the number of header or footer rows or columns
-            virtual.top = options.headerRows || 0;
-            virtual.bottom = options.footerRows || 0;
-            virtual.left = options.headerColumns || 0;
-            virtual.right = options.footerColumns || 0;
+            props.virtualTop = options.headerRows || 0;
+            props.virtualBottom = options.footerRows || 0;
+            props.virtualLeft = options.headerColumns || 0;
+            props.virtualRight = options.footerColumns || 0;
 
             // Set a reference to the parent object
             this.target = options.target;
 
-            render.setDefaultStyles.call(this);
-            render.formatRules = options.formatRules || [];
-            render.cellWaitText = options.cellWaitText || "loading...";
-            render.sortIconSize = options.sortIconSize || 7;
+            int.render.setDefaultStyles.call(this);
+
+            props.formatRules = options.formatRules || [];
+            props.cellWaitText = options.cellWaitText || "loading...";
+            props.sortIconSize = options.sortIconSize || 7;
 
             // Create the DOM shapes required
-            dom.populateDOM.call(this);
+            int.dom.populateDOM.call(this);
 
             // Pass the data or adapter through to setData
             this.data(options.data || options.adapter);
 
             if (options.autoResize) {
-                dom.setAutoResize.call(this);
+                int.dom.setAutoResize.call(this);
             }
         }
     };
@@ -102,11 +107,7 @@
     // Build namespaces
     Scrollgrid.adapters = {};
     Scrollgrid.prototype.internal = {
-        eventHandlers: [],
-        sizes: {
-            virtual: {},
-            physical: {}
-        },
+        sizes: {},
         events: {},
         interaction: {},
         dom: {},

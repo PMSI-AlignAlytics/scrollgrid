@@ -6,8 +6,7 @@ Scrollgrid.prototype.internal.sizes.getExistingTextBound = function (surface, co
     "use strict";
 
     var int = this.internal,
-        render = int.render,
-        sizes = int.sizes,
+        props = this.properties,
         returnBounds = { width: 0, height: 0 };
 
     surface.selectAll("text")
@@ -15,8 +14,8 @@ Scrollgrid.prototype.internal.sizes.getExistingTextBound = function (surface, co
             return (column === undefined || d.columnIndex === column) && (row === undefined || d.rowIndex === row);
         })
         .each(function (d) {
-            var sortIconSize = (d.sortIcon && d.sortIcon !== 'none' ? render.sortIconSize + d.cellPadding : 0);
-            returnBounds = sizes.pushTextBound(returnBounds, d3.select(this), d.cellPadding, sortIconSize);
+            var sortIconSize = (d.sortIcon && d.sortIcon !== 'none' ? props.sortIconSize + d.cellPadding : 0);
+            returnBounds = int.sizes.pushTextBound(returnBounds, d3.select(this), d.cellPadding, sortIconSize);
         });
 
     return returnBounds;

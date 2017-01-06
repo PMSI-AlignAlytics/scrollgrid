@@ -5,13 +5,11 @@
 Scrollgrid.prototype.internal.dom.setScrollerSize = function () {
     "use strict";
 
-    var int = this.internal,
-        dom = int.dom,
-        sizes = int.sizes,
-        physical = sizes.physical;
+    var elems = this.elements,
+        props = this.properties;
 
-    dom.main.scroller
-        .style('width', physical.totalInnerWidth + 'px')
-        .style('height', physical.totalInnerHeight + 'px');
+    elems.main.scroller
+        .style('width', props.physicalTotalInnerWidth + 'px')
+        .style('height', props.physicalTotalInnerHeight + 'px');
 
 };

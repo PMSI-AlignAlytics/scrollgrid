@@ -5,11 +5,8 @@
 Scrollgrid.prototype.data = function (data, silent) {
     "use strict";
 
-    var int = this.internal,
-        sizes = int.sizes,
-        physical = sizes.physical,
-        virtual = sizes.virtual,
-        interaction = int.interaction,
+    var props = this.properties,
+        int = this.internal,
         c;
 
     if (data) {
@@ -20,22 +17,22 @@ Scrollgrid.prototype.data = function (data, silent) {
         } else {
             this.adapter = data;
         }
-        virtual.outerHeight = this.adapter.rowCount();
-        virtual.outerWidth = this.adapter.columnCount();
+        props.virtualOuterHeight = this.adapter.rowCount();
+        props.virtualOuterWidth = this.adapter.columnCount();
 
         // Set up the columns
-        physical.initialiseColumns.call(this);
+        int.sizes.initialiseColumns.call(this);
 
         // If any of the columns have a sort it should be applied
         for (c = 0; c < this.columns.length; c += 1) {
             if (this.columns[c].sort === 'asc' || this.columns[c].sort === 'desc') {
-                interaction.sortColumn.call(this, c, false);
+                int.interaction.sortColumn.call(this, c, false);
             }
         }
 
         // Calculate the bounds of the data displayable in the main grid
-        virtual.innerWidth = virtual.outerWidth - virtual.left - virtual.right;
-        virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
+        props.virtualInnerWidth = props.virtualOuterWidth - props.virtualLeft - props.virtualRight;
+        props.virtualInnerHeight = props.virtualOuterHeight - props.virtualTop - props.virtualBottom;
 
         // Render the control
         if (!silent) {

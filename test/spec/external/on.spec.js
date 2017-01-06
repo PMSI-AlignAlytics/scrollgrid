@@ -18,7 +18,7 @@ define(['d3', 'mock', 'external/on'], function (d3, mock) {
                 capture = false;
 
             underTest.call(mock, type, listener, capture);
-            expect(mock.internal.eventHandlers[0].type).toEqual(type);
+            expect(mock.eventHandlers[0].type).toEqual(type);
         });
     });
 

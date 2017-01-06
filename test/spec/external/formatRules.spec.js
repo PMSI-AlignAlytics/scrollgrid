@@ -21,7 +21,7 @@ define(['d3', 'mock', 'external/formatRules'], function (d3, mock) {
 
         it("should update the column resizing value to a passed parameter", function () {
             underTest.call(mock, ['X', 'Y', 'Z']);
-            expect(mock.internal.render.formatRules).toEqual(['X', 'Y', 'Z']);
+            expect(mock.properties.formatRules).toEqual(['X', 'Y', 'Z']);
         });
 
         it("should return the context when a parameter is passed", function () {

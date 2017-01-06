@@ -29,7 +29,7 @@ define(['d3', 'mock', 'external/addFormatRules'], function (d3, mock) {
 
         it("should call the initialise columns method", function () {
             underTest.call(mock, ['D', 'E']);
-            expect(mock.internal.sizes.physical.initialiseColumns).toHaveBeenCalled();
+            expect(mock.internal.sizes.initialiseColumns).toHaveBeenCalled();
         });
 
         it("should call refresh when a parameter is passed", function () {

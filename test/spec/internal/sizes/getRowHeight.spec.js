@@ -3,23 +3,21 @@ define(['d3', 'mock', 'sizes/getRowHeight'], function (d3, mock) {
 
     describe("getRowHeight", function () {
 
-        var underTest = Scrollgrid.prototype.internal.sizes.physical.getRowHeight,
-            int,
-            sizes;
+        var underTest = Scrollgrid.prototype.internal.sizes.getRowHeight,
+            props;
 
         beforeEach(function () {
             mock.init();
             d3.init();
 
-            int = mock.internal;
-            sizes = int.sizes;
+            props = mock.properties;
 
-            sizes.virtual.outerHeight = 10;
-            sizes.virtual.top = 2;
-            sizes.virtual.bottom = 3;
-            sizes.physical.headerRowHeight = 17;
-            sizes.physical.rowHeight = 23;
-            sizes.physical.footerRowHeight = 29;
+            props.virtualOuterHeight = 10;
+            props.virtualTop = 2;
+            props.virtualBottom = 3;
+            props.headerRowHeight = 17;
+            props.rowHeight = 23;
+            props.footerRowHeight = 29;
         });
 
         it("should return the header row height for a header row", function () {

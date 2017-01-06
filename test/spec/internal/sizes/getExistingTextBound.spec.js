@@ -79,7 +79,7 @@ define(['d3', 'mock', 'sizes/getExistingTextBound'], function (d3, mock) {
 
             it("should pass size if sort icon is set", function () {
                 sub({ cellPadding: 13, sortIcon: "asc" });
-                expect(mock.internal.sizes.pushTextBound).toHaveBeenCalledWith({ width: 0, height: 0 }, d3.returnValues.select, 13, mock.internal.render.sortIconSize + 13);
+                expect(mock.internal.sizes.pushTextBound).toHaveBeenCalledWith({ width: 0, height: 0 }, d3.returnValues.select, 13, mock.properties.sortIconSize + 13);
             });
 
         });

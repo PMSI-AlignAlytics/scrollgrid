@@ -5,19 +5,18 @@
 Scrollgrid.prototype.internal.dom.stylePanels = function (style) {
     "use strict";
 
-    var int = this.internal,
-        dom = int.dom;
+    var elems = this.elements;
 
     this.style = style || this.style;
 
-    dom.left.svg.attr('class', this.style.left.panel);
-    dom.top.svg.attr('class', this.style.top.panel);
-    dom.right.svg.attr('class', this.style.right.panel);
-    dom.bottom.svg.attr('class', this.style.bottom.panel);
-    dom.top.left.svg.attr('class', this.style.top.left.panel);
-    dom.top.right.svg.attr('class', this.style.top.right.panel);
-    dom.bottom.left.svg.attr('class', this.style.bottom.left.panel);
-    dom.bottom.right.svg.attr('class', this.style.bottom.right.panel);
-    dom.main.svg.attr('class', this.style.main.panel);
+    elems.left.svg.attr('class', this.style.left.panel);
+    elems.top.svg.attr('class', this.style.top.panel);
+    elems.right.svg.attr('class', this.style.right.panel);
+    elems.bottom.svg.attr('class', this.style.bottom.panel);
+    elems.top.left.svg.attr('class', this.style.top.left.panel);
+    elems.top.right.svg.attr('class', this.style.top.right.panel);
+    elems.bottom.left.svg.attr('class', this.style.bottom.left.panel);
+    elems.bottom.right.svg.attr('class', this.style.bottom.right.panel);
+    elems.main.svg.attr('class', this.style.main.panel);
 
 };

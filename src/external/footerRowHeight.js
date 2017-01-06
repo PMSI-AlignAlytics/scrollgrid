@@ -5,14 +5,14 @@
 Scrollgrid.prototype.footerRowHeight = function (value, silent) {
     "use strict";
 
-    var physical = this.internal.sizes.physical,
+    var props = this.properties,
         result;
 
     if (value === undefined) {
-        result = physical.footerRowHeight;
+        result = props.footerRowHeight;
     } else {
         // Set the value and redraw but return self for chaining
-        physical.footerRowHeight = value;
+        props.footerRowHeight = value;
         result = this;
         if (!silent) {
             this.refresh();

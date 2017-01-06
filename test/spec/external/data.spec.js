@@ -46,17 +46,17 @@ define(['d3', 'mock', 'external/data'], function (d3, mock) {
 
         it("should set the outer height from the adapter", function () {
             result = underTest.call(mock, mockSimple);
-            expect(mock.internal.sizes.virtual.outerHeight).toEqual(71);
+            expect(mock.properties.virtualOuterHeight).toEqual(71);
         });
 
         it("should set the outer width from the adapter", function () {
             result = underTest.call(mock, mockSimple);
-            expect(mock.internal.sizes.virtual.outerWidth).toEqual(73);
+            expect(mock.properties.virtualOuterWidth).toEqual(73);
         });
 
         it("should initialise columns", function () {
             result = underTest.call(mock, mockSimple);
-            expect(mock.internal.sizes.physical.initialiseColumns).toHaveBeenCalled();
+            expect(mock.internal.sizes.initialiseColumns).toHaveBeenCalled();
         });
 
         it("should sort any columns with sort defined", function () {
@@ -75,17 +75,17 @@ define(['d3', 'mock', 'external/data'], function (d3, mock) {
         });
 
         it("should calculate the inner width", function () {
-            mock.internal.sizes.virtual.left = 5;
-            mock.internal.sizes.virtual.right = 7;
+            mock.properties.virtualLeft = 5;
+            mock.properties.virtualRight = 7;
             result = underTest.call(mock, mockSimple);
-            expect(mock.internal.sizes.virtual.innerWidth).toEqual(73 - 5 - 7);
+            expect(mock.properties.virtualInnerWidth).toEqual(73 - 5 - 7);
         });
 
         it("should calculate the inner height", function () {
-            mock.internal.sizes.virtual.top = 11;
-            mock.internal.sizes.virtual.bottom = 13;
+            mock.properties.virtualTop = 11;
+            mock.properties.virtualBottom = 13;
             result = underTest.call(mock, mockSimple);
-            expect(mock.internal.sizes.virtual.innerHeight).toEqual(71 - 11 - 13);
+            expect(mock.properties.virtualInnerHeight).toEqual(71 - 11 - 13);
         });
 
 

@@ -5,10 +5,9 @@
 Scrollgrid.prototype.internal.render.sortIcon = function (group) {
     "use strict";
 
-    var int = this.internal,
-        render = int.render,
-        size = render.sortIconSize,
-        icon = group.append("path").attr("class", this.style.sortIcon);
+    var icon = group.append("path").attr("class", this.style.sortIcon),
+        props = this.properties,
+        size = props.sortIconSize;
 
     if (group.datum() === 'asc') {
         icon.attr("d", "M " + (size / 2) + " 0 L " + size + " " + size + " L 0 " + size + " z");

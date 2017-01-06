@@ -21,7 +21,7 @@ define(['d3', 'mock', 'external/cellPadding'], function (d3, mock) {
 
         it("should update the column resizing value to a passed parameter", function () {
             underTest.call(mock, 13);
-            expect(mock.internal.sizes.physical.cellPadding).toEqual(13);
+            expect(mock.properties.cellPadding).toEqual(13);
         });
 
         it("should return the context when a parameter is passed", function () {

@@ -6,11 +6,9 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
     "use strict";
 
     var self = this,
-        int = self.internal,
-        render = int.render,
-        dom = int.dom,
-        interaction = int.interaction,
-        events = int.events,
+        int = this.internal,
+        props = this.properties,
+        elems = this.elements,
         cells,
         metadata,
         bounds;
@@ -26,7 +24,7 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
             right: xVirtual.right || 0
         };
 
-        metadata = render.getDataInBounds.call(self, bounds);
+        metadata = int.render.getDataInBounds.call(self, bounds);
 
         // On refresh we will clear and redraw everything.  This can
         // be invoked externally or internally on full grid changes.  On scroll or resize
@@ -53,18 +51,18 @@ Scrollgrid.prototype.internal.render.renderRegion = function (target, physicalOf
                 if (d.renderBackground) {
                     d.renderBackground.call(self, group, d);
                 }
-                render.renderSortIcon.call(self, d, group, !(!d.sortIcon || d.sortIcon === 'none'));
+                int.render.renderSortIcon.call(self, d, group, !(!d.sortIcon || d.sortIcon === 'none'));
                 // Add some interaction to the headers
-                if (interaction.allowSorting && (target === dom.top || target === dom.top.left || target === dom.top.right)) {
-                    interaction.addSortButtons.call(self, group, d);
+                if (props.allowSorting && (target === elems.top || target === elems.top.left || target === elems.top.right)) {
+                    int.interaction.addSortButtons.call(self, group, d);
                 }
 
                 // Register events
-                events.addEventHandlers.call(self, group, d);
+                int.events.addEventHandlers.call(self, group, d);
             });
 
         // Draw the foreground separately to allow for asynchronous adapters
-        render.renderRegionForeground.call(this, bounds, cells);
+        int.render.renderRegionForeground.call(this, bounds, cells);
 
         cells.attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")";

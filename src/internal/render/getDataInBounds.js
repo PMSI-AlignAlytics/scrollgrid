@@ -7,9 +7,7 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
 
     var i, r, c, x, vc, vr = 0,
         int = this.internal,
-        sizes = int.sizes,
-        render = int.render,
-        physical = sizes.physical,
+        props = this.properties,
         cols = this.columns,
         column,
         runningX,
@@ -21,12 +19,12 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
     runningY = viewArea.startY;
 
     for (r = viewArea.top || 0, i = 0; r < viewArea.bottom || 0; r += 1) {
-        rowHeight = physical.getRowHeight.call(this, r);
+        rowHeight = int.sizes.getRowHeight.call(this, r);
         runningX = viewArea.startX || 0;
         vc = 0;
         for (c = viewArea.left || 0; c < viewArea.right || 0; c += 1, i += 1) {
             // Get any measurement modifiers based on cell position
-            adjustments = render.calculateCellAdjustments.call(this, r, c);
+            adjustments = int.render.calculateCellAdjustments.call(this, r, c);
             // Get the column definition
             column = cols[c];
             // Get the x position of the cell
@@ -44,15 +42,15 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
                 backgroundStyle: this.style.cellBackgroundPrefix + 'r' + (r + 1) + ' ' + this.style.cellBackgroundPrefix + 'c' + (c + 1),
                 foregroundStyle: this.style.cellForegroundPrefix + 'r' + (r + 1) + ' ' + this.style.cellForegroundPrefix + 'c' + (c + 1),
                 sortIcon: adjustments.sortIcon || 'none',
-                cellPadding: physical.cellPadding,
+                cellPadding: props.cellPadding,
                 alignment: 'left',
                 rowIndex: r,
                 columnIndex: c,
                 column: column,
                 formatter: null,
-                renderForeground: render.renderForeground,
+                renderForeground: int.render.renderForeground,
                 renderBetween: null,
-                renderBackground: render.renderBackground
+                renderBackground: int.render.renderBackground
             };
             // We abuse the key here, cells will be rendered on enter only, we therefore
             // want to key by any value which should result in a redraw of a particular cell,
@@ -66,7 +64,7 @@ Scrollgrid.prototype.internal.render.getDataInBounds = function (viewArea) {
     }
 
     // Modify the data based on the user rules
-    render.applyRules.call(this, visibleData);
+    int.render.applyRules.call(this, visibleData);
 
     return visibleData;
 

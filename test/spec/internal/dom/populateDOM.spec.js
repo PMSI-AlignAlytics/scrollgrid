@@ -4,89 +4,91 @@ define(['d3', 'mock', 'dom/populateDOM'], function (d3, mock) {
     describe("populateDOM", function () {
 
         var underTest,
-            mockDom;
+            elems,
+            int;
 
         beforeEach(function () {
             mock.init();
             d3.init();
 
             underTest = Scrollgrid.prototype.internal.dom.populateDOM;
-            mockDom = mock.internal.dom;
+            int = mock.internal;
+            elems = mock.elements;
         });
 
         it("should select the target and set as parent", function () {
             underTest.call(mock);
             expect(d3.select).toHaveBeenCalledWith(mock.vals.target);
-            expect(mockDom.parent).toBe(d3.returnValues.select);
+            expect(elems.parent).toBe(d3.returnValues.select);
         });
 
         it("should add a div to the parent and store it in container", function () {
             underTest.call(mock);
-            expect(mockDom.parent.children.div[0]).toBeDefined();
-            expect(mockDom.container).toEqual(mockDom.parent.children.div[0]);
+            expect(elems.parent.children.div[0]).toBeDefined();
+            expect(elems.container).toEqual(elems.parent.children.div[0]);
         });
 
         it("should add a div to the container and store it in main viewport", function () {
             underTest.call(mock);
-            expect(mockDom.container.children.div[0]).toBeDefined();
-            expect(mockDom.main.viewport).toEqual(mockDom.container.children.div[0]);
+            expect(elems.container.children.div[0]).toBeDefined();
+            expect(elems.main.viewport).toEqual(elems.container.children.div[0]);
         });
 
         it("should add a div to the viewport and store it in scroller", function () {
             underTest.call(mock);
-            expect(mockDom.main.viewport.children.div[0]).toBeDefined();
-            expect(mockDom.main.scroller).toEqual(mockDom.main.viewport.children.div[0]);
+            expect(elems.main.viewport.children.div[0]).toBeDefined();
+            expect(elems.main.scroller).toEqual(elems.main.viewport.children.div[0]);
         });
 
         it("should use populate panel for each panel in the dom", function () {
             underTest.call(mock);
-            expect(mockDom.populatePanel).toHaveBeenCalled();
-            expect(mockDom.populatePanel.calls.count()).toEqual(9);
+            expect(int.dom.populatePanel).toHaveBeenCalled();
+            expect(int.dom.populatePanel.calls.count()).toEqual(9);
         });
 
         it("should populate the top left panel and store in the dom", function () {
             underTest.call(mock);
-            expect(mockDom.top.left).toBeDefined();
+            expect(elems.top.left).toBeDefined();
         });
 
         it("should populate the top panel and store in the dom", function () {
             underTest.call(mock);
-            expect(mockDom.top).toBeDefined();
+            expect(elems.top).toBeDefined();
         });
 
         it("should populate the top right panel and store in the dom", function () {
             underTest.call(mock);
-            expect(mockDom.top.right).toBeDefined();
+            expect(elems.top.right).toBeDefined();
         });
 
         it("should populate the left panel and store in the dom", function () {
             underTest.call(mock);
-            expect(mockDom.left).toBeDefined();
+            expect(elems.left).toBeDefined();
         });
 
         it("should populate the main panel and store in the dom", function () {
             underTest.call(mock);
-            expect(mockDom.main).toBeDefined();
+            expect(elems.main).toBeDefined();
         });
 
         it("should populate the right panel and store in the dom", function () {
             underTest.call(mock);
-            expect(mockDom.right).toBeDefined();
+            expect(elems.right).toBeDefined();
         });
 
         it("should populate the bottom left panel and store in the dom", function () {
             underTest.call(mock);
-            expect(mockDom.bottom.left).toBeDefined();
+            expect(elems.bottom.left).toBeDefined();
         });
 
         it("should populate the bottom panel and store in the dom", function () {
             underTest.call(mock);
-            expect(mockDom.bottom).toBeDefined();
+            expect(elems.bottom).toBeDefined();
         });
 
         it("should populate the bottom right panel and store in the dom", function () {
             underTest.call(mock);
-            expect(mockDom.bottom.right).toBeDefined();
+            expect(elems.bottom.right).toBeDefined();
         });
     });
 

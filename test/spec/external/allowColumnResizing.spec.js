@@ -21,7 +21,7 @@ define(['d3', 'mock', 'external/allowColumnResizing'], function (d3, mock) {
 
         it("should update the column resizing value to a passed parameter", function () {
             underTest.call(mock, false);
-            expect(mock.internal.interaction.allowColumnResizing).toEqual(false);
+            expect(mock.properties.allowColumnResizing).toEqual(false);
         });
 
         it("should return the context when a parameter is passed", function () {

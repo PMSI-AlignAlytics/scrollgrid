@@ -4,21 +4,21 @@ define(['mock', 'dom/setScrollerSize'], function (mock) {
     describe("setScrollerSize", function () {
 
         var underTest = Scrollgrid.prototype.internal.dom.setScrollerSize,
-            mockDom;
+            elems;
 
         beforeEach(function () {
             mock.init();
-            mockDom = mock.internal.dom;
+            elems = mock.elements;
         });
 
         it("should set width to total inner width and add px for cross-browser compatibility", function () {
             underTest.call(mock);
-            expect(mockDom.main.scroller.styles.width).toEqual(mock.vals.totalInnerWidth + "px");
+            expect(elems.main.scroller.styles.width).toEqual(mock.vals.totalInnerWidth + "px");
         });
 
         it("should set height to total inner height and add px for cross-browser compatibility", function () {
             underTest.call(mock);
-            expect(mockDom.main.scroller.styles.height).toEqual(mock.vals.totalInnerHeight + "px");
+            expect(elems.main.scroller.styles.height).toEqual(mock.vals.totalInnerHeight + "px");
         });
 
     });

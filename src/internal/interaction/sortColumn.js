@@ -6,9 +6,7 @@ Scrollgrid.prototype.internal.interaction.sortColumn = function (index, toggle) 
     "use strict";
 
     var int = this.internal,
-        interaction = int.interaction,
-        sizes = int.sizes,
-        virtual = sizes.virtual,
+        props = this.properties,
         c;
 
     // Clear existing sorts and set the new one
@@ -21,7 +19,7 @@ Scrollgrid.prototype.internal.interaction.sortColumn = function (index, toggle) 
     }
 
     // Instruct the adapter to perform a sort
-    this.adapter.sort(index, virtual.top, virtual.bottom, this.columns[index].sort === 'desc', this.columns[index].compareFunction || interaction.defaultComparer);
+    this.adapter.sort(index, props.virtualTop, props.virtualBottom, this.columns[index].sort === 'desc', this.columns[index].compareFunction || int.interaction.defaultComparer);
     this.refresh(false);
 
 };

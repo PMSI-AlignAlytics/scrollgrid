@@ -22,7 +22,7 @@ define(['d3', 'mock', 'external/footerRowHeight'], function (d3, mock) {
 
         it("should update the column resizing value to a passed parameter", function () {
             underTest.call(mock, 13);
-            expect(mock.internal.sizes.physical.footerRowHeight).toEqual(13);
+            expect(mock.properties.footerRowHeight).toEqual(13);
         });
 
         it("should return the context when a parameter is passed", function () {

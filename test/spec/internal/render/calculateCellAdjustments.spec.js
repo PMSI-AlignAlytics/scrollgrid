@@ -4,19 +4,19 @@ define(['d3', 'mock', 'render/calculateCellAdjustments'], function (d3, mock) {
     describe("calculateCellAdjustments", function () {
 
         var underTest = Scrollgrid.prototype.internal.render.calculateCellAdjustments,
-            virtual;
+            props;
 
         beforeEach(function () {
             mock.init();
             d3.init();
-            virtual = mock.internal.sizes.virtual;
+            props = mock.properties;
             // Describe a 10x10 grid with a single row and column header or footer
-            virtual.outerHeight = 10;
-            virtual.outerWidth = 10;
-            virtual.top = 1;
-            virtual.left = 1;
-            virtual.right = 1;
-            virtual.bottom = 1;
+            props.virtualOuterHeight = 10;
+            props.virtualOuterWidth = 10;
+            props.virtualTop = 1;
+            props.virtualLeft = 1;
+            props.virtualRight = 1;
+            props.virtualBottom = 1;
         });
 
         it("should not apply cell adjustments to any non special cells", function () {

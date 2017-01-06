@@ -5,20 +5,12 @@
 Scrollgrid.prototype.internal.events.addEventHandlers = function (g, viewData) {
     "use strict";
 
-    var self = this,
-        int = self.internal,
-        eventHandlers = int.eventHandlers,
-        n = eventHandlers.length,
-        i,
-        eventHandler;
+    var i;
 
     g.attr("data-row", viewData.rowIndex)
         .attr("data-col", viewData.columnIndex);
 
-    for (i = 0; i < n; i += 1) {
-        eventHandler = eventHandlers[i];
-        g.on(eventHandler.type, eventHandler.listener, eventHandler.capture);
+    for (i = 0; i < this.eventHandlers.length; i += 1) {
+        g.on(this.eventHandlers[i].type, this.eventHandlers[i].listener, this.eventHandlers[i].capture);
     }
 };
-
-

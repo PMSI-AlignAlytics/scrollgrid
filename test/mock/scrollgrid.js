@@ -85,48 +85,13 @@ define(["d3"], function (d3) {
     scrollgrid.init = function () {
         scrollgrid.internal = {
             sizes: {
-                physical: {
-                    verticalAlignment: scrollgrid.vals.gridAlignment,
-                    verticalScrollbarWidth: scrollgrid.vals.verticalScrollbarWidth,
-                    horizontalScrollbarHeight: scrollgrid.vals.horizontalScrollbarHeight,
-                    footerRowHeight: scrollgrid.vals.footerRowHeight,
-                    headerRowHeight: scrollgrid.vals.headerRowHeight,
-                    rowHeight: scrollgrid.vals.physRowHeight,
-                    top: scrollgrid.vals.physTop,
-                    left: scrollgrid.vals.physLeft,
-                    right: scrollgrid.vals.physRight,
-                    bottom: scrollgrid.vals.physBottom,
-                    visibleInnerHeight: scrollgrid.vals.visibleInnerHeight,
-                    visibleInnerWidth: scrollgrid.vals.visibleInnerWidth,
-                    dragHandleWidth: scrollgrid.vals.dragHandleWidth,
-                    totalInnerHeight: scrollgrid.vals.totalInnerHeight,
-                    totalInnerWidth: scrollgrid.vals.totalInnerWidth,
-                    getRowHeight: jasmine.createSpy("getRowHeight").and.returnValue(scrollgrid.vals.physRowHeight),
-                    cellPadding: scrollgrid.vals.cellPadding,
-                    initialiseColumns: jasmine.createSpy("initialiseColumns")
-                },
-                virtual: {
-                    top: scrollgrid.vals.virtTop,
-                    left: scrollgrid.vals.virtLeft,
-                    right: scrollgrid.vals.virtRight,
-                    bottom: scrollgrid.vals.virtBottom,
-                    outerWidth: scrollgrid.vals.virtOuterWidth,
-                    outerHeight: scrollgrid.vals.virtOuterHeight,
-                    innerWidth: scrollgrid.vals.virtInnerWidth,
-                    innerHeight: scrollgrid.vals.virtInnerHeight
-                },
+                initialiseColumns: jasmine.createSpy("initialiseColumns"),
+                getRowHeight: jasmine.createSpy("getRowHeight").and.returnValue(scrollgrid.vals.physRowHeight),
                 calculatePhysicalBounds: jasmine.createSpy("calculatePhysicalBounds"),
                 getExistingTextBound: jasmine.createSpy("getExistingTextBound").and.returnValue({ width: scrollgrid.vals.textBoundWidth }),
                 pushTextBound: jasmine.createSpy("pushTextBound").and.returnValue({ width: scrollgrid.vals.pushedTextBoundWidth, height: scrollgrid.vals.pushedTextBoundHeight })
             },
             dom: {
-                parent: new d3.shape(scrollgrid.vals),
-                container: new d3.shape(scrollgrid.vals),
-                top: new scrollgrid.panel(),
-                left: new scrollgrid.panel(),
-                main: new scrollgrid.panel(),
-                right: new scrollgrid.panel(),
-                bottom: new scrollgrid.panel(),
                 getTopMargin: jasmine.createSpy("getTopMargin").and.returnValue(scrollgrid.vals.topMargin),
                 setAbsolutePosition: jasmine.createSpy("setAbsolutePosition"),
                 setRelativePosition: jasmine.createSpy("setRelativePosition"),
@@ -141,8 +106,6 @@ define(["d3"], function (d3) {
                 redirectViewportEvents: jasmine.createSpy("redirectViewportEvents")
             },
             interaction: {
-                allowColumnResizing: true,
-                allowSorting: true,
                 addResizeHandles: jasmine.createSpy("addResizeHandles"),
                 autoResizeColumn: jasmine.createSpy("autoResizeColumn"),
                 getColumnResizer: jasmine.createSpy("getColumnResizer").and.returnValue("column resizer"),
@@ -153,7 +116,6 @@ define(["d3"], function (d3) {
                 addSortButtons: jasmine.createSpy("addSortButtons")
             },
             render: {
-                cellWaitText: scrollgrid.vals.cellWaitText,
                 matchRule: jasmine.createSpy("matchRule").and.returnValue(true),
                 draw: jasmine.createSpy("draw"),
                 getVisibleRegion: jasmine.createSpy("getVisibleRegion").and.returnValue("visible region"),
@@ -182,29 +144,67 @@ define(["d3"], function (d3) {
                     sortIcon: scrollgrid.vals.sortIcon
                 }),
                 applyRules: jasmine.createSpy("applyRules"),
-                sortIconSize: scrollgrid.vals.sortIconSize,
                 getTextAnchor: jasmine.createSpy("getTextAnchor").and.returnValue("Text Anchor"),
                 getTextPosition: jasmine.createSpy("getTextPosition").and.returnValue("Text Position"),
                 renderText: jasmine.createSpy("renderText"),
                 renderSortIcon: jasmine.createSpy("renderSortIcon"),
                 renderRegionForeground: jasmine.createSpy("renderRegionForeground"),
                 cropText: jasmine.createSpy("cropText"),
-                sortIcon: jasmine.createSpy("sortIcon"),
-                formatRules: ['A', 'B', 'C']
+                sortIcon: jasmine.createSpy("sortIcon")
             },
             events: {
                 addEventHandlers: jasmine.createSpy("addEventHandlers")
-            },
-            eventHandlers: [
-                {
-                    type: 'click',
-                    handler: function() {
-                        return 'clicked';
-                    },
-                    capture: false
-                }
-            ]
+            }
         };
+        scrollgrid.elements = {
+            parent: new d3.shape(scrollgrid.vals),
+            container: new d3.shape(scrollgrid.vals),
+            top: new scrollgrid.panel(),
+            left: new scrollgrid.panel(),
+            main: new scrollgrid.panel(),
+            right: new scrollgrid.panel(),
+            bottom: new scrollgrid.panel(),
+        };
+        scrollgrid.properties = {
+            allowColumnResizing: true,
+            allowSorting: true,
+            cellPadding: scrollgrid.vals.cellPadding,
+            cellWaitText: scrollgrid.vals.cellWaitText,
+            dragHandleWidth: scrollgrid.vals.dragHandleWidth,
+            footerRowHeight: scrollgrid.vals.footerRowHeight,
+            formatRules: ['A', 'B', 'C'],
+            headerRowHeight: scrollgrid.vals.headerRowHeight,
+            horizontalScrollbarHeight: scrollgrid.vals.horizontalScrollbarHeight,
+            physicalBottom: scrollgrid.vals.physBottom,
+            physicalLeft: scrollgrid.vals.physLeft,
+            physicalRight: scrollgrid.vals.physRight,
+            physicalTop: scrollgrid.vals.physTop,
+            physicalTotalInnerHeight: scrollgrid.vals.totalInnerHeight,
+            physicalTotalInnerWidth: scrollgrid.vals.totalInnerWidth,
+            physicalVisibleInnerHeight: scrollgrid.vals.visibleInnerHeight,
+            physicalVisibleInnerWidth: scrollgrid.vals.visibleInnerWidth,
+            rowHeight: scrollgrid.vals.physRowHeight,
+            sortIconSize: scrollgrid.vals.sortIconSize,
+            verticalAlignment: scrollgrid.vals.gridAlignment,
+            verticalScrollbarWidth: scrollgrid.vals.verticalScrollbarWidth,
+            virtualBottom: scrollgrid.vals.virtBottom,
+            virtualLeft: scrollgrid.vals.virtLeft,
+            virtualRight: scrollgrid.vals.virtRight,
+            virtualTop: scrollgrid.vals.virtTop,
+            virtualInnerHeight: scrollgrid.vals.virtInnerHeight,
+            virtualInnerWidth: scrollgrid.vals.virtInnerWidth,
+            virtualOuterHeight: scrollgrid.vals.virtOuterHeight,
+            virtualOuterWidth: scrollgrid.vals.virtOuterWidth,
+        };
+        scrollgrid.eventHandlers = [
+            {
+                type: 'click',
+                handler: function() {
+                    return 'clicked';
+                },
+                capture: false
+            }
+        ];
         scrollgrid.style = {
             left: { panel: 'left' },
             right: { panel: 'right' },

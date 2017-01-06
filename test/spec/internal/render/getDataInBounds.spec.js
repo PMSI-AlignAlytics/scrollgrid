@@ -6,14 +6,12 @@ define(['d3', 'mock', 'render/getDataInBounds'], function (d3, mock) {
         var underTest = Scrollgrid.prototype.internal.render.getDataInBounds,
             viewArea,
             result,
-            render,
-            physical;
+            int;
 
         beforeEach(function () {
             mock.init();
             d3.init();
-            render = mock.internal.render;
-            physical = mock.internal.sizes.physical;
+            int = mock.internal;
             viewArea = {
                 left: 1,
                 top: 2,
@@ -30,17 +28,17 @@ define(['d3', 'mock', 'render/getDataInBounds'], function (d3, mock) {
         });
 
         it("should get row height for each row", function () {
-            expect(physical.getRowHeight.calls.count()).toEqual(2);
-            expect(physical.getRowHeight).toHaveBeenCalledWith(2);
-            expect(physical.getRowHeight).toHaveBeenCalledWith(3);
+            expect(int.sizes.getRowHeight.calls.count()).toEqual(2);
+            expect(int.sizes.getRowHeight).toHaveBeenCalledWith(2);
+            expect(int.sizes.getRowHeight).toHaveBeenCalledWith(3);
         });
 
         it("should call calculate cell adjustments for every cell", function () {
-            expect(render.calculateCellAdjustments.calls.count()).toEqual(4);
-            expect(render.calculateCellAdjustments).toHaveBeenCalledWith(2, 1);
-            expect(render.calculateCellAdjustments).toHaveBeenCalledWith(2, 2);
-            expect(render.calculateCellAdjustments).toHaveBeenCalledWith(3, 1);
-            expect(render.calculateCellAdjustments).toHaveBeenCalledWith(3, 2);
+            expect(int.render.calculateCellAdjustments.calls.count()).toEqual(4);
+            expect(int.render.calculateCellAdjustments).toHaveBeenCalledWith(2, 1);
+            expect(int.render.calculateCellAdjustments).toHaveBeenCalledWith(2, 2);
+            expect(int.render.calculateCellAdjustments).toHaveBeenCalledWith(3, 1);
+            expect(int.render.calculateCellAdjustments).toHaveBeenCalledWith(3, 2);
         });
 
         it("should contain a key based on all values which invalidate cache", function () {
@@ -184,7 +182,7 @@ define(['d3', 'mock', 'render/getDataInBounds'], function (d3, mock) {
         });
 
         it("should call the apply rules method passing the returned dataset", function () {
-            expect(render.applyRules).toHaveBeenCalledWith(result);
+            expect(int.render.applyRules).toHaveBeenCalledWith(result);
         });
 
     });

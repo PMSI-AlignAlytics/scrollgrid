@@ -21,7 +21,7 @@ define(['d3', 'mock', 'external/sortIconSize'], function (d3, mock) {
 
         it("should update the private value to a passed parameter", function () {
             underTest.call(mock, 13);
-            expect(mock.internal.render.sortIconSize).toEqual(13);
+            expect(mock.properties.sortIconSize).toEqual(13);
         });
 
         it("should return the context when a parameter is passed", function () {

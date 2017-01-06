@@ -5,16 +5,16 @@
 Scrollgrid.prototype.formatRules = function (value, silent) {
     "use strict";
 
-    var render = this.internal.render,
-        physical = this.internal.sizes.physical,
+    var int = this.internal,
+        props = this.properties,
         result;
 
     if (value === undefined) {
-        result = render.formatRules;
+        result = props.formatRules;
     } else {
         // Set the value and redraw but return self for chaining
-        render.formatRules = value;
-        physical.initialiseColumns.call(this);
+        props.formatRules = value;
+        int.sizes.initialiseColumns.call(this);
         result = this;
         if (!silent) {
             this.refresh();

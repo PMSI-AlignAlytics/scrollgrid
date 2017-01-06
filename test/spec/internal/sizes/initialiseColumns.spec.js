@@ -3,7 +3,7 @@ define(['d3', 'mock', 'sizes/initialiseColumns'], function (d3, mock) {
 
     describe("initialiseColumns", function () {
 
-        var underTest = Scrollgrid.prototype.internal.sizes.physical.initialiseColumns;
+        var underTest = Scrollgrid.prototype.internal.sizes.initialiseColumns;
 
         beforeEach(function () {
             mock.init();
@@ -12,8 +12,8 @@ define(['d3', 'mock', 'sizes/initialiseColumns'], function (d3, mock) {
 
         it("should use the default column width for the number of columns in the outerWidth if nothing is defined", function () {
             delete mock.columns;
-            mock.internal.sizes.virtual.outerWidth = 5;
-            mock.internal.sizes.physical.defaultColumnWidth = 13;
+            mock.properties.virtualOuterWidth = 5;
+            mock.properties.defaultColumnWidth = 13;
             underTest.call(mock);
             expect(mock.columns.length).toEqual(5);
             expect(mock.columns[0].width).toEqual(13);
@@ -29,8 +29,8 @@ define(['d3', 'mock', 'sizes/initialiseColumns'], function (d3, mock) {
                 null,
                 { width: 17 }
             ];
-            mock.internal.sizes.virtual.outerWidth = 5;
-            mock.internal.sizes.physical.defaultColumnWidth = 13;
+            mock.properties.virtualOuterWidth = 5;
+            mock.properties.defaultColumnWidth = 13;
             underTest.call(mock);
             expect(mock.columns.length).toEqual(5);
             expect(mock.columns[0].width).toEqual(7);
@@ -41,31 +41,31 @@ define(['d3', 'mock', 'sizes/initialiseColumns'], function (d3, mock) {
         });
 
         it("should not call matchRule if format rules are null", function () {
-            mock.internal.render.formatRules = null;
+            mock.properties.formatRules = null;
             underTest.call(mock);
             expect(mock.internal.render.matchRule).not.toHaveBeenCalled();
         });
 
         it("should not call matchRule if format rules are zero length", function () {
-            mock.internal.render.formatRules = [];
+            mock.properties.formatRules = [];
             underTest.call(mock);
             expect(mock.internal.render.matchRule).not.toHaveBeenCalled();
         });
 
         it("should call matchRule if format rules exist", function () {
-            mock.internal.render.formatRules = [{}];
+            mock.properties.formatRules = [{}];
             underTest.call(mock);
             expect(mock.internal.render.matchRule).toHaveBeenCalled();
         });
 
         it("should call use the column width rule if provided", function () {
             delete mock.columns;
-            mock.internal.sizes.virtual.outerWidth = 5;
-            mock.internal.sizes.physical.defaultColumnWidth = 13;
+            mock.properties.virtualOuterWidth = 5;
+            mock.properties.defaultColumnWidth = 13;
             mock.internal.render.matchRule.and.callFake(function (ruleColumn, compareColumn) {
                 return compareColumn === ruleColumn;
             });
-            mock.internal.render.formatRules = [{
+            mock.properties.formatRules = [{
                 column: 3,
                 columnWidth: 31
             }];
@@ -80,12 +80,12 @@ define(['d3', 'mock', 'sizes/initialiseColumns'], function (d3, mock) {
 
         it("should use the sort rule if provided", function () {
             delete mock.columns;
-            mock.internal.sizes.virtual.outerWidth = 5;
-            mock.internal.sizes.physical.defaultColumnWidth = 13;
+            mock.properties.virtualOuterWidth = 5;
+            mock.properties.defaultColumnWidth = 13;
             mock.internal.render.matchRule.and.callFake(function (ruleColumn, compareColumn) {
                 return compareColumn === ruleColumn;
             });
-            mock.internal.render.formatRules = [{
+            mock.properties.formatRules = [{
                 column: 3,
                 sort: 'asc'
             }];
@@ -100,12 +100,12 @@ define(['d3', 'mock', 'sizes/initialiseColumns'], function (d3, mock) {
 
         it("should use the compare function if provided", function () {
             delete mock.columns;
-            mock.internal.sizes.virtual.outerWidth = 5;
-            mock.internal.sizes.physical.defaultColumnWidth = 13;
+            mock.properties.virtualOuterWidth = 5;
+            mock.properties.defaultColumnWidth = 13;
             mock.internal.render.matchRule.and.callFake(function (ruleColumn, compareColumn) {
                 return compareColumn === ruleColumn;
             });
-            mock.internal.render.formatRules = [{
+            mock.properties.formatRules = [{
                 column: 3,
                 compareFunction: 'Comparer'
             }];

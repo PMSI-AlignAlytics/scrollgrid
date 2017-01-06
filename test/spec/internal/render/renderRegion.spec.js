@@ -148,22 +148,22 @@ define(['d3', 'mock', 'render/renderRegion'], function (d3, mock) {
             });
 
             it("should add sort buttons if sorting is defined and the top left dom is the target", function () {
-                mock.internal.dom.top.left = target;
-                mock.internal.interaction.allowSorting = true;
+                mock.elements.top.left = target;
+                mock.properties.allowSorting = true;
                 iterator({});
                 expect(mock.internal.interaction.addSortButtons).toHaveBeenCalled();
             });
 
             it("should add sort buttons if sorting is defined and the top dom is the target", function () {
-                mock.internal.dom.top = target;
-                mock.internal.interaction.allowSorting = true;
+                mock.elements.top = target;
+                mock.properties.allowSorting = true;
                 iterator({});
                 expect(mock.internal.interaction.addSortButtons).toHaveBeenCalled();
             });
 
             it("should add sort buttons if sorting is defined and the top right dom is the target", function () {
-                mock.internal.dom.top.right = target;
-                mock.internal.interaction.allowSorting = true;
+                mock.elements.top.right = target;
+                mock.properties.allowSorting = true;
                 iterator({});
                 expect(mock.internal.interaction.addSortButtons).toHaveBeenCalled();
             });

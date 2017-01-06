@@ -5,16 +5,15 @@
 Scrollgrid.prototype.internal.render.getVisibleRegion = function () {
     "use strict";
 
-    var int = this.internal,
-        dom = int.dom,
+    var elems = this.elements,
         visibleRegion;
 
     visibleRegion = {};
 
-    visibleRegion.left = dom.main.viewport.node().scrollLeft;
-    visibleRegion.top = dom.main.viewport.node().scrollTop;
-    visibleRegion.right = visibleRegion.left + dom.main.viewport.node().clientWidth;
-    visibleRegion.bottom = visibleRegion.top + dom.main.viewport.node().clientHeight;
+    visibleRegion.left = elems.main.viewport.node().scrollLeft;
+    visibleRegion.top = elems.main.viewport.node().scrollTop;
+    visibleRegion.right = visibleRegion.left + elems.main.viewport.node().clientWidth;
+    visibleRegion.bottom = visibleRegion.top + elems.main.viewport.node().clientHeight;
 
     return visibleRegion;
 

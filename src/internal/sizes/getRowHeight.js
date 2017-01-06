@@ -2,21 +2,18 @@
 // Copyright: 2017 AlignAlytics
 // License: "https://github.com/PMSI-AlignAlytics/scrollgrid/blob/master/MIT-LICENSE.txt"
 // Source: /src/internal/sizes/getRowHeight.js
-Scrollgrid.prototype.internal.sizes.physical.getRowHeight = function (row) {
+Scrollgrid.prototype.internal.sizes.getRowHeight = function (row) {
     "use strict";
 
-    var int = this.internal,
-        sizes = int.sizes,
-        physical = sizes.physical,
-        virtual = sizes.virtual,
+    var props = this.properties,
         rowHeight = 0;
 
-    if (row < virtual.top) {
-        rowHeight = physical.headerRowHeight;
-    } else if (row < virtual.outerHeight - virtual.bottom) {
-        rowHeight = physical.rowHeight;
+    if (row < props.virtualTop) {
+        rowHeight = props.headerRowHeight;
+    } else if (row < props.virtualOuterHeight - props.virtualBottom) {
+        rowHeight = props.rowHeight;
     } else {
-        rowHeight = physical.footerRowHeight;
+        rowHeight = props.footerRowHeight;
     }
 
     return rowHeight;

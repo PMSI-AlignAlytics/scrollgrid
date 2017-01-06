@@ -5,14 +5,14 @@
 Scrollgrid.prototype.cellPadding = function (value, silent) {
     "use strict";
 
-    var physical = this.internal.sizes.physical,
+    var props = this.properties,
         result;
 
     if (value === undefined) {
-        result = physical.cellPadding;
+        result = props.cellPadding;
     } else {
         // Set the value and redraw but return self for chaining
-        physical.cellPadding = value;
+        props.cellPadding = value;
         result = this;
         if (!silent) {
             this.refresh();

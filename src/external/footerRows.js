@@ -5,15 +5,15 @@
 Scrollgrid.prototype.footerRows = function (value, silent) {
     "use strict";
 
-    var virtual = this.internal.sizes.virtual,
+    var props = this.properties,
         result;
 
     if (value === undefined) {
-        result = virtual.bottom;
+        result = props.virtualBottom;
     } else {
         // Set the value and redraw but return self for chaining
-        virtual.bottom = value;
-        virtual.innerHeight = virtual.outerHeight - virtual.top - virtual.bottom;
+        props.virtualBottom = value;
+        props.virtualInnerHeight = props.virtualOuterHeight - props.virtualTop - props.virtualBottom;
         result = this;
         if (!silent) {
             this.refresh();

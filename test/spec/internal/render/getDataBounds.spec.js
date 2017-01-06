@@ -4,26 +4,24 @@ define(['d3', 'mock', 'render/getDataBounds'], function (d3, mock) {
     describe("getDataBounds", function () {
 
         var underTest = Scrollgrid.prototype.internal.render.getDataBounds,
-            virtual,
-            physical;
+            props;
 
         beforeEach(function () {
             var i;
             mock.init();
             d3.init();
-            virtual = mock.internal.sizes.virtual;
-            physical = mock.internal.sizes.physical;
+            props = mock.properties;
             // Define a 100x200px physical grid for testing
-            physical.totalInnerWidth = 100;
-            physical.totalInnerHeight = 200;
-            physical.rowHeight = 10;
+            props.physicalTotalInnerWidth = 100;
+            props.physicalTotalInnerHeight = 200;
+            props.rowHeight = 10;
             // Define a 10 column by 20 row virtual grid for testing
-            virtual.innerWidth = 10;
-            virtual.innerHeight = 20;
-            virtual.left = 1;
-            virtual.right = 1;
-            virtual.top = 1;
-            virtual.bottom = 1;
+            props.virtualInnerWidth = 10;
+            props.virtualInnerHeight = 20;
+            props.virtualLeft = 1;
+            props.virtualRight = 1;
+            props.virtualTop = 1;
+            props.virtualBottom = 1;
             mock.columns = [];
             for (i = 0; i < 12; i += 1) {
                 mock.columns.push({ width: 10 });

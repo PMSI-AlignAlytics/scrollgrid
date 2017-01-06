@@ -6,14 +6,13 @@ Scrollgrid.prototype.internal.interaction.addSortButtons = function (g, viewData
     "use strict";
 
     var self = this,
-        int = self.internal,
-        interaction = int.interaction;
+        int = this.internal;
 
     g.append("rect")
         .attr("width", viewData.boxWidth)
         .attr("height", viewData.boxHeight)
         .style("opacity", 0)
         .style("cursor", "pointer")
-        .on("click", function () { return interaction.sortColumn.call(self, viewData.columnIndex, true); });
+        .on("click", function () { return int.interaction.sortColumn.call(self, viewData.columnIndex, true); });
 
 };

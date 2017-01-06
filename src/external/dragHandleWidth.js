@@ -5,14 +5,14 @@
 Scrollgrid.prototype.dragHandleWidth = function (value, silent) {
     "use strict";
 
-    var physical = this.internal.sizes.physical,
+    var props = this.properties,
         result;
 
     if (value === undefined) {
-        result = physical.dragHandleWidth;
+        result = props.dragHandleWidth;
     } else {
         // Set the value and redraw but return self for chaining
-        physical.dragHandleWidth = value;
+        props.dragHandleWidth = value;
         result = this;
         if (!silent) {
             this.refresh();

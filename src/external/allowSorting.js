@@ -5,14 +5,14 @@
 Scrollgrid.prototype.allowSorting = function (value, silent) {
     "use strict";
 
-    var interaction = this.internal.interaction,
+    var props = this.properties,
         result;
 
     if (value === undefined) {
-        result = interaction.allowSorting;
+        result = props.allowSorting;
     } else {
         // Set the value and redraw but return self for chaining
-        interaction.allowSorting = value;
+        props.allowSorting = value;
         result = this;
         if (!silent) {
             this.refresh();

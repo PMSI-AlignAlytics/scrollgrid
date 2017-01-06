@@ -21,7 +21,7 @@ define(['d3', 'mock', 'external/allowSorting'], function (d3, mock) {
 
         it("should update the column resizing value to a passed parameter", function () {
             underTest.call(mock, false);
-            expect(mock.internal.interaction.allowSorting).toEqual(false);
+            expect(mock.properties.allowSorting).toEqual(false);
         });
 
         it("should return the context when a parameter is passed", function () {

@@ -5,14 +5,14 @@
 Scrollgrid.prototype.sortIconSize = function (value, silent) {
     "use strict";
 
-    var render = this.internal.render,
+    var props = this.properties,
         result;
 
     if (value === undefined) {
-        result = render.sortIconSize;
+        result = props.sortIconSize;
     } else {
         // Set the value and redraw but return self for chaining
-        render.sortIconSize = value;
+        props.sortIconSize = value;
         result = this;
         if (!silent) {
             this.refresh();

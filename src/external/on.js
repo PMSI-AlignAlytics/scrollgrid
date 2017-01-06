@@ -5,10 +5,7 @@
 Scrollgrid.prototype.on = function (type, listener, capture) {
     "use strict";
 
-    var int = this.internal,
-        eventHandlers = int.eventHandlers;
-
-    eventHandlers.push({
+    this.eventHandlers.push({
         type: type,
         listener: listener,
         capture: capture
