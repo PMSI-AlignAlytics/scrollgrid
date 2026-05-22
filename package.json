@@ -1,36 +1,80 @@
 {
   "name": "scrollgrid",
-  "version": "0.3.0",
-  "private": true,
-  "devDependencies": {
-    "coveralls": "*",
-    "express": "*",
-    "grunt": "^0.4.5",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-connect": "^0.11.2",
-    "grunt-contrib-copy": "^0.8.2",
-    "grunt-contrib-uglify": "^0.11.0",
-    "grunt-contrib-watch": "^0.6.1",
-    "grunt-jslint": "^1.1.14",
-    "grunt-karma": "^0.12.1",
-    "istanbul": "*",
-    "jasmine-core": "^2.4.1",
-    "karma": "^0.13.15",
-    "karma-chrome-launcher": "*",
-    "karma-coffee-preprocessor": "*",
-    "karma-coverage": "^0.5.3",
-    "karma-firefox-launcher": "*",
-    "karma-html2js-preprocessor": "*",
-    "karma-jasmine": "^0.3.6",
-    "karma-phantomjs-launcher": "^0.2.1",
-    "karma-requirejs": "*",
-    "karma-script-launcher": "*",
-    "requirejs": "*"
+  "version": "1.0.0",
+  "description": "SVG/D3-powered grid control with a dynamic viewport for very large data sets.",
+  "type": "module",
+  "main": "./dist/scrollgrid.umd.cjs",
+  "module": "./dist/scrollgrid.js",
+  "types": "./dist/scrollgrid.d.ts",
+  "browser": "./dist/scrollgrid.umd.cjs",
+  "unpkg": "./dist/scrollgrid.umd.cjs",
+  "jsdelivr": "./dist/scrollgrid.umd.cjs",
+  "exports": {
+    ".": {
+      "types": "./dist/scrollgrid.d.ts",
+      "import": "./dist/scrollgrid.js",
+      "require": "./dist/scrollgrid.umd.cjs"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.js",
+      "require": "./dist/react.cjs"
+    },
+    "./style.css": "./src/scrollgrid.css",
+    "./package.json": "./package.json"
   },
-  "buildDependencies": {
-    "d3": "*"
-  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "MIT-LICENCE.txt"
+  ],
   "scripts": {
-    "test": ""
-  }
+    "dev": "vite",
+    "build": "vite build && vite build --config vite.react.config.js && node scripts/copy-types.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src test",
+    "preview": "vite preview"
+  },
+  "peerDependencies": {
+    "d3-drag": "^3.0.0",
+    "d3-selection": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": { "optional": true },
+    "react-dom": { "optional": true }
+  },
+  "devDependencies": {
+    "@types/d3-drag": "^3.0.7",
+    "@types/d3-selection": "^3.0.10",
+    "@types/react": "^18.3.3",
+    "@vitest/coverage-v8": "^1.6.0",
+    "d3-drag": "^3.0.0",
+    "d3-selection": "^3.0.0",
+    "eslint": "^9.5.0",
+    "jsdom": "^24.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.3.1",
+    "vitest": "^1.6.0"
+  },
+  "keywords": [
+    "scrollgrid",
+    "grid",
+    "table",
+    "d3",
+    "svg",
+    "react",
+    "virtual-scroll",
+    "data-grid"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PMSI-AlignAlytics/scrollgrid.git"
+  },
+  "license": "MIT",
+  "sideEffects": [
+    "*.css"
+  ]
 }

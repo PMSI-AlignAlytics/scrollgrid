@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Scrollgrid — JSON adapter</title>
+    <style>
+        html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+        body { display: flex; flex-direction: column; }
+        header { padding: 12px 16px; border-bottom: 1px solid #ddd; }
+        main { flex: 1; min-height: 0; padding: 16px; }
+        #myTable { height: 100%; width: 100%; }
+        .currency text { font-variant-numeric: tabular-nums; }
+        .highlight rect { fill: #fff4d6; }
+    </style>
+</head>
+<body>
+    <header><strong>JSON adapter</strong> — array of records, click any row to toggle highlight.</header>
+    <main><div id="myTable"></div></main>
+
+    <script type="module">
+        import 'scrollgrid/style.css';
+        import { Scrollgrid, jsonAdapter } from '/src/index.js';
+
+        const records = Array.from({ length: 500 }, (_v, i) => ({
+            id: i + 1,
+            name: `Customer ${i + 1}`,
+            country: ['UK', 'US', 'DE', 'FR', 'NL'][i % 5],
+            revenue: Math.round((Math.random() * 1_000_000)) / 100,
+            active: i % 7 !== 0,
+        }));
+
+        const currency = new Intl.NumberFormat('en-GB', {
+            style: 'currency', currency: 'GBP',
+        });
+
+        const grid = Scrollgrid.init('#myTable', {
+            data: jsonAdapter(records),
+            headerRows: 1,
+            autoResize: true,
+            formatRules: [
+                { row: '2:-1', column: '4', alignment: 'right', formatter: currency.format, foregroundStyle: 'currency' },
+                { row: '1', column: '4', alignment: 'right' },
+                { row: '*', column: '1', columnWidth: 60, alignment: 'right' },
+                { row: '1', rowHeight: 44 },              // taller header
+                { row: '2(3)-1', rowHeight: 44 },         // every third body row taller
+            ],
+        });
+
+        grid.on('click', (event, cell) => {
+            grid.addFormatRules([{
+                row: cell.rowIndex + 1,
+                column: '*',
+                backgroundStyle: 'highlight',
+            }]);
+        });
+    </script>
+</body>
+</html>

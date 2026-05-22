@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Scrollgrid examples</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+        body { display: flex; flex-direction: column; }
+        header { padding: 12px 16px; border-bottom: 1px solid #ddd; }
+        header h1 { margin: 0 0 6px; font-size: 18px; }
+        nav a { margin-right: 12px; color: #0a66c2; text-decoration: none; }
+        nav a:hover { text-decoration: underline; }
+        main { flex: 1; min-height: 0; padding: 16px; }
+        #myTable { height: 100%; width: 100%; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Scrollgrid examples</h1>
+        <nav>
+            <a href="/">Basic (vanilla)</a>
+            <a href="/examples/big.html">Large data adapter</a>
+            <a href="/examples/json.html">JSON adapter</a>
+            <a href="/examples/react.html">React</a>
+        </nav>
+    </header>
+    <main>
+        <div id="myTable"></div>
+    </main>
+
+    <script type="module">
+        import 'scrollgrid/style.css';
+        import { Scrollgrid } from '/src/index.js';
+
+        Scrollgrid.init('#myTable', {
+            headerRows: 1,
+            headerColumns: 1,
+            footerRows: 1,
+            autoResize: true,
+            data: [
+                ['Header', 'A', 'B', 'C', 'D', 'E'],
+                ['Row 1', 11, 12, 13, 14, 15],
+                ['Row 2', 21, 22, 23, 24, 25],
+                ['Row 3', 31, 32, 33, 34, 35],
+                ['Row 4', 41, 42, 43, 44, 45],
+                ['Row 5', 51, 52, 53, 54, 55],
+                ['Total', 155, 160, 165, 170, 175],
+            ],
+        });
+    </script>
+</body>
+</html>

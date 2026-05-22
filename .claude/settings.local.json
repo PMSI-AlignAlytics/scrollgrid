@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install *)",
+      "Bash(npx vitest *)",
+      "Bash(npx vite *)",
+      "Bash(npm run *)",
+      "Bash(node --input-type=module -e \"import\\('./dist/scrollgrid.js'\\).then\\(m => { console.log\\('exports:', Object.keys\\(m\\)\\); console.log\\('Scrollgrid.adapters:', Object.keys\\(m.Scrollgrid.adapters\\)\\); }\\).catch\\(e => { console.error\\(e\\); process.exit\\(1\\); }\\)\")",
+      "Bash(curl -s -o /tmp/index_out.html -w \"HTTP %{http_code}\\\\nbytes: %{size_download}\\\\n\" http://127.0.0.1:4173/)",
+      "Bash(curl -s -o /tmp/big_out.html -w \"HTTP %{http_code}\\\\nbytes: %{size_download}\\\\n\" http://127.0.0.1:4173/examples/big.html)",
+      "Bash(curl -s -o /tmp/json_out.html -w \"HTTP %{http_code}\\\\nbytes: %{size_download}\\\\n\" http://127.0.0.1:4173/examples/json.html)",
+      "Bash(curl -s -o /tmp/index_js.js -w \"HTTP %{http_code}\\\\nbytes: %{size_download}\\\\n\" http://127.0.0.1:4173/src/index.js)",
+      "Bash(curl -s -o /tmp/idx.html -w \"HTTP %{http_code} bytes: %{size_download}\\\\n\" http://localhost:4173/)",
+      "Bash(curl -s -o /tmp/src_idx.js -w \"HTTP %{http_code} bytes: %{size_download}\\\\n\" http://localhost:4173/src/index.js)",
+      "Bash(curl -s -o /tmp/big.html -w \"HTTP %{http_code} bytes: %{size_download}\\\\n\" http://localhost:4173/examples/big.html)",
+      "Bash(curl -s -o /tmp/sg.js -w \"HTTP %{http_code} bytes: %{size_download}\\\\n\" http://localhost:4173/src/scrollgrid.js)",
+      "Bash(curl -s -o /tmp/dom_layout.js -w \"HTTP %{http_code} bytes: %{size_download}\\\\n\" http://localhost:4173/src/dom/layoutDOM.js)",
+      "Bash(curl -s -o /tmp/css.css -w \"HTTP %{http_code} bytes: %{size_download}\\\\n\" \"http://localhost:4173/@id/scrollgrid/style.css\")",
+      "mcp__Claude_Preview__preview_start"
+    ]
+  }
+}

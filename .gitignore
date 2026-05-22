@@ -1,4 +1,7 @@
 .idea
-tmp
+.vscode
 node_modules
 coverage
+tmp
+*.log
+.DS_Store

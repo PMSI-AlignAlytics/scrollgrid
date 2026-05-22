@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Scrollgrid — large data adapter</title>
+    <style>
+        html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; }
+        body { display: flex; flex-direction: column; }
+        header { padding: 12px 16px; border-bottom: 1px solid #ddd; }
+        main { flex: 1; min-height: 0; padding: 16px; }
+        #myTable { height: 100%; width: 100%; }
+    </style>
+</head>
+<body>
+    <header><strong>Large data adapter</strong> — 1,000,000 rows × 200 columns, lazy-loaded.</header>
+    <main><div id="myTable"></div></main>
+
+    <script type="module">
+        import 'scrollgrid/style.css';
+        import { Scrollgrid } from '/src/index.js';
+
+        const columns = 200;
+        const rows = 1_000_000;
+
+        // Asynchronous adapter — values are computed on demand.  Scrollgrid
+        // only ever asks for the cells visible in the viewport, so the grid
+        // happily handles a billion-row table.
+        const adapter = {
+            rowCount: () => rows,
+            columnCount: () => columns,
+            sort() {},
+            loadDataRange(viewArea, callback) {
+                // Simulate a slow source (server, DB, etc.).
+                setTimeout(() => {
+                    const data = [];
+                    for (let r = viewArea.top; r < viewArea.bottom; r += 1) {
+                        const row = [];
+                        for (let c = viewArea.left; c < viewArea.right; c += 1) {
+                            row.push(r * columns + c);
+                        }
+                        data.push(row);
+                    }
+                    callback(data);
+                }, 300);
+            },
+        };
+
+        Scrollgrid.init('#myTable', {
+            data: adapter,
+            headerRows: 1,
+            headerColumns: 1,
+            footerRows: 1,
+            footerColumns: 1,
+            autoResize: true,
+            cellWaitText: '…',
+        });
+    </script>
+</body>
+</html>

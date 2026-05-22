@@ -1,0 +1,41 @@
+/* Sensible default styles for Scrollgrid.  Optional — every selector below
+ * can be overridden by your own CSS.  Import via:
+ *     import 'scrollgrid/style.css';
+ */
+
+.sg-grid rect {
+    fill: #ffffff;
+    stroke: #d0d0d0;
+}
+
+.sg-grid text {
+    fill: #222222;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-size: 12px;
+    pointer-events: none;
+}
+
+.sg-fixed rect {
+    fill: #f4f4f4;
+    stroke: #c8c8c8;
+}
+
+.sg-fixed text {
+    fill: #222222;
+    font-weight: 600;
+}
+
+.sg-resize-handle {
+    fill: #888888;
+    opacity: 0;
+    cursor: col-resize;
+}
+
+.sg-resize-handle:hover,
+.sg-resize-handle.dragging {
+    opacity: 0.5;
+}
+
+.sg-sort-icon {
+    fill: #444444;
+}

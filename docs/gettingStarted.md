@@ -1,5 +1,22 @@
 ### Getting Started
 
+##### Installing
+
+```bash
+npm install scrollgrid d3-selection d3-drag
+```
+
+Scrollgrid is published as an ES module with a UMD fallback for plain
+`<script>` tags. Importing it looks the same in vanilla apps, in Vite,
+webpack, and bundler-based React projects:
+
+```js
+import { Scrollgrid } from 'scrollgrid';
+import 'scrollgrid/style.css';   // optional default theme
+```
+
+For the React wrapper see [react.md](react.md).
+
 ##### Setting up the HTML
 
 The requirements for the HTML are very simple.  Scrollgrid occupies a single DIV which should be identifiable either by a unique class or an id, in the example below the grid can be referenced as `#gridContainer`.
