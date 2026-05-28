@@ -35,6 +35,7 @@ export interface ScrollgridProps {
     onCellMouseUp?: CellEventHandler;
     onCellMouseOver?: CellEventHandler;
     onCellMouseOut?: CellEventHandler;
+    onCellMouseMove?: CellEventHandler;
     onCellContextMenu?: CellEventHandler;
 
     className?: string;

@@ -49,6 +49,7 @@ const EVENT_PROP_MAP = {
     onCellMouseUp: 'mouseup',
     onCellMouseOver: 'mouseover',
     onCellMouseOut: 'mouseout',
+    onCellMouseMove: 'mousemove',
     onCellContextMenu: 'contextmenu',
 };
 

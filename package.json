@@ -1,6 +1,6 @@
 {
   "name": "scrollgrid",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "SVG/D3-powered grid control with a dynamic viewport for very large data sets.",
   "type": "module",
   "main": "./dist/scrollgrid.umd.cjs",

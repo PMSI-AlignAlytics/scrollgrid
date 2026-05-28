@@ -19,36 +19,37 @@ const p = /* @__PURE__ */ new Set([
   "autoResize",
   "verticalAlignment"
 ]);
-function S(c) {
+function v(c) {
   const n = {};
   for (const t of Object.keys(c))
     p.has(t) && (n[t] = c[t]);
   return n;
 }
-const v = {
+const M = {
   onCellClick: "click",
   onCellDblClick: "dblclick",
   onCellMouseDown: "mousedown",
   onCellMouseUp: "mouseup",
   onCellMouseOver: "mouseover",
   onCellMouseOut: "mouseout",
+  onCellMouseMove: "mousemove",
   onCellContextMenu: "contextmenu"
-}, M = f.forwardRef(function(n, t) {
+}, y = f.forwardRef(function(n, t) {
   const {
     data: l,
     style: m,
     className: R,
-    gridRef: O,
+    gridRef: S,
     ...r
   } = n, i = d(null), e = d(null);
   return w(t, () => e.current, [e.current]), u(() => {
-    const g = S(r), o = new h({
+    const g = v(r), o = new h({
       ...g,
       target: i.current,
       data: l
     });
     e.current = o;
-    for (const [s, C] of Object.entries(v)) {
+    for (const [s, C] of Object.entries(M)) {
       const a = r[s];
       a && o.on(C, a);
     }
@@ -63,7 +64,7 @@ const v = {
   }, [r.formatRules]), /* @__PURE__ */ f.createElement("div", { ref: i, className: R, style: m });
 });
 export {
-  M as Scrollgrid,
-  M as default
+  y as Scrollgrid,
+  y as default
 };
 //# sourceMappingURL=react.js.map
